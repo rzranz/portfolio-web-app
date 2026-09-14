@@ -1,0 +1,64 @@
+{
+  "profile": {
+    "name": "Randi Zakaria Putra",
+    "role": "Fullstack Software Engineer",
+    "location": "Bandung, Jawa Barat",
+    "email": "randizakariaputra22@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/randizakariaputra",
+    "summary": "Fresh Graduate from Informatics Engineering with hands-on experience in Full Stack Web Development. Proven track record in building scalable web applications using Laravel and Vue.js. Experienced in managing technical projects and leading organizational divisions. Seeking a remote developer role to leverage strong problem-solving skills and technical adaptability.",
+    "education": "Universitas Komputer Indonesia (2022-2026), Bachelor of Informatics Engineering (GPA: 3.43)",
+    "certifications": ["CCNA Introduction to Network BNSP", "Web Developer LSP INFORMATIKA"]
+  },
+  "tech_stack": [
+    "Laravel", "Tailwind", "Django",
+    "Next JS", "Vue JS", "Springboot",
+    "React", "Git", "Go-Lang", "PostgreSQL", "MySQL", "Unity", "Three.js"
+  ],
+  "experience": [
+    {
+      "id": "spp",
+      "title": "SPP Payment Gateway & WhatsApp API",
+      "company": "RA Darul Fikri (Client Project)",
+      "period": "Jan - Aug 2025",
+      "description": "Web application for automated school fee invoicing & Pakasir Payment Gateway integration with Fonnte WhatsApp API instant digital receipt delivery.",
+      "stack": ["Laravel", "Vue.js", "React", "Pakasir Payment Gateway API", "Fonnte WhatsApp API", "MySQL"],
+      "tags": ["Fullstack", "Midtrans Live"]
+    },
+    {
+      "id": "ar",
+      "title": "AR SIBI Sign Language Educational App",
+      "company": "Augmented Reality (AR) Project",
+      "period": "Juni 2025",
+      "description": "Android Augmented Reality educational app displaying 3D gestural models for Indonesian Sign Language (SIBI) using Unity 3D & MediaPipe AI.",
+      "stack": ["Unity 3D", "C#", "MediaPipe AI", "Android Studio"],
+      "tags": ["Augmented Reality", "AI Tracking"]
+    },
+    {
+      "id": "golang",
+      "title": "Backend REST API Project",
+      "company": "Dinas Kehutanan Jawa Barat",
+      "period": "May - Sept 2026",
+      "description": "Backend API integration and database management for government system.",
+      "stack": ["Go", "PostgreSQL", "Laravel", "Docker", "CI/CD", "REST API"],
+      "tags": ["Microservice", "High Performance"]
+    },
+    {
+      "id": "hrms",
+      "title": "HRMS — Enterprise Human Resource System",
+      "company": "PT. YukMari Project",
+      "period": "Okt - Nov 2025",
+      "description": "Internal HR management platform with employee attendance tracking, payroll workflows, and KPI evaluations.",
+      "stack": ["Vue.js", "Tailwind CSS", "Laravel", "MySQL"],
+      "tags": ["Enterprise", "Internship"]
+    },
+    {
+      "id": "pos",
+      "title": "Coffeeshop POS & Realtime Stock System",
+      "company": "Freelance",
+      "period": "Feb 2025",
+      "description": "Web Point of Sales (POS) app built with Vue.js & Laravel featuring recipe-based inventory auto-deduction and QRIS transactions.",
+      "stack": ["Vue.js", "Laravel", "PHP", "Tailwind"],
+      "tags": ["POS", "Inventory"]
+    }
+  ]
+}

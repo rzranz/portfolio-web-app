@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-display: "Geist", "Inter", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+
+  /* We define semantic colors that map to Light/Dark modes */
+  --color-canvas: var(--color-canvas);
+  --color-surface: var(--color-surface);
+  --color-primary: var(--color-primary);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-text-main: var(--color-text-main);
+  --color-text-muted: var(--color-text-muted);
+}
+
+@layer base {
+  :root {
+    /* Light Mode: White & Dark Purple */
+    --color-canvas: #ffffff;
+    --color-surface: #f9f9f9;
+    --color-primary: #4b0082; /* Dark Purple */
+    --color-border-subtle: #eaeaea;
+    --color-text-main: #111111;
+    --color-text-muted: #787774;
+  }
+
+  /* Dark Mode: Pure Black & White Minimalism */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-canvas: #0a0a0a;
+      --color-surface: #121212;
+      --color-primary: #ffffff; /* Contrast B&W */
+      --color-border-subtle: rgba(255, 255, 255, 0.1);
+      --color-text-main: #eaeaea;
+      --color-text-muted: #888888;
+    }
+  }
+
+  body {
+    @apply bg-[var(--color-canvas)] text-[var(--color-text-main)] antialiased font-sans transition-colors duration-300 overflow-x-hidden;
+    /* Selection styling for premium feel */
+    ::selection {
+      @apply bg-[var(--color-text-main)] text-[var(--color-canvas)];
+    }
+  }
+}
+
+@layer utilities {
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+  .animate-marquee-reverse {
+    animation: marquee 30s linear infinite reverse;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-subtle);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Utilities for interaction */
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .prd-card {
+    @apply bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-xl transition-all duration-300;
+  }
+}
+
+/* Works dot pagination */
+.works-dot {
+  transition: background-color 0.5s ease, transform 0.5s ease;
+}
+.works-dot.active {
+  background-color: var(--color-text-main) !important;
+  transform: scale(1.2);
+}
+

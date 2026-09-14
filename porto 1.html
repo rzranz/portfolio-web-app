@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RANN. — Randi Zakaria Putra | Fullstack Software Engineer</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Space Grotesk & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- GSAP CDN for Delay & In-Out Staggered Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"Space Grotesk"', 'monospace'],
+          },
+          colors: {
+            rann: {
+              bg: '#0D0E15',
+              card: '#151722',
+              border: '#222536',
+              accent: '#3B82F6',
+              purple: '#8B5CF6',
+              text: '#F8FAFC',
+              muted: '#94A3B8'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Hide OS Cursor for Custom Smooth Lerp Cursor */
+    html, body {
+      cursor: none;
+      background-color: #0D0E15;
+      color: #F8FAFC;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .rann-card {
+      background-color: rgba(21, 23, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid #222536;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rann-card:hover {
+      border-color: #3B82F6;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px -10px rgba(59, 130, 246, 0.15);
+    }
+
+    /* Custom Lerp Cursor Elements */
+    #cursor-dot {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background-color: #3B82F6;
+      border-radius: 50%;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    #cursor-ring {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 38px;
+      height: 38px;
+      border: 1.5px solid rgba(59, 130, 246, 0.5);
+      border-radius: 50%;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s, height 0.25s, border-color 0.25s, background-color 0.25s;
+    }
+
+    body.hovering-link #cursor-ring {
+      width: 58px;
+      height: 58px;
+      border-color: #3B82F6;
+      background-color: rgba(59, 130, 246, 0.08);
+    }
+
+    /* Side Nav Indicator Line */
+    .side-nav-item {
+      position: relative;
+      padding-right: 12px;
+      transition: all 0.3s ease;
+      cursor: none;
+    }
+    .side-nav-item.active {
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+    .side-nav-item.active::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 16px;
+      background-color: #3B82F6;
+      border-radius: 2px;
+    }
+
+    /* Heavy Easing Curtain Slide Transition */
+    .curtain-slider {
+      transition: transform 0.95s cubic-bezier(0.85, 0, 0.15, 1);
+    }
+  </style>
+
+  <!-- Three.js Importmap -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+<body class="font-sans antialiased selection:bg-blue-600 selection:text-white relative">
+
+  <!-- CUSTOM LERP CURSOR -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- FULL-PAGE INTERACTIVE THREE.JS SCROLL BACKGROUND -->
+  <div id="canvas-bg-container" class="fixed inset-0 pointer-events-none z-0">
+    <canvas id="bg-webgl-canvas" class="w-full h-full"></canvas>
+  </div>
+
+  <!-- FIXED HEADER: TOP-LEFT LOGO & TOP-RIGHT CONTACT BUTTON ONLY -->
+  <header class="fixed top-0 left-0 right-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 sm:px-12 h-24 flex items-center justify-between">
+      <a href="javascript:void(0)" onclick="navigateToSection(0)" class="flex items-center gap-2 hoverable">
+        <span class="font-display font-bold text-2xl tracking-wider text-white flex items-center gap-1.5">
+          <span class="text-blue-500 font-mono text-xl">&gt;</span>-RANN<span class="text-blue-500">.</span>
+        </span>
+      </a>
+
+      <button onclick="navigateToSection(totalSlides - 1)" class="px-6 py-2.5 rounded border border-white/80 hover:bg-white hover:text-black font-mono text-xs font-semibold text-white transition-all shadow-lg hoverable">
+        Contact
+      </button>
+    </div>
+  </header>
+
+  <!-- FIXED RIGHT SIDE SECTION INDICATOR (00 - 04) -->
+  <div class="fixed right-8 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-end gap-5 text-xs font-mono text-gray-500">
+    <div onclick="navigateToSection(0)" id="nav-item-00" class="side-nav-item active hoverable">00</div>
+    <div onclick="navigateToSection(1)" id="nav-item-01" class="side-nav-item hoverable">01</div>
+    <div onclick="navigateToSection(2)" id="nav-item-02" class="side-nav-item hoverable">02</div>
+    <div onclick="navigateToSection(3)" id="nav-item-03" class="side-nav-item hoverable">03</div>
+    <div onclick="navigateToSection(totalSlides - 1)" id="nav-item-04" class="side-nav-item hoverable">04</div>
+  </div>
+
+  <!-- FIXED BOTTOM RIGHT VERTICAL SCROLL INDICATOR -->
+  <div class="fixed right-8 bottom-10 z-30 hidden lg:flex items-center gap-2 text-[10px] font-mono text-gray-400 rotate-90 origin-right">
+    <i class="fa-solid fa-chevron-left text-[8px]"></i> Scroll Down
+  </div>
+
+  <!-- FULLPAGE VIEWPORT & CURTAIN SLIDER -->
+  <div id="app-viewport" class="fixed inset-0 overflow-hidden w-full h-full">
+    <div id="curtain-slider" class="w-full h-full curtain-slider">
+      
+      <!-- SECTION 00: HERO (SLIDE INDEX 0) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="00">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div class="lg:col-span-7 slide-content">
+            <h1 class="font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl text-white tracking-tight leading-[1.08] mb-8">
+              Fullstack<br>
+              Software<br>
+              <span class="text-blue-500">Engineer</span>
+            </h1>
+
+            <p class="text-gray-300 text-base sm:text-lg leading-relaxed mb-10 max-w-xl font-light">
+              Crafting modern, accessible, and secure web experiences. I build clean backends, responsive interfaces, and solve complex software challenges through scalable code.
+            </p>
+
+            <button onclick="navigateNext()" class="inline-flex items-center gap-3 text-blue-400 hover:text-blue-300 font-mono text-xs font-semibold tracking-wider transition-all group hoverable">
+              About me <i class="fa-solid fa-chevron-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </div>
+
+          <div class="lg:col-span-5 relative h-[400px] flex items-center justify-center slide-content">
+            <div id="hero-3d-box" class="w-full h-full relative flex items-center justify-center">
+              <canvas id="hero-webgl-canvas" class="w-full h-full cursor-grab active:cursor-grabbing hoverable"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 01: ABOUT ME (SLIDE INDEX 1) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="01">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-5 slide-content">
+              <h2 class="font-display text-4xl sm:text-6xl font-extrabold text-white leading-tight mb-4">
+                Hi, I'm Randi<br>
+                <span class="text-blue-500">Fullstack Developer</span>
+              </h2>
+              <p class="text-xs font-mono text-gray-400">
+                JavaScript & PHP Enthusiast / Creative Problem Solver
+              </p>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6 text-gray-300 text-base sm:text-lg leading-relaxed font-light slide-content">
+              <p>
+                Professionally connected to the web development world. I am a detail-oriented engineer who enjoys building thoughtful, high-quality user experiences and scalable backend architectures.
+              </p>
+              <p>
+                Currently completing my Bachelor's degree in Informatics Engineering at <strong class="text-white">UNIKOM</strong> (GPA 3.47) and holding a <strong class="text-white">BNSP Certified Web Developer</strong> credential. I am passionate about solving problems, collaborating with great people, and continuously learning.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 02: SKILLS (SLIDE INDEX 2) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="02">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full text-center">
+          
+          <div class="slide-content">
+            <span class="text-xs font-mono text-gray-400 uppercase tracking-widest block mb-3">A PROBLEM IS AN OPPORTUNITY TO DO YOUR BEST.</span>
+            <h2 class="font-display text-4xl sm:text-5xl font-extrabold text-white mb-6">
+              Skills & Experience
+            </h2>
+            <p class="text-gray-300 text-base max-w-3xl mx-auto mb-12 font-light leading-relaxed">
+              I specialize in crafting engaging and high-quality web applications using Laravel, Vue, React, Go (Golang), Node.js, Three.js, PostgreSQL/MySQL, Git, and Figma.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 max-w-5xl mx-auto slide-content">
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-laravel text-3xl text-red-500"></i>
+              <span class="text-xs font-mono text-gray-200">Laravel</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-vuejs text-3xl text-emerald-500"></i>
+              <span class="text-xs font-mono text-gray-200">Vue.js</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-react text-3xl text-sky-400"></i>
+              <span class="text-xs font-mono text-gray-200">React</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-node-js text-3xl text-emerald-400"></i>
+              <span class="text-xs font-mono text-gray-200">Node.js</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-solid fa-code text-3xl text-cyan-400"></i>
+              <span class="text-xs font-mono text-gray-200">Go (Golang)</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-php text-3xl text-indigo-400"></i>
+              <span class="text-xs font-mono text-gray-200">PHP</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-js text-3xl text-yellow-400"></i>
+              <span class="text-xs font-mono text-gray-200">JavaScript</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-solid fa-wind text-3xl text-sky-400"></i>
+              <span class="text-xs font-mono text-gray-200">Tailwind CSS</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-solid fa-cube text-3xl text-purple-400"></i>
+              <span class="text-xs font-mono text-gray-200">Three.js</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-solid fa-database text-3xl text-blue-400"></i>
+              <span class="text-xs font-mono text-gray-200">MySQL / Postgres</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-git-alt text-3xl text-orange-500"></i>
+              <span class="text-xs font-mono text-gray-200">Git</span>
+            </div>
+            <div class="rann-card p-6 rounded-xl flex flex-col items-center justify-center gap-3 hoverable">
+              <i class="fa-brands fa-figma text-3xl text-pink-400"></i>
+              <span class="text-xs font-mono text-gray-200">Figma</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PORTFOLIO PROJECT SLIDE 1 (SLIDE INDEX 3) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="03">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full">
+          <div onclick="openModal('spp')" class="rann-card p-8 rounded-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center cursor-pointer group hoverable slide-content">
+            <div class="lg:col-span-7 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono text-blue-400 uppercase tracking-wider">SCHOOL PAYMENT SYSTEM</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-800 text-emerald-400 bg-emerald-950">Midtrans Live</span>
+              </div>
+              <h3 class="font-display text-3xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                SPP Payment Gateway & WhatsApp Bot (fe-spp)
+              </h3>
+              <p class="text-gray-300 text-sm font-light leading-relaxed">
+                Web application for automated school fee invoicing & Midtrans Payment Gateway integration with Fonnte WhatsApp Bot instant digital receipt delivery.
+              </p>
+              <div class="text-xs font-mono text-gray-400 pt-2">
+                <strong class="text-white">Built with:</strong> Laravel, Vue.js, React, Midtrans Payment API, Fonnte WA Bot, MySQL, Vercel
+              </div>
+              <div class="pt-2 text-xs font-mono text-blue-400 flex items-center gap-2">
+                <span>View project details</span> <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+            <div class="lg:col-span-5 p-8 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-center min-h-[240px]">
+              <div class="text-center font-mono">
+                <i class="fa-solid fa-graduation-cap text-5xl text-blue-500 mb-3"></i>
+                <div class="text-sm font-bold text-white">Yayasan Darul Fikri</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO PROJECT SLIDE 2 (SLIDE INDEX 4) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="03">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full">
+          <div onclick="openModal('golang')" class="rann-card p-8 rounded-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center cursor-pointer group hoverable slide-content">
+            <div class="lg:col-span-7 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono text-cyan-400 uppercase tracking-wider">BACKEND MICROSERVICE</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-cyan-800 text-cyan-400 bg-cyan-950">Latency &lt; 50ms</span>
+              </div>
+              <h3 class="font-display text-3xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                Go (Golang) High-Speed REST API Service
+              </h3>
+              <p class="text-gray-300 text-sm font-light leading-relaxed">
+                Isolated Backend REST API built with Go (Golang) for processing high-volume transaction batches with low latency and Goroutines concurrency.
+              </p>
+              <div class="text-xs font-mono text-gray-400 pt-2">
+                <strong class="text-white">Built with:</strong> Go (Golang), PostgreSQL, REST API, Docker, Goroutines
+              </div>
+              <div class="pt-2 text-xs font-mono text-blue-400 flex items-center gap-2">
+                <span>View project details</span> <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+            <div class="lg:col-span-5 p-8 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-center min-h-[240px]">
+              <div class="text-center font-mono">
+                <i class="fa-solid fa-code text-5xl text-cyan-400 mb-3"></i>
+                <div class="text-sm font-bold text-white">Go Concurrency Service</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO PROJECT SLIDE 3 (SLIDE INDEX 5) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="03">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full">
+          <div onclick="openModal('ar')" class="rann-card p-8 rounded-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center cursor-pointer group hoverable slide-content">
+            <div class="lg:col-span-7 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono text-purple-400 uppercase tracking-wider">AUGMENTED REALITY & AI</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-purple-800 text-purple-400 bg-purple-950">Unity 3D & AI</span>
+              </div>
+              <h3 class="font-display text-3xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                AR SIBI Sign Language Educational App
+              </h3>
+              <p class="text-gray-300 text-sm font-light leading-relaxed">
+                Android Augmented Reality educational app displaying 3D gestural models for Indonesian Sign Language (SIBI) using Unity 3D & MediaPipe AI.
+              </p>
+              <div class="text-xs font-mono text-gray-400 pt-2">
+                <strong class="text-white">Built with:</strong> Unity 3D, C#, MediaPipe AI, Android Studio
+              </div>
+              <div class="pt-2 text-xs font-mono text-blue-400 flex items-center gap-2">
+                <span>View project details</span> <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+            <div class="lg:col-span-5 p-8 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-center min-h-[240px]">
+              <div class="text-center font-mono">
+                <i class="fa-solid fa-hand-holding-heart text-5xl text-purple-400 mb-3"></i>
+                <div class="text-sm font-bold text-white">AR SIBI 3D Tracking</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO PROJECT SLIDE 4 (SLIDE INDEX 6) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="03">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full">
+          <div onclick="openModal('hrms')" class="rann-card p-8 rounded-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center cursor-pointer group hoverable slide-content">
+            <div class="lg:col-span-7 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono text-sky-400 uppercase tracking-wider">ENTERPRISE HR MANAGEMENT</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-sky-800 text-sky-400 bg-sky-950">Internship Project</span>
+              </div>
+              <h3 class="font-display text-3xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                HRMS — Enterprise Human Resource System
+              </h3>
+              <p class="text-gray-300 text-sm font-light leading-relaxed">
+                Internal HR management platform with employee attendance tracking, payroll workflows, and KPI evaluations for PT. YukMari Project.
+              </p>
+              <div class="text-xs font-mono text-gray-400 pt-2">
+                <strong class="text-white">Built with:</strong> React, Tailwind CSS, Node.js, Express, MySQL
+              </div>
+              <div class="pt-2 text-xs font-mono text-blue-400 flex items-center gap-2">
+                <span>View project details</span> <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+            <div class="lg:col-span-5 p-8 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-center min-h-[240px]">
+              <div class="text-center font-mono">
+                <i class="fa-solid fa-users-gear text-5xl text-sky-400 mb-3"></i>
+                <div class="text-sm font-bold text-white">PT. YukMari Project</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO PROJECT SLIDE 5 (SLIDE INDEX 7) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="03">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full">
+          <div onclick="openModal('pos')" class="rann-card p-8 rounded-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center cursor-pointer group hoverable slide-content">
+            <div class="lg:col-span-7 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono text-amber-400 uppercase tracking-wider">POINT OF SALE & INVENTORY</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-amber-800 text-amber-400 bg-amber-950">QRIS Sync Live</span>
+              </div>
+              <h3 class="font-display text-3xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                Coffeeshop POS & Realtime Stock System
+              </h3>
+              <p class="text-gray-300 text-sm font-light leading-relaxed">
+                Web Point of Sales (POS) app built with Vue.js & Laravel featuring recipe-based inventory auto-deduction and QRIS transactions.
+              </p>
+              <div class="text-xs font-mono text-gray-400 pt-2">
+                <strong class="text-white">Built with:</strong> Vue.js, Laravel, PHP, Tailwind CSS, QRIS Payment Sync
+              </div>
+              <div class="pt-2 text-xs font-mono text-blue-400 flex items-center gap-2">
+                <span>View project details</span> <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+            <div class="lg:col-span-5 p-8 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-center min-h-[240px]">
+              <div class="text-center font-mono">
+                <i class="fa-solid fa-mug-saucer text-5xl text-amber-400 mb-3"></i>
+                <div class="text-sm font-bold text-white">Coffeeshop POS System</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 04: CONTACT (SLIDE INDEX 8 - LAST SLIDE) -->
+      <section class="section-slide w-full h-screen flex items-center relative z-10" data-nav="04">
+        <div class="max-w-4xl mx-auto px-6 sm:px-12 w-full">
+          
+          <div class="mb-12 text-center slide-content">
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white mb-4 tracking-tight">
+              What would you do if a software expert was just a click away?
+            </h2>
+            <p class="text-gray-300 text-base max-w-lg mx-auto font-light">
+              Whether you want to start a new project or just say hello, I'd love to hear from you.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start slide-content">
+            <div class="md:col-span-5 space-y-4 font-mono text-xs">
+              <a href="mailto:randizakariaputra22@gmail.com" class="rann-card p-5 rounded-xl flex items-center gap-4 hover:border-blue-500 transition-colors hoverable">
+                <div class="w-10 h-10 rounded bg-blue-600/10 text-blue-500 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div>
+                  <div class="text-gray-400">Direct Email</div>
+                  <div class="text-sm font-bold text-white">randizakariaputra22@gmail.com</div>
+                </div>
+              </a>
+
+              <a href="https://www.linkedin.com/in/randizakariaputra" target="_blank" class="rann-card p-5 rounded-xl flex items-center gap-4 hover:border-blue-500 transition-colors hoverable">
+                <div class="w-10 h-10 rounded bg-blue-600/10 text-blue-500 flex items-center justify-center text-lg">
+                  <i class="fa-brands fa-linkedin"></i>
+                </div>
+                <div>
+                  <div class="text-gray-400">LinkedIn Profile</div>
+                  <div class="text-sm font-bold text-white">randizakariaputra</div>
+                </div>
+              </a>
+
+              <div class="rann-card p-5 rounded-xl flex items-center gap-4">
+                <div class="w-10 h-10 rounded bg-blue-600/10 text-blue-500 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <div>
+                  <div class="text-gray-400">Location</div>
+                  <div class="text-sm font-bold text-white">Bandung, West Java, Indonesia</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-7 rann-card p-6 sm:p-8 rounded-xl">
+              <form id="contact-form" onsubmit="submitContactForm(event)" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-mono text-gray-300 mb-1">Your Name</label>
+                  <input type="text" id="input-name" required placeholder="Alex Wijaya" class="w-full px-4 py-2.5 rounded bg-gray-900 border border-gray-800 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-mono text-gray-300 mb-1">Email Address</label>
+                  <input type="email" id="input-email" required placeholder="alex@company.com" class="w-full px-4 py-2.5 rounded bg-gray-900 border border-gray-800 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-mono text-gray-300 mb-1">Message / Project Details</label>
+                  <textarea id="input-message" rows="4" required placeholder="Tell me about your project or inquiry..." class="w-full px-4 py-2.5 rounded bg-gray-900 border border-gray-800 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-semibold transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 hoverable">
+                  <i class="fa-solid fa-paper-plane"></i> Send Message
+                </button>
+              </form>
+
+              <div id="form-response" class="hidden mt-4 p-4 rounded bg-blue-600/10 border border-blue-500/30 text-blue-400 text-xs text-center font-mono">
+                <i class="fa-solid fa-circle-check mr-1"></i> Thank you! Your message has been sent successfully.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- FUNCTIONAL PROJECT DETAIL MODAL -->
+  <div id="detail-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="rann-card w-full max-w-2xl rounded-xl p-6 sm:p-8 relative border border-gray-700 max-h-[90vh] overflow-y-auto">
+      
+      <button onclick="closeModal()" class="absolute top-5 right-5 w-8 h-8 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center transition-colors hoverable">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="modal-content"></div>
+
+    </div>
+  </div>
+
+  <!-- THREE.JS SCROLL BACKGROUND ENGINE & HERO 3D MOCKUP -->
+  <script type="module">
+    import * as THREE from 'three';
+
+    // 1. BACKGROUND CANVAS
+    const canvasBg = document.getElementById('bg-webgl-canvas');
+    const sceneBg = new THREE.Scene();
+    const cameraBg = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    cameraBg.position.set(0, 0, 10);
+
+    const rendererBg = new THREE.WebGLRenderer({ canvas: canvasBg, antialias: true, alpha: true });
+    rendererBg.setSize(window.innerWidth, window.innerHeight);
+    rendererBg.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const lightBg = new THREE.PointLight(0x3b82f6, 3, 50);
+    lightBg.position.set(5, 5, 5);
+    sceneBg.add(lightBg);
+
+    const particleCount = 260;
+    const posArray = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 22;
+    }
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particleMat = new THREE.PointsMaterial({ size: 0.05, color: 0x3b82f6, transparent: true, opacity: 0.45 });
+    const particlesMesh = new THREE.Points(particleGeo, particleMat);
+    sceneBg.add(particlesMesh);
+
+    const bgShapeGeo = new THREE.IcosahedronGeometry(2.2, 1);
+    const bgShapeMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, wireframe: true, transparent: true, opacity: 0.12 });
+    const bgMesh = new THREE.Mesh(bgShapeGeo, bgShapeMat);
+    bgMesh.position.set(4.5, -2, -2);
+    sceneBg.add(bgMesh);
+
+    // 2. HERO 3D SCENE
+    const heroBox = document.getElementById('hero-3d-box');
+    const canvasHero = document.getElementById('hero-webgl-canvas');
+    const sceneHero = new THREE.Scene();
+    const cameraHero = new THREE.PerspectiveCamera(45, heroBox.clientWidth / heroBox.clientHeight, 0.1, 1000);
+    cameraHero.position.set(3, 3, 6);
+    cameraHero.lookAt(0, 0, 0);
+
+    const rendererHero = new THREE.WebGLRenderer({ canvas: canvasHero, antialias: true, alpha: true });
+    rendererHero.setSize(heroBox.clientWidth, heroBox.clientHeight);
+
+    const lightHero = new THREE.PointLight(0x3b82f6, 4, 30);
+    lightHero.position.set(4, 4, 4);
+    sceneHero.add(lightHero);
+    sceneHero.add(new THREE.AmbientLight(0xffffff, 0.8));
+
+    const laptopGroup = new THREE.Group();
+    sceneHero.add(laptopGroup);
+
+    const screenGeo = new THREE.BoxGeometry(3.2, 2.0, 0.1);
+    const screenMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.2 });
+    const screenMesh = new THREE.Mesh(screenGeo, screenMat);
+    laptopGroup.add(screenMesh);
+
+    const displayGeo = new THREE.PlaneGeometry(3.0, 1.8);
+    const displayMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+    const displayMesh = new THREE.Mesh(displayGeo, displayMat);
+    displayMesh.position.z = 0.06;
+    laptopGroup.add(displayMesh);
+
+    const baseGeo = new THREE.BoxGeometry(3.4, 0.1, 2.2);
+    const baseMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
+    const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+    baseMesh.position.set(0, -1.1, 1.0);
+    laptopGroup.add(baseMesh);
+
+    const cube1Geo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    const cube1Mat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, wireframe: true });
+    const cube1 = new THREE.Mesh(cube1Geo, cube1Mat);
+    cube1.position.set(-2.0, 1.2, 0.5);
+    laptopGroup.add(cube1);
+
+    const cube2Geo = new THREE.DodecahedronGeometry(0.4, 0);
+    const cube2Mat = new THREE.MeshStandardMaterial({ color: 0x8b5cf6, wireframe: true });
+    const cube2 = new THREE.Mesh(cube2Geo, cube2Mat);
+    cube2.position.set(2.0, -0.8, 0.8);
+    laptopGroup.add(cube2);
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      particlesMesh.rotation.y = (window.currentSlideIndex || 0) * 0.25;
+      bgMesh.rotation.y = (window.currentSlideIndex || 0) * 0.35;
+
+      laptopGroup.rotation.y = Math.sin(Date.now() * 0.001) * 0.15;
+      laptopGroup.rotation.x = Math.cos(Date.now() * 0.0008) * 0.08;
+      cube1.rotation.y += 0.01;
+      cube2.rotation.x += 0.01;
+
+      rendererBg.render(sceneBg, cameraBg);
+      rendererHero.render(sceneHero, cameraHero);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      cameraBg.aspect = window.innerWidth / window.innerHeight;
+      cameraBg.updateProjectionMatrix();
+      rendererBg.setSize(window.innerWidth, window.innerHeight);
+
+      if (heroBox) {
+        cameraHero.aspect = heroBox.clientWidth / heroBox.clientHeight;
+        cameraHero.updateProjectionMatrix();
+        rendererHero.setSize(heroBox.clientWidth, heroBox.clientHeight);
+      }
+    });
+  </script>
+
+  <!-- GSAP DELAY & IN-OUT STAGGERED SLIDE TRANSITION ENGINE (EXACT DVPLR.PRO REPLICATION) -->
+  <script>
+    const totalSlides = 9; // 0:Hero, 1:About, 2:Skills, 3-7:Projects 1-5, 8:Contact
+    let currentSlideIndex = 0;
+    let isTransitioning = false;
+    window.currentSlideIndex = 0;
+    window.totalSlides = totalSlides;
+
+    // 1. Custom Lerp Cursor Setup
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+
+    let mousePos = { x: window.innerWidth/2, y: window.innerHeight/2 };
+    let dotPos = { x: window.innerWidth/2, y: window.innerHeight/2 };
+    let ringPos = { x: window.innerWidth/2, y: window.innerHeight/2 };
+
+    window.addEventListener('mousemove', (e) => {
+      mousePos.x = e.clientX;
+      mousePos.y = e.clientY;
+    });
+
+    function renderCursor() {
+      dotPos.x += (mousePos.x - dotPos.x) * 0.35;
+      dotPos.y += (mousePos.y - dotPos.y) * 0.35;
+
+      ringPos.x += (mousePos.x - ringPos.x) * 0.15;
+      ringPos.y += (mousePos.y - ringPos.y) * 0.15;
+
+      cursorDot.style.left = `${dotPos.x}px`;
+      cursorDot.style.top = `${dotPos.y}px`;
+
+      cursorRing.style.left = `${ringPos.x}px`;
+      cursorRing.style.top = `${ringPos.y}px`;
+
+      requestAnimationFrame(renderCursor);
+    }
+    renderCursor();
+
+    document.querySelectorAll('.hoverable, button, a, .rann-card').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering-link'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering-link'));
+    });
+
+    // 2. Perform Delayed Curtain Slide Transition with GSAP In-Out Staggered Animations
+    function navigateToSection(targetIndex) {
+      if (targetIndex < 0) targetIndex = 0;
+      if (targetIndex >= totalSlides) targetIndex = totalSlides - 1;
+      if (targetIndex === currentSlideIndex || isTransitioning) return;
+
+      isTransitioning = true;
+      const currentSlide = document.querySelectorAll('.section-slide')[currentSlideIndex];
+      const targetSlide = document.querySelectorAll('.section-slide')[targetIndex];
+
+      // PHASE 1: Exit Fade & Translate Out (Intentional Easing Delay)
+      const currentContents = currentSlide.querySelectorAll('.slide-content');
+      gsap.to(currentContents, {
+        y: targetIndex > currentSlideIndex ? -50 : 50,
+        opacity: 0,
+        duration: 0.25,
+        stagger: 0.05,
+        ease: 'power2.in',
+        onComplete: () => {
+          // PHASE 2: Heavy Curtain Slide (dvlpr.pro style)
+          currentSlideIndex = targetIndex;
+          window.currentSlideIndex = currentSlideIndex;
+
+          const slider = document.getElementById('curtain-slider');
+          slider.style.transform = `translateY(-${currentSlideIndex * 100}vh)`;
+
+          // Update Side Nav Indicator (00 - 04)
+          const navTag = targetSlide.getAttribute('data-nav');
+          document.querySelectorAll('.side-nav-item').forEach(el => el.classList.remove('active'));
+          document.getElementById(`nav-item-${navTag}`)?.classList.add('active');
+
+          // PHASE 3: Entrance Staggered Reveal
+          setTimeout(() => {
+            const targetContents = targetSlide.querySelectorAll('.slide-content');
+            gsap.fromTo(targetContents, 
+              { y: targetIndex > currentSlideIndex ? -60 : 60, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power3.out' }
+            );
+
+            // PHASE 4: Unlock Wheel
+            setTimeout(() => {
+              isTransitioning = false;
+            }, 300);
+          }, 450);
+        }
+      });
+    }
+
+    function navigateNext() {
+      if (currentSlideIndex < totalSlides - 1) {
+        navigateToSection(currentSlideIndex + 1);
+      }
+    }
+
+    function navigatePrev() {
+      if (currentSlideIndex > 0) {
+        navigateToSection(currentSlideIndex - 1);
+      }
+    }
+
+    // Wheel Interceptor for Intentional Delay & Curtain Slide
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (isTransitioning) return;
+
+      if (e.deltaY > 0) {
+        navigateNext();
+      } else if (e.deltaY < 0) {
+        navigatePrev();
+      }
+    }, { passive: false });
+
+    // Touch Swipe Interceptor
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener('touchend', (e) => {
+      if (isTransitioning) return;
+      const touchEndY = e.changedTouches[0].clientY;
+      const diffY = touchStartY - touchEndY;
+
+      if (Math.abs(diffY) > 40) {
+        if (diffY > 0) navigateNext();
+        else navigatePrev();
+      }
+    });
+
+    // Modal Control
+    const projectsData = {
+      'spp': {
+        title: 'SPP Payment Gateway & WhatsApp Bot (fe-spp)',
+        client: 'Yayasan Darul Fikri (darulfikri.sch.id)',
+        tech: ['Laravel', 'Vue.js / React', 'Midtrans Payment API', 'Fonnte WhatsApp API', 'MySQL', 'Vercel'],
+        desc: 'Web application for automated school fee invoicing & Midtrans Payment Gateway integration with Fonnte WhatsApp Bot instant digital receipt delivery.',
+        problem: 'Manual fee reconciliation created data mismatches and required extensive time for payment verification.',
+        solution: 'Built a web application integrating Laravel and Vue/React with Midtrans API for automated Virtual Account generation and Fonnte WA Bot for real-time receipt delivery.'
+      },
+      'golang': {
+        title: 'Go (Golang) High-Speed REST API Service',
+        client: 'Backend Infrastructure Project',
+        tech: ['Go (Golang)', 'PostgreSQL', 'REST API', 'Docker', 'Goroutines'],
+        desc: 'Isolated Backend REST API built with Go (Golang) for processing high-volume transaction batches with low latency and Goroutines concurrency.',
+        problem: 'Response speed limitations on large batch data processing requiring memory efficiency.',
+        solution: 'Built a modular microservice using Go (Golang), optimized PostgreSQL queries, and leveraged Goroutines concurrency.'
+      },
+      'ar': {
+        title: 'AR SIBI Sign Language Educational App',
+        client: 'UNIKOM Academic Research',
+        tech: ['Unity 3D', 'C#', 'MediaPipe AI', 'Android Studio'],
+        desc: 'Android Augmented Reality educational app displaying 3D gestural models for Indonesian Sign Language (SIBI) using Unity 3D & MediaPipe AI.',
+        problem: 'Conventional 2D printed materials failed to convey 3D hand gestures accurately.',
+        solution: 'Designed an Android AR app in Unity 3D with MediaPipe AI hand tracking and interactive quiz modules.'
+      },
+      'hrms': {
+        title: 'HRMS — Enterprise Human Resource System',
+        client: 'PT. YukMari Project Indonesia',
+        tech: ['React', 'Tailwind CSS', 'Node.js', 'Express', 'MySQL'],
+        desc: 'Internal HR management platform with employee attendance tracking, payroll workflows, and KPI evaluations for PT. YukMari Project.',
+        problem: 'Attendance tracking and payroll calculation required centralized integration.',
+        solution: 'Developed a React dashboard with role-based access control (Admin, HR, Employee) and KPI charts.'
+      },
+      'pos': {
+        title: 'Coffeeshop POS & Realtime Stock System',
+        client: 'Commercial Coffee Shop',
+        tech: ['Vue.js', 'Laravel', 'PHP', 'Tailwind CSS', 'QRIS Payment Sync'],
+        desc: 'Web Point of Sales (POS) app built with Vue.js & Laravel featuring recipe-based inventory auto-deduction and QRIS transactions.',
+        problem: 'Inventory discrepancies and slow cashier ordering during peak hours.',
+        solution: 'Built a POS application that automatically deducts recipe ingredients during transactions.'
+      }
+    };
+
+    function openModal(id) {
+      const p = projectsData[id];
+      if (!p) return;
+
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `
+        <div class="mb-4 border-b border-gray-800 pb-4">
+          <span class="text-xs font-mono text-blue-400 font-semibold">${p.client}</span>
+          <h3 class="text-2xl font-bold text-white mt-1">${p.title}</h3>
+        </div>
+
+        <div class="space-y-4 text-sm text-gray-300">
+          <p class="text-gray-300 leading-relaxed font-light">${p.desc}</p>
+
+          <div class="p-4 rounded bg-gray-900 border border-gray-800">
+            <h4 class="font-bold text-blue-400 text-xs font-mono mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Challenge & Requirement</h4>
+            <p class="text-xs text-gray-300 leading-relaxed">${p.problem}</p>
+          </div>
+
+          <div class="p-4 rounded bg-gray-900 border border-gray-800">
+            <h4 class="font-bold text-blue-400 text-xs font-mono mb-1"><i class="fa-solid fa-code-branch mr-1"></i> Architecture & Solution</h4>
+            <p class="text-xs text-gray-300 leading-relaxed">${p.solution}</p>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-white text-xs font-mono mb-2">Technologies Used:</h4>
+            <div class="text-xs font-mono text-blue-300 bg-blue-950 p-3 rounded border border-blue-800">
+              ${p.tech.join(', ')}
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+
+    function submitContactForm(e) {
+      e.preventDefault();
+      document.getElementById('form-response').classList.remove('hidden');
+      document.getElementById('contact-form').reset();
+    }
+  </script>
+</body>
+</html>
+EOF
+
+ls -lh /working_dir/c_1e62f6b3f7b73f62/portfolio-sticky-horizontal/index.html
+}}
