@@ -26,15 +26,13 @@
   }
 
   /* Dark Mode: Pure Black & White Minimalism */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-canvas: #0a0a0a;
-      --color-surface: #121212;
-      --color-primary: #ffffff; /* Contrast B&W */
-      --color-border-subtle: rgba(255, 255, 255, 0.1);
-      --color-text-main: #eaeaea;
-      --color-text-muted: #888888;
-    }
+  .dark {
+    --color-canvas: #0a0a0a;
+    --color-surface: #121212;
+    --color-primary: #ffffff; /* Contrast B&W */
+    --color-border-subtle: rgba(255, 255, 255, 0.1);
+    --color-text-main: #eaeaea;
+    --color-text-muted: #888888;
   }
 
   body {

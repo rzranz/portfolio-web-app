@@ -9,6 +9,7 @@ import TechStack from './components/TechStack'
 import RecentWorks from './components/RecentWorks'
 import Contact from './components/Contact'
 import SectionIndex from './components/SectionIndex'
+import ThemeToggle from './components/ThemeToggle'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -53,9 +54,12 @@ function App() {
         <div className="font-display font-bold text-xl tracking-wider pointer-events-auto">
           <span className="text-[var(--color-primary)]">&gt;</span> RANN.
         </div>
-        <a href="#contact" className="px-5 py-2 text-xs font-mono font-semibold rounded border border-[var(--color-border-subtle)] hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] transition-colors pointer-events-auto">
-          Contact
-        </a>
+        <div className="flex items-center gap-6 pointer-events-auto">
+          <ThemeToggle />
+          <a href="#contact" className="px-5 py-2 text-xs font-mono font-semibold rounded border border-[var(--color-border-subtle)] hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] transition-colors">
+            Contact
+          </a>
+        </div>
       </header>
 
       <main className="relative z-10">
