@@ -101,7 +101,7 @@ export default function RecentWorks() {
         {projects.map((exp, i) => (
           <div
             key={exp.id}
-            ref={(el) => slideRefs.current[i] = el}
+            ref={(el) => { slideRefs.current[i] = el }}
             className="works-slide absolute inset-0 flex items-center bg-[var(--color-canvas)] will-change-transform"
             style={{ 
               transform: `translateX(${i === 0 ? '0%' : '100%'})`, 
