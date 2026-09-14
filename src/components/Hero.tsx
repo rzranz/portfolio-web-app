@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from '../data/cv.json'
-import randiImg from '../assets/randi-nobg.png'
+import randiImg from '../assets/randi.jpg'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -91,13 +91,17 @@ export default function Hero() {
 
         {/* Right Column: Profile Image — lingers with slower parallax */}
         <div ref={imageRef} className="relative h-full w-full flex-center will-change-transform lg:justify-end pt-12 lg:pt-0">
-          <div className="hero-image relative w-[80%] max-w-[450px] aspect-square flex items-end justify-center">
+          <div className="hero-image relative w-[90%] max-w-[500px] aspect-square flex items-center justify-center">
             {/* The soft glow behind the transparent image */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-[var(--color-primary)] rounded-full opacity-10 blur-3xl mix-blend-screen"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-[var(--color-primary)] rounded-full opacity-10 blur-3xl mix-blend-screen"></div>
             <img 
               src={randiImg} 
               alt="Randi Zakaria Putra" 
-              className="w-full h-auto object-contain drop-shadow-2xl grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out z-10"
+              style={{
+                maskImage: 'radial-gradient(circle at center, black 40%, transparent 68%)',
+                WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 68%)'
+              }}
+              className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out z-10"
             />
           </div>
         </div>
