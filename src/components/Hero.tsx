@@ -1,46 +1,15 @@
 import { useEffect, useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Icosahedron, Box, Sphere } from '@react-three/drei'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from '../data/cv.json'
+import randiImg from '../assets/randi-nobg.png'
 
 gsap.registerPlugin(ScrollTrigger)
-
-function FloatingShapes() {
-  const groupRef = useRef<any>(null)
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1
-      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2
-    }
-  })
-
-  return (
-    <group ref={groupRef}>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[5, 5, 5]} intensity={2.5} color="#a855f7" />
-      <pointLight position={[-5, -5, -5]} intensity={1.5} color="#ffffff" />
-      
-      <Box args={[1.2, 1.2, 1.2]} position={[-0.8, 0.4, 0]}>
-        <meshStandardMaterial color="#a855f7" wireframe opacity={0.2} transparent />
-      </Box>
-      <Icosahedron args={[0.8, 0]} position={[1.2, -0.4, 0.5]}>
-        <meshStandardMaterial color="#ffffff" wireframe opacity={0.3} transparent />
-      </Icosahedron>
-      <Sphere args={[0.3, 16, 16]} position={[-0.2, -1.2, 1]}>
-         <meshStandardMaterial color="#888888" opacity={0.8} />
-      </Sphere>
-    </group>
-  )
-}
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
-  const canvasRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Entrance animation
@@ -59,8 +28,13 @@ export default function Hero() {
       { opacity: 1, duration: 0.8 },
       "-=0.6"
     )
+    tl.fromTo('.hero-image',
+      { opacity: 0, scale: 0.95, filter: 'blur(10px)' },
+      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out' },
+      "-=1.0"
+    )
 
-    // Parallax on scroll — text moves up faster, canvas lingers
+    // Parallax on scroll — text moves up faster, image lingers
     const ctx = gsap.context(() => {
       if (textRef.current) {
         gsap.to(textRef.current, {
@@ -75,8 +49,8 @@ export default function Hero() {
           }
         })
       }
-      if (canvasRef.current) {
-        gsap.to(canvasRef.current, {
+      if (imageRef.current) {
+        gsap.to(imageRef.current, {
           y: -30,
           ease: 'none',
           scrollTrigger: {
@@ -115,11 +89,17 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right Column: 3D Canvas — lingers with slower parallax */}
-        <div ref={canvasRef} className="relative h-[400px] lg:h-[600px] w-full flex-center will-change-transform">
-          <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }} className="w-full h-full cursor-grab active:cursor-grabbing">
-            <FloatingShapes />
-          </Canvas>
+        {/* Right Column: Profile Image — lingers with slower parallax */}
+        <div ref={imageRef} className="relative h-full w-full flex-center will-change-transform lg:justify-end pt-12 lg:pt-0">
+          <div className="hero-image relative w-[80%] max-w-[450px] aspect-square flex items-end justify-center">
+            {/* The soft glow behind the transparent image */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-[var(--color-primary)] rounded-full opacity-10 blur-3xl mix-blend-screen"></div>
+            <img 
+              src={randiImg} 
+              alt="Randi Zakaria Putra" 
+              className="w-full h-auto object-contain drop-shadow-2xl grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out z-10"
+            />
+          </div>
         </div>
 
       </div>

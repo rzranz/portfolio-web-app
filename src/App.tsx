@@ -8,7 +8,6 @@ import About from './components/About'
 import TechStack from './components/TechStack'
 import RecentWorks from './components/RecentWorks'
 import Contact from './components/Contact'
-import Cursor from './components/Cursor'
 import SectionIndex from './components/SectionIndex'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -47,7 +46,6 @@ function App() {
 
   return (
     <>
-      <Cursor />
       <SectionIndex />
       
       {/* Navbar Placeholder */}

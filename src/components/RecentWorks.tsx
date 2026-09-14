@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from '../data/cv.json'
@@ -7,8 +7,11 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function RecentWorks() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const [activeSlide, setActiveSlide] = useState(0)
   const projects = data.experience
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([])
 
+  // 1. Track scroll progress to update activeSlide state cleanly
   useEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
@@ -16,161 +19,76 @@ export default function RecentWorks() {
       mm.add("(min-width: 768px)", () => {
         if (!sectionRef.current) return
 
-        const slides = gsap.utils.toArray<HTMLElement>('.works-slide')
-        const dots = gsap.utils.toArray<HTMLElement>('.works-dot')
-        const totalSlides = slides.length
-
-        // Each slide gets a generous scroll distance so users can read comfortably
-        const scrollPerSlide = window.innerHeight * 1.5
-        const totalScroll = scrollPerSlide * totalSlides
-
-        // Pin the whole section
-        const pinTrigger = ScrollTrigger.create({
+        ScrollTrigger.create({
           trigger: sectionRef.current,
-          start: 'top top',
-          end: `+=${totalScroll}`,
+          start: "top top",
+          end: `+=${window.innerHeight * projects.length * 1.2}`, // Generous scroll space
           pin: true,
-          scrub: true,
-        })
-
-        // Animate each slide: fade in → hold → fade out
-        slides.forEach((slide, i) => {
-          const textContent = slide.querySelector('.works-text') as HTMLElement
-          const mockupContent = slide.querySelector('.works-mockup') as HTMLElement
-
-          // Calculate normalized start/end for this slide
-          const slideStart = i / totalSlides
-          const slideEnd = (i + 1) / totalSlides
-          const fadeDuration = 0.15 / totalSlides // 15% of one slide's duration for fade
-
-          if (i === 0) {
-            // First slide: start visible, fade out at end
-            gsap.set(slide, { opacity: 1, pointerEvents: 'auto' })
-
-            // Parallax: text moves up slightly, mockup stays
-            gsap.fromTo(textContent,
-              { y: 0 },
-              {
-                y: -30,
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: sectionRef.current,
-                  start: 'top top',
-                  end: `+=${scrollPerSlide}`,
-                  scrub: 1.5,
-                }
-              }
-            )
-
-            // Fade out first slide
-            gsap.to(slide, {
-              opacity: 0,
-              pointerEvents: 'none',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: sectionRef.current,
-                start: `+=${scrollPerSlide * 0.8}`,
-                end: `+=${scrollPerSlide}`,
-                scrub: 1.5,
-              }
-            })
-          } else {
-            // Other slides: fade in → hold → fade out
-            gsap.set(slide, { opacity: 0, pointerEvents: 'none' })
-
-            // Fade in
-            const fadeInStart = scrollPerSlide * (i - 0.2)
-            const fadeInEnd = scrollPerSlide * i
-            gsap.to(slide, {
-              opacity: 1,
-              pointerEvents: 'auto',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: sectionRef.current,
-                start: `+=${fadeInStart}`,
-                end: `+=${fadeInEnd}`,
-                scrub: 1.5,
-              }
-            })
-
-            // Parallax on text
-            gsap.fromTo(textContent,
-              { y: 30 },
-              {
-                y: -30,
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: sectionRef.current,
-                  start: `+=${scrollPerSlide * i}`,
-                  end: `+=${scrollPerSlide * (i + 1)}`,
-                  scrub: 1.5,
-                }
-              }
-            )
-
-            // Parallax on mockup (slower, creates depth)
-            gsap.fromTo(mockupContent,
-              { y: 20 },
-              {
-                y: -10,
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: sectionRef.current,
-                  start: `+=${scrollPerSlide * i}`,
-                  end: `+=${scrollPerSlide * (i + 1)}`,
-                  scrub: 2,
-                }
-              }
-            )
-
-            // Fade out (not for last slide)
-            if (i < totalSlides - 1) {
-              const fadeOutStart = scrollPerSlide * (i + 0.8)
-              const fadeOutEnd = scrollPerSlide * (i + 1)
-              gsap.to(slide, {
-                opacity: 0,
-                pointerEvents: 'none',
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: sectionRef.current,
-                  start: `+=${fadeOutStart}`,
-                  end: `+=${fadeOutEnd}`,
-                  scrub: 1.5,
-                }
-              })
-            }
-          }
-
-          // Dot activation
-          if (dots[i]) {
-            ScrollTrigger.create({
-              trigger: sectionRef.current,
-              start: `+=${scrollPerSlide * i}`,
-              end: `+=${scrollPerSlide * (i + 1)}`,
-              onEnter: () => {
-                dots.forEach((d, di) => {
-                  d.classList.toggle('active', di === i)
-                })
-              },
-              onEnterBack: () => {
-                dots.forEach((d, di) => {
-                  d.classList.toggle('active', di === i)
-                })
-              },
-            })
+          scrub: false, // No scrub, ensuring discrete slide triggers
+          onUpdate: (self) => {
+            let newIndex = Math.floor(self.progress * projects.length)
+            if (newIndex >= projects.length) newIndex = projects.length - 1
+            if (newIndex < 0) newIndex = 0
+            
+            setActiveSlide(newIndex)
           }
         })
       })
+
+      mm.add("(max-width: 767px)", () => {})
     }, sectionRef)
 
     return () => ctx.revert()
   }, [projects.length])
 
+  // 2. Perform discrete "slide in" animations of the entire slide containers horizontally
+  // This guarantees zero overlapping content because the whole container moves.
+  useEffect(() => {
+    slideRefs.current.forEach((slide, i) => {
+      if (!slide) return
+      
+      if (i === activeSlide) {
+        // ACTIVE SLIDE: slide in to center
+        gsap.to(slide, { 
+          x: '0%', 
+          opacity: 1,
+          pointerEvents: 'auto', 
+          duration: 1.0, 
+          ease: 'power3.inOut', 
+          overwrite: true,
+          zIndex: 10
+        })
+      } else if (i < activeSlide) {
+        // PAST SLIDE: slide out to the left
+        gsap.to(slide, { 
+          x: '-100%', 
+          opacity: 0.5,
+          pointerEvents: 'none', 
+          duration: 1.0, 
+          ease: 'power3.inOut', 
+          overwrite: true,
+          zIndex: 1
+        })
+      } else {
+        // FUTURE SLIDE: stay hidden at the right, ready to slide in
+        gsap.to(slide, { 
+          x: '100%', 
+          opacity: 0,
+          pointerEvents: 'none', 
+          duration: 1.0, 
+          ease: 'power3.inOut', 
+          overwrite: true,
+          zIndex: 1
+        })
+      }
+    })
+  }, [activeSlide])
+
   return (
-    <section id="works" ref={sectionRef} className="relative min-h-screen bg-[var(--color-canvas)]">
+    <section id="works" ref={sectionRef} className="relative min-h-screen bg-[var(--color-canvas)] overflow-hidden">
       
       {/* Desktop: Pinned full-screen slides */}
-      <div className="hidden md:block relative h-screen w-full overflow-hidden">
+      <div className="hidden md:block relative h-screen w-full">
         
         {/* Section header — always visible */}
         <div className="absolute top-20 left-6 lg:left-12 z-20">
@@ -183,12 +101,19 @@ export default function RecentWorks() {
         {projects.map((exp, i) => (
           <div
             key={exp.id}
-            className="works-slide absolute inset-0 flex items-center will-change-[opacity]"
+            ref={(el) => slideRefs.current[i] = el}
+            className="works-slide absolute inset-0 flex items-center bg-[var(--color-canvas)] will-change-transform"
+            style={{ 
+              transform: `translateX(${i === 0 ? '0%' : '100%'})`, 
+              opacity: i === 0 ? 1 : 0,
+              pointerEvents: i === 0 ? 'auto' : 'none',
+              zIndex: i === 0 ? 10 : 1
+            }}
           >
             <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
               
               {/* Left: Project info */}
-              <div className="works-text space-y-6 will-change-transform">
+              <div className="works-text space-y-6">
                 <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
                   {exp.tags.join(' · ')}
                 </span>
@@ -212,8 +137,8 @@ export default function RecentWorks() {
               </div>
 
               {/* Right: Project preview mockup */}
-              <div className="works-mockup relative flex items-center justify-center will-change-transform">
-                <div className="w-full max-w-lg aspect-[4/3] rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-subtle)] p-6 flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="works-mockup relative flex items-center justify-center">
+                <div className="w-full max-w-lg aspect-[4/3] rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-subtle)] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-xl">
                   {/* Simulated app window chrome */}
                   <div className="absolute top-4 left-4 flex gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-border-subtle)]" />
@@ -245,7 +170,7 @@ export default function RecentWorks() {
             <div
               key={i}
               className={`works-dot w-2.5 h-2.5 rounded-full transition-all duration-500 ${
-                i === 0 ? 'active' : ''
+                i === activeSlide ? 'active' : ''
               }`}
               style={{
                 backgroundColor: 'var(--color-border-subtle)',
