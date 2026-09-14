@@ -35,7 +35,27 @@ export default function RecentWorks() {
         })
       })
 
-      mm.add("(max-width: 767px)", () => {})
+      mm.add("(max-width: 767px)", () => {
+        // On mobile, we use standard vertical scrolling but with elegant fade-up animations
+        const mobileCards = gsap.utils.toArray<HTMLElement>('.mobile-work-card')
+        
+        mobileCards.forEach((card) => {
+          gsap.fromTo(card, 
+            { y: 50, opacity: 0 },
+            { 
+              y: 0, 
+              opacity: 1, 
+              duration: 0.8, 
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: card,
+                start: "top 85%", // Trigger when the top of the card is 85% down the viewport
+                toggleActions: "play none none reverse"
+              }
+            }
+          )
+        })
+      })
     }, sectionRef)
 
     return () => ctx.revert()
@@ -187,7 +207,7 @@ export default function RecentWorks() {
           <p className="font-sans text-[var(--color-text-muted)] text-sm">Selected projects.</p>
         </div>
         {projects.map((exp) => (
-          <div key={exp.id} className="space-y-4 border-t border-[var(--color-border-subtle)] pt-8">
+          <div key={exp.id} className="mobile-work-card space-y-4 border-t border-[var(--color-border-subtle)] pt-8 will-change-[opacity,transform]">
             <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
               {exp.tags.join(' · ')}
             </span>

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from '../data/cv.json'
-import randiImg from '../assets/randi.jpg'
+import randiImg from '../assets/randi-nobg2.png'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -97,11 +97,7 @@ export default function Hero() {
             <img 
               src={randiImg} 
               alt="Randi Zakaria Putra" 
-              style={{
-                maskImage: 'radial-gradient(circle at center, black 40%, transparent 68%)',
-                WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 68%)'
-              }}
-              className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out z-10"
+              className="w-full h-full object-contain grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out z-10"
             />
           </div>
         </div>
