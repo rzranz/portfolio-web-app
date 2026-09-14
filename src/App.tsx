@@ -10,6 +10,8 @@ import RecentWorks from './components/RecentWorks'
 import Contact from './components/Contact'
 import SectionIndex from './components/SectionIndex'
 import ThemeToggle from './components/ThemeToggle'
+import Footer from './components/Footer'
+import { Particles } from './components/ui/particles'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -24,6 +26,10 @@ function App() {
       smoothWheel: true,
       touchMultiplier: 2,
     })
+
+    // Expose lenis globally for custom scroll triggers (like SectionIndex)
+    // @ts-expect-error adding lenis to window
+    window.lenis = lenis
 
     function raf(time: number) {
       lenis.raf(time)
@@ -48,6 +54,7 @@ function App() {
   return (
     <>
       <SectionIndex />
+      <Particles className="fixed inset-0 z-0 pointer-events-none" />
       
       {/* Navbar Placeholder */}
       <header className="fixed top-0 left-0 right-0 z-40 p-6 flex items-center justify-between pointer-events-none">
@@ -62,7 +69,7 @@ function App() {
         </div>
       </header>
 
-      <main className="relative z-10">
+      <main className="relative z-10 overflow-hidden">
         <Hero />
         <About />
         <TechStack />
@@ -70,9 +77,7 @@ function App() {
         <Contact />
       </main>
 
-      <footer className="py-6 border-t border-[var(--color-border-subtle)] text-center text-[10px] text-[var(--color-text-muted)] font-mono">
-        © 2026 Randi Zakaria Putra. Portfolio with Vite + React.
-      </footer>
+      <Footer />
     </>
   )
 }

@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from '../data/cv.json'
-
+import { BlurReveal } from './ui/blur-reveal'
+import { StaggerBlurEffect } from './ui/stagger-blur-effect'
 gsap.registerPlugin(ScrollTrigger)
 
 export default function RecentWorks() {
@@ -22,12 +23,16 @@ export default function RecentWorks() {
         ScrollTrigger.create({
           trigger: sectionRef.current,
           start: "top top",
-          end: `+=${window.innerHeight * projects.length * 1.2}`, // Generous scroll space
+          // Reduce scroll distance significantly so it only takes ~1 scroll to transition
+          end: `+=${window.innerHeight * (projects.length + 1) * 0.35}`, 
           pin: true,
           scrub: false, // No scrub, ensuring discrete slide triggers
           onUpdate: (self) => {
-            let newIndex = Math.floor(self.progress * projects.length)
-            if (newIndex >= projects.length) newIndex = projects.length - 1
+            const totalSlides = projects.length + 1;
+            // Add a 0.75 step buffer at the end so the last slide rests before unpinning
+            const scrollSteps = totalSlides + 0.75; 
+            let newIndex = Math.floor(self.progress * scrollSteps)
+            if (newIndex >= totalSlides) newIndex = totalSlides - 1
             if (newIndex < 0) newIndex = 0
             
             setActiveSlide(newIndex)
@@ -117,76 +122,107 @@ export default function RecentWorks() {
           </span>
         </div>
 
-        {/* Slides */}
-        {projects.map((exp, i) => (
-          <div
-            key={exp.id}
-            ref={(el) => { slideRefs.current[i] = el }}
-            className="works-slide absolute inset-0 flex items-center bg-[var(--color-canvas)] will-change-transform"
-            style={{ 
-              transform: `translateX(${i === 0 ? '0%' : '100%'})`, 
-              opacity: i === 0 ? 1 : 0,
-              pointerEvents: i === 0 ? 'auto' : 'none',
-              zIndex: i === 0 ? 10 : 1
-            }}
-          >
-            <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-              
-              {/* Left: Project info */}
-              <div className="works-text space-y-6">
-                <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
-                  {exp.tags.join(' · ')}
-                </span>
-                <h3 className="font-display font-semibold text-4xl lg:text-5xl tracking-tight leading-tight">
-                  {exp.title}
-                </h3>
-                <p className="font-sans text-[var(--color-text-muted)] text-base leading-relaxed max-w-[50ch]">
-                  {exp.description}
-                </p>
-                <div className="pt-2">
-                  <span className="font-sans font-medium text-sm">Built with: </span>
-                  <span className="font-sans text-[var(--color-text-muted)] text-sm">
-                    {exp.stack.join(', ')}.
-                  </span>
-                </div>
-                <div className="flex items-center gap-6 pt-4">
-                  <a href="#" className="text-[var(--color-primary)] text-sm font-sans font-medium hover:opacity-70 transition-opacity inline-flex items-center gap-1.5">
-                    View the code <span className="text-xs">›</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Right: Project preview mockup */}
-              <div className="works-mockup relative flex items-center justify-center">
-                <div className="w-full max-w-lg aspect-[4/3] rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-subtle)] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-xl">
-                  {/* Simulated app window chrome */}
-                  <div className="absolute top-4 left-4 flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-border-subtle)]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-border-subtle)]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-border-subtle)]" />
-                  </div>
-                  <div className="text-center mt-4">
-                    <div className="font-display font-semibold text-xl mb-2">{exp.company}</div>
-                    <div className="font-mono text-xs text-[var(--color-text-muted)]">{exp.period}</div>
-                  </div>
-                  {/* Stack pills */}
-                  <div className="flex flex-wrap justify-center gap-2 mt-6">
-                    {exp.stack.slice(0, 4).map((s) => (
-                      <span key={s} className="px-3 py-1 rounded-full text-[10px] font-mono border border-[var(--color-border-subtle)] text-[var(--color-text-muted)]">
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-            </div>
+        {/* Intro Slide (Index 0) */}
+        <div
+          ref={(el) => { slideRefs.current[0] = el }}
+          className="works-slide absolute inset-0 flex items-center justify-center bg-[var(--color-canvas)] will-change-transform"
+          style={{ 
+            transform: `translateX(0%)`, 
+            opacity: 1,
+            pointerEvents: 'auto',
+            zIndex: 10
+          }}
+        >
+          <div className="text-center space-y-6">
+            <h2 className="font-display font-bold text-5xl md:text-7xl tracking-tight leading-tight flex flex-col items-center">
+              <StaggerBlurEffect delay={0}>Portfolio & Previous</StaggerBlurEffect>
+              <StaggerBlurEffect delay={0.2}>Projects</StaggerBlurEffect>
+            </h2>
+            <BlurReveal delay={0.2} className="block font-sans text-[var(--color-text-muted)] text-base md:text-lg max-w-[60ch] mx-auto">
+              I've built a variety of projects tailored to different aspects of each client's business. 
+              If you'd like to see more examples beyond what's showcased here, feel free to <a href="#contact" className="text-[var(--color-primary)] hover:opacity-70 transition-opacity">get in touch</a> — I'd be happy to share.
+            </BlurReveal>
+            <BlurReveal delay={0.3} className="block pt-8">
+              <span className="text-[var(--color-primary)] text-sm font-sans font-medium inline-flex items-center gap-1.5 animate-bounce">
+                See Projects <span className="text-xs rotate-90">›</span>
+              </span>
+            </BlurReveal>
           </div>
-        ))}
+        </div>
+
+        {/* Project Slides (Index 1 to N) */}
+        {projects.map((exp, i) => {
+          const slideIndex = i + 1;
+          return (
+            <div
+              key={exp.id}
+              ref={(el) => { slideRefs.current[slideIndex] = el }}
+              className="works-slide absolute inset-0 flex items-center bg-[var(--color-canvas)] will-change-transform"
+              style={{ 
+                transform: `translateX(100%)`, 
+                opacity: 0,
+                pointerEvents: 'none',
+                zIndex: 1
+              }}
+            >
+              <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+                
+                {/* Left: Project info */}
+                <div className="works-text space-y-6">
+                  <span className="font-mono text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
+                    {exp.tags.join(' · ')}
+                  </span>
+                  <h3 className="font-display font-semibold text-4xl lg:text-5xl tracking-tight leading-tight">
+                    {exp.title}
+                  </h3>
+                  <p className="font-sans text-[var(--color-text-muted)] text-base leading-relaxed max-w-[50ch]">
+                    {exp.description}
+                  </p>
+                  <div className="pt-2">
+                    <span className="font-sans font-medium text-sm">Built with: </span>
+                    <span className="font-sans text-[var(--color-text-muted)] text-sm">
+                      {exp.stack.join(', ')}.
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-6 pt-4">
+                    <a href="#" className="text-[var(--color-primary)] text-sm font-sans font-medium hover:opacity-70 transition-opacity inline-flex items-center gap-1.5">
+                      View the code <span className="text-xs">›</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Right: Project preview mockup */}
+                <div className="works-mockup relative flex items-center justify-center">
+                  <div className="w-full max-w-lg aspect-[4/3] rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-subtle)] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-xl">
+                    {/* Simulated app window chrome */}
+                    <div className="absolute top-4 left-4 flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-border-subtle)]" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-border-subtle)]" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-border-subtle)]" />
+                    </div>
+                    <div className="text-center mt-4">
+                      <div className="font-display font-semibold text-xl mb-2">{exp.company}</div>
+                      <div className="font-mono text-xs text-[var(--color-text-muted)]">{exp.period}</div>
+                    </div>
+                    {/* Stack pills */}
+                    <div className="flex flex-wrap justify-center gap-2 mt-6">
+                      {exp.stack.slice(0, 4).map((s) => (
+                        <span key={s} className="px-3 py-1 rounded-full text-[10px] font-mono border border-[var(--color-border-subtle)] text-[var(--color-text-muted)]">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )
+        })}
 
         {/* Dot pagination */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
-          {projects.map((_, i) => (
+          {Array.from({ length: projects.length + 1 }).map((_, i) => (
             <div
               key={i}
               className={`works-dot w-2.5 h-2.5 rounded-full transition-all duration-500 ${

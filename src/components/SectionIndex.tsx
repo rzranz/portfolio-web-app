@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import gsap from 'gsap'
 
 const SECTIONS = [
   { id: 'hero', label: '00' },
@@ -25,7 +26,7 @@ export default function SectionIndex() {
             setActiveIndex(index)
           }
         },
-        { threshold: 0.3 }
+        { rootMargin: "-50% 0px -50% 0px" }
       )
       observer.observe(el)
       observers.push(observer)
@@ -45,9 +46,49 @@ export default function SectionIndex() {
     }
   }, [])
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault()
+
+    // 1. Apply blur to the main container
+    gsap.to('main', { 
+      filter: 'blur(8px) brightness(0.7)', 
+      duration: 0.4, 
+      ease: 'power2.out' 
+    })
+
+    const lenis = (window as any).lenis
+    
+    if (lenis && typeof lenis.scrollTo === 'function') {
+      // 2. Scroll smoothly with Lenis
+      lenis.scrollTo(`#${id}`, {
+        duration: 1.5,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        onComplete: () => {
+          // 3. Remove blur once scrolling is done
+          gsap.to('main', { 
+            filter: 'blur(0px) brightness(1)', 
+            duration: 0.6, 
+            ease: 'power2.inOut',
+            clearProps: 'filter'
+          })
+        }
+      })
+    } else {
+      // Fallback
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+      setTimeout(() => {
+        gsap.to('main', { filter: 'blur(0px) brightness(1)', duration: 0.6, clearProps: 'filter' })
+      }, 1500)
+    }
+  }
+
   const scrollAction = () => {
     if (atBottom) {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      handleNavClick({ preventDefault: () => {} } as any, 'hero')
+    } else {
+      // Scroll down one section relative to current
+      const nextIndex = Math.min(activeIndex + 1, SECTIONS.length - 1)
+      handleNavClick({ preventDefault: () => {} } as any, SECTIONS[nextIndex].id)
     }
   }
 
@@ -62,10 +103,11 @@ export default function SectionIndex() {
           <a
             key={section.id}
             href={`#${section.id}`}
+            onClick={(e) => handleNavClick(e, section.id)}
             className={`
               relative font-mono text-xs tracking-wider transition-all duration-300 pointer-events-auto
               ${i === activeIndex
-                ? 'text-[var(--color-text-main)] font-bold'
+                ? 'text-[var(--color-text-main)] font-bold scale-110'
                 : 'text-[var(--color-text-muted)] opacity-40 hover:opacity-70'
               }
             `}
@@ -73,7 +115,7 @@ export default function SectionIndex() {
             {section.label}
             {/* Active dot */}
             {i === activeIndex && (
-              <span className="absolute -right-[11px] top-1/2 -translate-y-1/2 w-[9px] h-[9px] rounded-full bg-[var(--color-text-main)]" />
+              <span className="absolute -right-[11px] top-1/2 -translate-y-1/2 w-[9px] h-[9px] rounded-full bg-[var(--color-text-main)] shadow-[0_0_10px_var(--color-text-main)]" />
             )}
           </a>
         ))}
