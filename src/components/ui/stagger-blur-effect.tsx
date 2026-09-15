@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode, useEffect, useState } from "react"
+import { type CSSProperties, type ReactNode, useEffect, useState } from "react"
 import { stagger, useAnimate } from "framer-motion"
 import { cn } from "../../lib/utils"
 
@@ -25,8 +25,8 @@ export function StaggerBlurEffect({
   }
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout
-    let interval: NodeJS.Timeout
+    let timeout: ReturnType<typeof setTimeout>
+    let interval: ReturnType<typeof setInterval>
 
     // Initial sequence
     timeout = setTimeout(() => {
