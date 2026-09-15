@@ -31,13 +31,6 @@ function App() {
     // @ts-expect-error adding lenis to window
     window.lenis = lenis
 
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-
     // Sync GSAP with Lenis
     lenis.on('scroll', ScrollTrigger.update)
     gsap.ticker.add((time) => {
@@ -69,7 +62,7 @@ function App() {
         </div>
       </header>
 
-      <main className="relative z-10 overflow-hidden">
+      <main className="relative z-10 overflow-x-clip">
         <Hero />
         <About />
         <TechStack />
