@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Globe } from 'lucide-react'
 
 import Hero from './components/Hero'
 import About from './components/About'
@@ -12,10 +13,13 @@ import SectionIndex from './components/SectionIndex'
 import ThemeToggle from './components/ThemeToggle'
 import Footer from './components/Footer'
 import { Particles } from './components/ui/particles'
+import { useLanguage } from './lib/i18n'
 
 gsap.registerPlugin(ScrollTrigger)
 
 function App() {
+  const { language, toggleLanguage, t } = useLanguage()
+
   useEffect(() => {
     // Initialize Lenis
     const lenis = new Lenis({
@@ -49,15 +53,19 @@ function App() {
       <SectionIndex />
       <Particles className="fixed inset-0 z-0 pointer-events-none" />
       
-      {/* Navbar Placeholder */}
       <header className="fixed top-0 left-0 right-0 z-40 p-6 flex items-center justify-between pointer-events-none">
-        <div className="font-display font-bold text-xl tracking-wider pointer-events-auto">
-          <span className="text-[var(--color-primary)]">&gt;</span> RANN.
+        <div className="flex items-center gap-6 pointer-events-auto">
+          <div className="font-display font-bold text-xl tracking-wider">
+            <span className="text-[var(--color-primary)]">&gt;</span> RANN.
+          </div>
+          <button onClick={toggleLanguage} className="flex items-center gap-2 text-sm font-semibold hover:opacity-70 transition-opacity ml-4 uppercase tracking-wider">
+            <Globe className="w-4 h-4" /> {language.toUpperCase()}
+          </button>
         </div>
         <div className="flex items-center gap-6 pointer-events-auto">
           <ThemeToggle />
           <a href="#contact" className="px-5 py-2 text-xs font-mono font-semibold rounded border border-[var(--color-border-subtle)] hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] transition-colors">
-            Contact
+            {t('nav.contact')}
           </a>
         </div>
       </header>

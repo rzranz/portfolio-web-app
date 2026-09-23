@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion"
 import { cn } from "../lib/utils"
+import { useLanguage } from '../lib/i18n'
 
 type CharacterProps = {
   char: string
@@ -52,6 +53,7 @@ const CharacterV1 = ({
 }
 
 export default function About() {
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   
   const { scrollYProgress } = useScroll({
@@ -61,9 +63,12 @@ export default function About() {
     offset: ["start 90%", "center center"]
   })
 
-  const text = "FULLSTACK ENGINEER, PROBLEM SOLVER."
+  const text = t('about.title')
+  const words = text.split(" ")
   const characters = text.split("")
   const centerIndex = Math.floor(characters.length / 2)
+
+  let globalCharIndex = 0
 
   return (
     <section id="about" ref={sectionRef} className="py-24 lg:py-40 bg-[var(--color-canvas)] border-b border-[var(--color-border-subtle)] overflow-hidden">
@@ -71,33 +76,45 @@ export default function About() {
         
         {/* Animated Title */}
         <div className="lg:col-span-7 z-10" style={{ perspective: "1000px" }}>
-          <h2 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.1] uppercase">
-            {characters.map((char, index) => (
-              <CharacterV1
-                key={index}
-                char={char}
-                index={index}
-                centerIndex={centerIndex}
-                scrollYProgress={scrollYProgress}
-              />
-            ))}
+          <h2 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] tracking-tighter leading-[1.05] uppercase flex flex-wrap gap-x-3 gap-y-2">
+            {words.map((word, wordIndex) => {
+              const wordChars = word.split("")
+              return (
+                <span key={wordIndex} className="inline-flex whitespace-nowrap">
+                  {wordChars.map((char) => {
+                    const currentIndex = globalCharIndex++
+                    return (
+                      <CharacterV1
+                        key={currentIndex}
+                        char={char}
+                        index={currentIndex}
+                        centerIndex={centerIndex}
+                        scrollYProgress={scrollYProgress}
+                      />
+                    )
+                  })}
+                  {/* Manually add space for all but the last word to maintain global index sequence, or just use gap-x-3 on the container. We'll use gap-x-3 on container and increment index for space. */}
+                  {wordIndex < words.length - 1 && (() => { globalCharIndex++; return null })()}
+                </span>
+              )
+            })}
           </h2>
           <div className="mt-8 font-mono text-xs uppercase tracking-widest text-[var(--color-text-muted)] border-l border-[var(--color-border-subtle)] pl-4">
-            <p>Universitas Komputer Indonesia (2022-2026)</p>
-            <p className="mt-1">Bachelor of Informatics Engineering (GPA: 3.43)</p>
+            <p>{t('about.uni')}</p>
+            <p className="mt-1">{t('about.degree')}</p>
           </div>
         </div>
 
         {/* Text Content */}
         <div className="lg:col-span-5 space-y-6 lg:pl-12">
           <p className="font-sans text-[var(--color-text-main)] text-base md:text-lg leading-relaxed">
-            I am a Fullstack Software Engineer with a proven track record of building scalable web applications. My expertise lies in architecting robust backend systems and creating responsive, intuitive frontends.
+            {t('about.p1')}
           </p>
           <p className="font-sans text-[var(--color-text-muted)] text-base md:text-lg leading-relaxed">
-            With hands-on experience in managing technical projects and leading teams, I approach every challenge with strong problem-solving skills and technical adaptability—whether I'm integrating payment gateways, developing REST APIs, or building enterprise systems.
+            {t('about.p2')}
           </p>
           <div className="pt-6 font-display font-medium text-xl leading-snug">
-            "Driven by logic, adaptability, and the pursuit of clean code."
+            "{t('hero.desc')}"
           </div>
         </div>
         

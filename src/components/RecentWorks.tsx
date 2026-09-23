@@ -4,9 +4,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from '../data/cv.json'
 import { BlurReveal } from './ui/blur-reveal'
 import { StaggerBlurEffect } from './ui/stagger-blur-effect'
+import { useLanguage } from '../lib/i18n'
 gsap.registerPlugin(ScrollTrigger)
 
 export default function RecentWorks() {
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLDivElement>(null)
   const [activeSlide, setActiveSlide] = useState(0)
   const projects = data.experience
@@ -118,7 +120,7 @@ export default function RecentWorks() {
         {/* Section header — always visible */}
         <div className="absolute top-20 left-6 lg:left-12 z-20">
           <span className="font-mono text-xs text-[var(--color-text-muted)] uppercase tracking-widest">
-            Featured Projects
+            {t('works.featured')}
           </span>
         </div>
 
@@ -135,16 +137,15 @@ export default function RecentWorks() {
         >
           <div className="text-center space-y-6">
             <h2 className="font-display font-bold text-5xl md:text-7xl tracking-tight leading-tight flex flex-col items-center">
-              <StaggerBlurEffect delay={0}>Portfolio & Previous</StaggerBlurEffect>
-              <StaggerBlurEffect delay={0.2}>Projects</StaggerBlurEffect>
+              <StaggerBlurEffect delay={0}>{t('works.title1')}</StaggerBlurEffect>
+              <StaggerBlurEffect delay={0.2}>{t('works.title2')}</StaggerBlurEffect>
             </h2>
             <BlurReveal delay={0.2} className="block font-sans text-[var(--color-text-muted)] text-base md:text-lg max-w-[60ch] mx-auto">
-              I've built a variety of projects tailored to different aspects of each client's business. 
-              If you'd like to see more examples beyond what's showcased here, feel free to <a href="#contact" className="text-[var(--color-primary)] hover:opacity-70 transition-opacity">get in touch</a> — I'd be happy to share.
+              {t('works.desc')} <a href="#contact" className="text-[var(--color-primary)] hover:opacity-70 transition-opacity">{t('works.contact')}</a> {t('works.share')}
             </BlurReveal>
             <BlurReveal delay={0.3} className="block pt-8">
               <span className="text-[var(--color-primary)] text-sm font-sans font-medium inline-flex items-center gap-1.5 animate-bounce">
-                See Projects <span className="text-xs rotate-90">›</span>
+                {t('works.scroll')} <span className="text-xs rotate-90">›</span>
               </span>
             </BlurReveal>
           </div>
@@ -179,14 +180,14 @@ export default function RecentWorks() {
                     {exp.description}
                   </p>
                   <div className="pt-2">
-                    <span className="font-sans font-medium text-sm">Built with: </span>
+                    <span className="font-sans font-medium text-sm">{t('works.built')}</span>
                     <span className="font-sans text-[var(--color-text-muted)] text-sm">
                       {exp.stack.join(', ')}.
                     </span>
                   </div>
                   <div className="flex items-center gap-6 pt-4">
                     <a href="#" className="text-[var(--color-primary)] text-sm font-sans font-medium hover:opacity-70 transition-opacity inline-flex items-center gap-1.5">
-                      View the code <span className="text-xs">›</span>
+                      {t('works.code')} <span className="text-xs">›</span>
                     </a>
                   </div>
                 </div>
@@ -239,8 +240,8 @@ export default function RecentWorks() {
       {/* Mobile: Stacked cards */}
       <div className="md:hidden py-24 px-6 space-y-16">
         <div>
-          <h2 className="font-display font-medium text-3xl tracking-tight mb-2">Recent Works</h2>
-          <p className="font-sans text-[var(--color-text-muted)] text-sm">Selected projects.</p>
+          <h2 className="font-display font-medium text-3xl tracking-tight mb-2">{t('works.mobileTitle')}</h2>
+          <p className="font-sans text-[var(--color-text-muted)] text-sm">{t('works.mobileSub')}</p>
         </div>
         {projects.map((exp) => (
           <div key={exp.id} className="mobile-work-card space-y-4 border-t border-[var(--color-border-subtle)] pt-8 will-change-[opacity,transform]">

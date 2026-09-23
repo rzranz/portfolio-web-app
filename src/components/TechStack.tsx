@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion"
 import { cn } from "../lib/utils"
 import data from '../data/cv.json'
+import { useLanguage } from '../lib/i18n'
 
 // Map tech names to devicon class names
 const techIcons: Record<string, string> = {
@@ -92,11 +93,12 @@ const Bracket = ({ className }: { className: string }) => {
 }
 
 export default function TechStack() {
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start 90%", "center center"]
+    offset: ["start end", "center center"]
   })
 
   const techList = data.tech_stack
@@ -109,7 +111,7 @@ export default function TechStack() {
         <div className="text-center">
           <p className="font-display flex flex-wrap items-center justify-center gap-3 text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-[var(--color-text-main)]">
             <Bracket className="h-8 sm:h-12 text-[var(--color-text-muted)] opacity-50" />
-            <span>Technologies I work with</span>
+            <span>{t('tech.title')}</span>
             <Bracket className="h-8 sm:h-12 scale-x-[-1] text-[var(--color-text-muted)] opacity-50" />
           </p>
         </div>

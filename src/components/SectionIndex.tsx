@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import gsap from 'gsap'
+import { useLanguage } from '../lib/i18n'
 
 const SECTIONS = [
   { id: 'hero', label: '00' },
@@ -10,6 +11,7 @@ const SECTIONS = [
 ]
 
 export default function SectionIndex() {
+  const { t } = useLanguage()
   const [activeIndex, setActiveIndex] = useState(0)
   const [atBottom, setAtBottom] = useState(false)
 
@@ -127,7 +129,7 @@ export default function SectionIndex() {
         className="pointer-events-auto mt-10 font-mono text-[10px] tracking-widest text-[var(--color-text-muted)] uppercase writing-mode-vertical cursor-pointer hover:text-[var(--color-text-main)] transition-colors"
         style={{ writingMode: 'vertical-rl' }}
       >
-        {atBottom ? '↑ Back To Top' : 'Scroll Down ↓'}
+        {atBottom ? `↑ ${t('footer.backTop')}` : `${t('index.scroll')} ↓`}
       </button>
     </div>
   )

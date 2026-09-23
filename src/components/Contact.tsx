@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLanguage } from '../lib/i18n'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function Contact() {
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -32,8 +34,8 @@ export default function Contact() {
   return (
     <section id="contact" ref={sectionRef} className="min-h-[60vh] flex items-center justify-center relative px-6">
       <div className="max-w-[1000px] mx-auto w-full text-center">
-        <h2 className="contact-reveal font-display font-medium text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-[var(--color-text-main)] mx-auto max-w-[20ch]">
-          What would you do if a software expert was just a click away?
+        <h2 className="contact-reveal font-display font-bold uppercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-[var(--color-text-main)] mx-auto max-w-[22ch]">
+          {t('contact.heading')}
         </h2>
       </div>
     </section>

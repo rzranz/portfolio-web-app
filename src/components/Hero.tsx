@@ -1,17 +1,32 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from '../data/cv.json'
-import randiImg from '../assets/randi-nobg2.png'
 import { BlurReveal } from './ui/blur-reveal'
-import { StaggerBlurEffect } from './ui/stagger-blur-effect'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useLanguage } from '../lib/i18n'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function Hero() {
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
+
+  const roles = [
+    "RANDI",
+    "A DEVELOPER",
+    "A SOFTWARE ENGINEER",
+    "TECH ENTHUSIAST"
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentRoleIndex((prev) => (prev + 1) % roles.length)
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const tl = gsap.timeline()
@@ -39,41 +54,51 @@ export default function Hero() {
     return () => ctx.revert()
   }, [])
 
-  const shortSummary = data.profile.summary.split(' ').slice(0, 22).join(' ') + '.';
   const roleWords = data.profile.role.split(' ')
 
   return (
-    <section id="hero" ref={sectionRef} className="min-h-[100dvh] flex items-center relative overflow-hidden">
-      <div className="hero-content-wrapper max-w-[1400px] mx-auto px-6 lg:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section id="hero" ref={sectionRef} className="min-h-[100dvh] flex flex-col justify-center relative overflow-hidden">
+      <div className="hero-content-wrapper max-w-[1400px] mx-auto px-6 lg:px-12 w-full z-10 pt-20">
         
-        {/* Left Column: Typography */}
-        <div ref={textRef} className="z-10 pt-24 lg:pt-0 will-change-transform">
-          <h1 className="font-display font-semibold text-5xl md:text-6xl lg:text-[4.5rem] tracking-tight leading-[1.08] mb-6">
-            <StaggerBlurEffect delay={0.1}>{data.profile.role}</StaggerBlurEffect>
+        {/* Top Label */}
+        <BlurReveal delay={0.1} className="mb-8 md:mb-12">
+          <span className="text-xs md:text-sm tracking-widest text-[var(--color-text-muted)] uppercase font-semibold">
+            {t('hero.label')}
+          </span>
+        </BlurReveal>
+
+        {/* Huge Typography */}
+        <div ref={textRef} className="will-change-transform">
+          <h1 className="font-display font-bold text-[9vw] sm:text-[7vw] md:text-[6vw] lg:text-[5.5vw] xl:text-[6rem] tracking-tighter leading-[0.95] mb-8 flex flex-col uppercase">
+            <span className="text-[var(--color-text-muted)] mb-2">{t('hero.iam')}</span>
+            <div className="relative h-[1.1em] text-[var(--color-text-main)] w-full">
+              <AnimatePresence>
+                <motion.div
+                  key={currentRoleIndex}
+                  initial={{ y: 20, opacity: 0, filter: 'blur(8px)' }}
+                  animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                  exit={{ y: -20, opacity: 0, filter: 'blur(8px)' }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="absolute inset-0 whitespace-nowrap"
+                >
+                  {roles[currentRoleIndex]}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </h1>
           
-          <BlurReveal delay={roleWords.length * 0.1} className="block text-[var(--color-text-muted)] text-base md:text-lg leading-relaxed max-w-[48ch] mb-8 font-sans">
-            {shortSummary}
+          <BlurReveal delay={roleWords.length * 0.1} className="block text-[var(--color-text-muted)] text-base md:text-xl leading-relaxed max-w-[50ch] mb-10 font-sans">
+            {t('hero.desc')}
           </BlurReveal>
           
-          <BlurReveal delay={(roleWords.length * 0.1) + 0.1} className="flex items-center gap-6">
-            <a href="#about" className="text-[var(--color-primary)] text-sm font-sans font-medium hover:opacity-70 transition-opacity inline-flex items-center gap-1.5">
-              About me <span className="text-xs">›</span>
+          <BlurReveal delay={(roleWords.length * 0.1) + 0.1} className="flex flex-row items-center justify-between w-full mt-4">
+            <a href="#about" className="rounded-[2rem] border border-[var(--color-border-subtle)] px-8 py-3 text-sm md:text-base font-semibold tracking-wider hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] transition-all uppercase">
+              {t('hero.about')}
+            </a>
+            <a href="#works" className="flex items-center gap-2 text-sm md:text-base font-semibold tracking-wider border-b border-[var(--color-text-main)] pb-1 hover:opacity-70 transition-opacity uppercase">
+              {t('hero.recent')} <span className="text-xl leading-none">→</span>
             </a>
           </BlurReveal>
-        </div>
-
-        {/* Right Column: Profile Image */}
-        <div ref={imageRef} className="relative h-full w-full flex-center will-change-transform lg:justify-end pt-12 lg:pt-0">
-          <div className="hero-image relative w-[90%] max-w-[500px] aspect-square flex items-center justify-center">
-            {/* The soft glow behind the transparent image */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-[var(--color-primary)] rounded-full opacity-10 blur-3xl mix-blend-screen"></div>
-            <img 
-              src={randiImg} 
-              alt="Randi Zakaria Putra" 
-              className="w-full h-full object-contain grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-700 ease-out z-10"
-            />
-          </div>
         </div>
 
       </div>
