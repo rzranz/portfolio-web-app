@@ -76,7 +76,7 @@ export default function About() {
         
         {/* Animated Title */}
         <div className="lg:col-span-7 z-10" style={{ perspective: "1000px" }}>
-          <h2 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] tracking-tighter leading-[1.05] uppercase flex flex-wrap gap-x-3 gap-y-2">
+          <h2 className="font-display font-bold text-3xl sm:text-5xl md:text-6xl lg:text-[4.5rem] tracking-tighter leading-[1.05] uppercase flex flex-wrap gap-x-2 sm:gap-x-3 gap-y-1 sm:gap-y-2">
             {words.map((word, wordIndex) => {
               const wordChars = word.split("")
               return (

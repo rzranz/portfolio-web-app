@@ -69,9 +69,9 @@ export default function Hero() {
 
         {/* Huge Typography */}
         <div ref={textRef} className="will-change-transform">
-          <h1 className="font-display font-bold text-[9vw] sm:text-[7vw] md:text-[6vw] lg:text-[5.5vw] xl:text-[6rem] tracking-tighter leading-[0.95] mb-8 flex flex-col uppercase">
-            <span className="text-[var(--color-text-muted)] mb-2">{t('hero.iam')}</span>
-            <div className="relative h-[1.1em] text-[var(--color-text-main)] w-full">
+          <h1 className="font-display font-bold text-[9vw] sm:text-[7vw] md:text-[6vw] lg:text-[5.5vw] xl:text-[6rem] tracking-tighter leading-[1] mb-6 sm:mb-8 flex flex-col uppercase">
+            <span className="text-[var(--color-text-muted)] mb-1 sm:mb-2 text-[6vw] sm:text-inherit">{t('hero.iam')}</span>
+            <div className="relative h-[2.2em] sm:h-[1.1em] text-[var(--color-text-main)] w-full">
               <AnimatePresence>
                 <motion.div
                   key={currentRoleIndex}
@@ -79,7 +79,7 @@ export default function Hero() {
                   animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
                   exit={{ y: -20, opacity: 0, filter: 'blur(8px)' }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
-                  className="absolute inset-0 whitespace-nowrap"
+                  className="absolute inset-0 whitespace-normal sm:whitespace-nowrap break-words"
                 >
                   {roles[currentRoleIndex]}
                 </motion.div>
