@@ -5,8 +5,8 @@ import { useLanguage } from '../lib/i18n'
 const SECTIONS = [
   { id: 'hero', label: '00' },
   { id: 'about', label: '01' },
-  { id: 'tech', label: '02' },
-  { id: 'works', label: '03' },
+  { id: 'works', label: '02' },
+  { id: 'experience', label: '03' },
   { id: 'contact', label: '04' },
 ]
 
@@ -16,34 +16,38 @@ export default function SectionIndex() {
   const [atBottom, setAtBottom] = useState(false)
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
-
-    SECTIONS.forEach((section, index) => {
-      const el = document.getElementById(section.id)
-      if (!el) return
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveIndex(index)
-          }
-        },
-        { rootMargin: "-50% 0px -50% 0px" }
-      )
-      observer.observe(el)
-      observers.push(observer)
-    })
-
-    // Detect bottom of page
     const handleScroll = () => {
+      const viewportHeight = window.innerHeight
       const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      setAtBottom(scrollTop > docHeight - 100)
+      const docHeight = document.documentElement.scrollHeight - viewportHeight
+
+      setAtBottom(scrollTop > docHeight - 120)
+
+      // Calculate which section is currently active based on viewport position
+      const centerLine = viewportHeight * 0.45
+
+      for (let i = SECTIONS.length - 1; i >= 0; i--) {
+        const el = document.getElementById(SECTIONS[i].id)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          // If the element's top is at or above the center line, and its bottom is below
+          if (rect.top <= centerLine && rect.bottom > 80) {
+            setActiveIndex(i)
+            return
+          }
+        }
+      }
+
+      // Default to 0 if at top
+      if (scrollTop < viewportHeight * 0.5) {
+        setActiveIndex(0)
+      }
     }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
 
     return () => {
-      observers.forEach(o => o.disconnect())
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -51,36 +55,32 @@ export default function SectionIndex() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
 
-    // 1. Apply blur to the main container
     gsap.to('main', { 
-      filter: 'blur(8px) brightness(0.7)', 
-      duration: 0.4, 
+      filter: 'blur(6px) brightness(0.8)', 
+      duration: 0.35, 
       ease: 'power2.out' 
     })
 
-    const lenis = (window as any).lenis
+    const lenis = (window as unknown as { lenis?: { scrollTo: (target: string, options: unknown) => void } }).lenis
     
     if (lenis && typeof lenis.scrollTo === 'function') {
-      // 2. Scroll smoothly with Lenis
       lenis.scrollTo(`#${id}`, {
-        duration: 1.5,
+        duration: 1.4,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         onComplete: () => {
-          // 3. Remove blur once scrolling is done
           gsap.to('main', { 
             filter: 'blur(0px) brightness(1)', 
-            duration: 0.6, 
+            duration: 0.5, 
             ease: 'power2.inOut',
             clearProps: 'filter'
           })
         }
       })
     } else {
-      // Fallback
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
       setTimeout(() => {
-        gsap.to('main', { filter: 'blur(0px) brightness(1)', duration: 0.6, clearProps: 'filter' })
-      }, 1500)
+        gsap.to('main', { filter: 'blur(0px) brightness(1)', duration: 0.5, clearProps: 'filter' })
+      }, 1200)
     }
   }
 
@@ -88,49 +88,66 @@ export default function SectionIndex() {
     if (atBottom) {
       handleNavClick({ preventDefault: () => {} } as any, 'hero')
     } else {
-      // Scroll down one section relative to current
       const nextIndex = Math.min(activeIndex + 1, SECTIONS.length - 1)
       handleNavClick({ preventDefault: () => {} } as any, SECTIONS[nextIndex].id)
     }
   }
 
   return (
-    <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-center gap-0 pointer-events-none">
-      {/* Vertical line */}
-      <div className="absolute right-[7px] top-0 bottom-0 w-px bg-[var(--color-border-subtle)]" />
+    <aside 
+      aria-label="Section scroller"
+      className="fixed right-6 md:right-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center pointer-events-none select-none"
+    >
+      {/* Background Vertical Line */}
+      <div className="absolute right-[5px] top-2 bottom-12 w-px bg-[var(--color-border-subtle)] opacity-40 pointer-events-none" />
 
-      {/* Section numbers */}
-      <div className="relative flex flex-col gap-6">
-        {SECTIONS.map((section, i) => (
-          <a
-            key={section.id}
-            href={`#${section.id}`}
-            onClick={(e) => handleNavClick(e, section.id)}
-            className={`
-              relative font-mono text-xs tracking-wider transition-all duration-300 pointer-events-auto
-              ${i === activeIndex
-                ? 'text-[var(--color-text-main)] font-bold scale-110'
-                : 'text-[var(--color-text-muted)] opacity-40 hover:opacity-70'
-              }
-            `}
-          >
-            {section.label}
-            {/* Active dot */}
-            {i === activeIndex && (
-              <span className="absolute -right-[11px] top-1/2 -translate-y-1/2 w-[9px] h-[9px] rounded-full bg-[var(--color-text-main)] shadow-[0_0_10px_var(--color-text-main)]" />
-            )}
-          </a>
-        ))}
-      </div>
+      {/* Section Indicators */}
+      <nav className="relative flex flex-col gap-6 py-2">
+        {SECTIONS.map((section, i) => {
+          const isActive = i === activeIndex
 
-      {/* Scroll indicator */}
+          return (
+            <a
+              key={section.id}
+              href={`#${section.id}`}
+              onClick={(e) => handleNavClick(e, section.id)}
+              className={`
+                group relative font-mono text-xs tracking-widest transition-all duration-300 pointer-events-auto flex items-center justify-end pr-3
+                ${isActive
+                  ? 'text-[var(--color-text-main)] font-extrabold scale-110'
+                  : 'text-[var(--color-text-muted)] opacity-35 hover:opacity-80 font-medium'
+                }
+              `}
+              title={`Section ${section.label}`}
+            >
+              <span className="transition-colors group-hover:text-[var(--color-primary)]">
+                {section.label}
+              </span>
+
+              {/* Active Indicator Dot */}
+              <span 
+                className={`
+                  absolute -right-[1px] top-1/2 -translate-y-1/2 rounded-full transition-all duration-300
+                  ${isActive 
+                    ? 'w-2 h-2 bg-[var(--color-primary)] shadow-[0_0_10px_var(--color-primary)] scale-100 opacity-100' 
+                    : 'w-1.5 h-1.5 bg-transparent scale-0 opacity-0'
+                  }
+                `} 
+              />
+            </a>
+          )
+        })}
+      </nav>
+
+      {/* Scroll indicator button */}
       <button
         onClick={scrollAction}
-        className="pointer-events-auto mt-10 font-mono text-[10px] tracking-widest text-[var(--color-text-muted)] uppercase writing-mode-vertical cursor-pointer hover:text-[var(--color-text-main)] transition-colors"
+        className="pointer-events-auto mt-8 font-mono text-[9px] tracking-[0.25em] text-[var(--color-text-muted)] uppercase cursor-pointer hover:text-[var(--color-primary)] transition-colors opacity-60 hover:opacity-100 flex items-center gap-1.5"
         style={{ writingMode: 'vertical-rl' }}
       >
-        {atBottom ? `↑ ${t('footer.backTop')}` : `${t('index.scroll')} ↓`}
+        <span>{atBottom ? t('footer.backTop') : t('index.scroll')}</span>
+        <span className="text-[11px] leading-none">{atBottom ? '↑' : '↓'}</span>
       </button>
-    </div>
+    </aside>
   )
 }

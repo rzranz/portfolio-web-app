@@ -4,14 +4,17 @@ import { useLanguage } from '../lib/i18n'
 export default function Footer() {
   const { t } = useLanguage()
   return (
-    <footer className="bg-[var(--color-canvas)] border-t border-[var(--color-border-subtle)] pt-16 pb-8 px-6 lg:px-12">
+    <footer className="relative z-50 bg-[var(--color-canvas)] border-t border-[var(--color-border-subtle)] pt-16 pb-8 px-6 lg:px-12">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
           
           {/* Brand & Slogan */}
           <div className="lg:col-span-1 flex flex-col gap-4">
-            <div className="font-display font-bold text-3xl tracking-wider text-[var(--color-text-main)]">
-              <span className="text-[var(--color-primary)]">&gt;</span> RANN.
+            <div className="flex items-center gap-2.5">
+              <img src="/RLogo.svg" alt="RLogo" className="w-8 h-8 rounded-lg" />
+              <div className="font-display font-bold text-2xl md:text-3xl tracking-wider text-[var(--color-text-main)]">
+                RANN<span className="text-[var(--color-primary)]">.</span>
+              </div>
             </div>
             <p className="font-sans text-[var(--color-text-muted)] text-sm max-w-xs leading-relaxed capitalize">
               {t('about.title')} {t('hero.desc')}
@@ -23,16 +26,16 @@ export default function Footer() {
             <h4 className="font-sans font-semibold text-[var(--color-text-main)] text-sm mb-2">{t('footer.nav')}</h4>
             <a href="#hero" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.home')}</a>
             <a href="#about" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.about')}</a>
-            <a href="#tech" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.tech')}</a>
             <a href="#works" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.works')}</a>
+            <a href="#experience" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.experience')}</a>
           </div>
 
           {/* Links Column 2: Connect */}
           <div className="flex flex-col gap-4">
             <h4 className="font-sans font-semibold text-[var(--color-text-main)] text-sm mb-2">{t('footer.connect')}</h4>
+            <a href="https://randizp.my.id" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors text-sm w-fit font-mono">randizp.my.id</a>
             <a href="https://www.linkedin.com/in/randizakariaputra" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">LinkedIn</a>
             <a href="https://github.com/rzranz" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">GitHub</a>
-            <a href="mailto:randizakariaputra22@gmail.com" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">Email</a>
           </div>
 
           {/* Right Column: Newsletter / Contact CTA */}
