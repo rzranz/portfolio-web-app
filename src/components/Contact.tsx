@@ -35,7 +35,11 @@ export default function Contact() {
   }, [])
 
   return (
-    <section id="contact" ref={sectionRef} className="relative z-50 min-h-screen w-full flex flex-col items-center justify-center px-6 lg:pr-28 py-28 overflow-hidden bg-[var(--color-canvas)] shadow-[0_-25px_50px_rgba(0,0,0,0.35)] border-t border-[var(--color-border-subtle)]">
+    <section 
+      id="contact" 
+      ref={sectionRef} 
+      className="md:sticky md:top-0 min-h-[100svh] md:h-screen w-full z-60 flex flex-col items-center justify-center px-6 lg:pr-28 py-20 overflow-hidden bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)]"
+    >
       <Particles id="contact-particles" className="absolute inset-0 pointer-events-none z-0" />
       <div className="max-w-[1000px] mx-auto w-full text-center space-y-10 relative z-10">
         

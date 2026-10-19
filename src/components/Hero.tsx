@@ -49,7 +49,7 @@ export default function Hero() {
   const roleWords = data.profile.role.split(' ')
 
   return (
-    <section id="hero" ref={sectionRef} className="lg:sticky lg:top-0 min-h-[100svh] w-full z-10 flex flex-col justify-center overflow-hidden bg-[var(--color-canvas)]">
+    <section id="hero" ref={sectionRef} className="md:sticky md:top-0 min-h-[100svh] w-full z-10 flex flex-col justify-center overflow-hidden bg-[var(--color-canvas)]">
       <Particles id="hero-particles" className="absolute inset-0 pointer-events-none z-0" />
       <div className="hero-content-wrapper max-w-[1400px] mx-auto px-6 lg:px-12 w-full z-10 pt-28 pb-12 sm:pt-24 sm:pb-8 flex flex-col justify-center">
         

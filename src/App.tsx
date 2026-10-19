@@ -234,22 +234,22 @@ function App() {
         </header>
 
         <main className="relative z-10">
-          {/* 00: Hero (sticky top-0 h-screen z-10) */}
+          {/* 00: Hero (sticky top-0 z-10) */}
           <Hero />
           
-          {/* 01: About (sticky top-0 h-screen z-20) */}
+          {/* 01: About (sticky top-0 z-20) */}
           <About />
 
-          {/* Tech Stack */}
+          {/* 02: TechStack (sticky top-0 z-30) */}
           <TechStack />
 
-          {/* 02: RecentWorks (relative z-30 min-h-screen) */}
+          {/* 03: RecentWorks (sticky top-0 z-40) */}
           <RecentWorks />
 
-          {/* 03: Experience (relative z-40 min-h-screen) */}
+          {/* 04: Experience (sticky top-0 z-50) */}
           <ExperienceTimeline />
 
-          {/* 04: Contact (relative z-50 min-h-screen) */}
+          {/* 05: Contact (sticky top-0 z-60) */}
           <Contact />
         </main>
 

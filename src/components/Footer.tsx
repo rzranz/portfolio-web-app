@@ -4,7 +4,7 @@ import { useLanguage } from '../lib/i18n'
 export default function Footer() {
   const { t } = useLanguage()
   return (
-    <footer className="relative z-50 bg-[var(--color-canvas)] border-t border-[var(--color-border-subtle)] pt-16 pb-8 px-6 lg:px-12">
+    <footer className="relative z-70 bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)] pt-16 pb-8 px-6 lg:px-12">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
           

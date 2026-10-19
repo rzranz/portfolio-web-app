@@ -11,7 +11,7 @@ export default function About() {
     <section 
       id="about" 
       ref={sectionRef} 
-      className="lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden relative min-h-screen w-full z-20 flex flex-col justify-center bg-[var(--color-canvas)] shadow-[0_-25px_50px_rgba(0,0,0,0.35)] border-t border-[var(--color-border-subtle)] overflow-visible py-20 sm:py-24 lg:py-0"
+      className="md:sticky md:top-0 md:h-screen md:overflow-hidden relative min-h-screen w-full z-20 flex flex-col justify-center bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)] py-20 sm:py-24 md:py-0"
     >
       <div className="about-content-wrapper max-w-[1360px] mx-auto px-6 sm:px-10 lg:pl-12 lg:pr-28 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-6 sm:pt-10 lg:pt-20 pb-6">
         
