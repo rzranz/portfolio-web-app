@@ -108,9 +108,9 @@ export default function TechStack() {
     <section 
       id="tech" 
       ref={sectionRef} 
-      className="relative z-25 min-h-screen py-24 lg:py-32 bg-[var(--color-canvas)] shadow-[0_-25px_50px_rgba(0,0,0,0.35)] border-t border-[var(--color-border-subtle)] flex flex-col justify-center overflow-hidden"
+      className="md:sticky md:top-0 md:h-screen md:overflow-hidden relative min-h-screen w-full z-30 flex flex-col justify-center bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)] py-20 md:py-0"
     >
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full flex flex-col items-center gap-12 lg:gap-16">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full flex flex-col items-center gap-8 lg:gap-10">
         
         <div className="text-center">
           <p className="font-display flex flex-wrap items-center justify-center gap-3 text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-[var(--color-text-main)]">
