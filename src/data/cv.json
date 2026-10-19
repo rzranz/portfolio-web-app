@@ -2,63 +2,274 @@
   "profile": {
     "name": "Randi Zakaria Putra",
     "role": "Fullstack Software Engineer",
-    "location": "Bandung, Jawa Barat",
+    "status": "Available for Opportunities",
+    "location": "Bandung, Jawa Barat (UTC+7)",
+    "website": "https://randizp.my.id",
     "email": "randizakariaputra22@gmail.com",
+    "github": "https://github.com/rzranz",
     "linkedin": "https://www.linkedin.com/in/randizakariaputra",
-    "summary": "Fresh Graduate from Informatics Engineering with hands-on experience in Full Stack Web Development. Proven track record in building scalable web applications using Laravel and Vue.js. Experienced in managing technical projects and leading organizational divisions. Seeking a remote developer role to leverage strong problem-solving skills and technical adaptability.",
-    "education": "Universitas Komputer Indonesia (2022-2026), Bachelor of Informatics Engineering (GPA: 3.43)",
-    "certifications": ["CCNA Introduction to Network BNSP", "Web Developer LSP INFORMATIKA"]
+    "summary": "Recent Informatics Engineering graduate from UNIKOM with a strong focus on Full Stack and Backend Web Development. Proven track record in designing database architectures, building scalable REST APIs (Laravel, Go, Spring Boot), and integrating secure payment gateways (Pakasir) & real-time notification systems (Fonnte WhatsApp API). Experienced in managing technical projects end-to-end and leading organizational divisions.",
+    "education": {
+      "institution": "Universitas Komputer Indonesia (UNIKOM)",
+      "degree": "Bachelor of Informatics Engineering (Sarjana Teknik Informatika)",
+      "period": "2022 - Nov 2026 (Expected Graduation / Menunggu Wisuda)",
+      "gpa": "3.43"
+    },
+    "leadership": {
+      "role": "Head of Communication and Information Division",
+      "organization": "HMIF UNIKOM",
+      "organization_url": "https://hmif.unikom.my.id/",
+      "period": "Jan 2025 - Dec 2025",
+      "description": "Led the division in managing organizational communications, tech publications, and digital information distribution."
+    },
+    "certifications": [
+      "Web Developer (BNSP)",
+      "Web Developer (LSP INFORMATIKA)",
+      "CCNA: Introduction to Networks"
+    ],
+    "languages": [
+      { "name": "Indonesian", "level": "Native" },
+      { "name": "English", "level": "Intermediate (TOEFL: 457)" }
+    ],
+    "activities": [
+      "Freelance Software Developer",
+      "Freelance Photographer & Editor"
+    ],
+    "stats": [
+      { "label": "Production Apps", "value": "20+" },
+      { "label": "Tech Stacks Mastered", "value": "13+" },
+      { "label": "GPA / IPK", "value": "3.43" },
+      { "label": "Years Active", "value": "4+" }
+    ]
   },
+  "tech_categories": [
+    {
+      "category": "Backend & Cloud",
+      "skills": ["Laravel", "Spring Boot", "Go", "REST API Development", "Django", "Docker", "CI/CD"]
+    },
+    {
+      "category": "Frontend & Interactive",
+      "skills": ["Vue.js", "React.js", "Next.js", "Nuxt.js", "Tailwind CSS", "Three.js"]
+    },
+    {
+      "category": "Tools & Infrastructure",
+      "skills": ["Git", "Docker", "Postman", "PostgreSQL", "MySQL", "VS Code"]
+    },
+    {
+      "category": "AI, AR & Game Tech",
+      "skills": ["Unity 3D", "MediaPipe AI", "AI Mentor Engine"]
+    }
+  ],
   "tech_stack": [
-    "Laravel", "Tailwind", "Django",
-    "Next JS", "Vue JS", "Springboot",
-    "React", "Git", "Go-Lang", "PostgreSQL", "MySQL", "Unity", "Three.js"
+    "Laravel", "Springboot", "Go-Lang", "Django",
+    "Vue JS", "React", "Next JS", "Tailwind",
+    "PostgreSQL", "MySQL", "Docker", "Git", "Unity", "Three.js"
+  ],
+  "categories": [
+    "All",
+    "EdTech & AI",
+    "Fullstack",
+    "Backend & Cloud",
+    "AR & 3D"
   ],
   "experience": [
     {
+      "id": "ic-gamez",
+      "title": "IC Game-Z — Gamified Learning & AI Platform",
+      "company": "iCraft DS",
+      "company_url": "https://www.icraftds.id/",
+      "period": "2025 - Present",
+      "year": "2025-2026",
+      "category": "EdTech & AI",
+      "featured": true,
+      "image": "/projects/ic-gamez.png",
+      "live_url": "https://gamez.icraftds.id/",
+      "github_url": "",
+      "description": "Gamified skill validation & interactive learning web application equipped with AI Mentor guidance, structured coding tracks, automated code validation, and a global leaderboard.",
+      "stack": ["Vue.js", "Vite", "Tailwind CSS", "REST API", "AI Mentor Engine", "JetBrains Mono"],
+      "tags": ["Gamified EdTech", "AI Integration", "Live Production"],
+      "highlights": [
+        "Interactive Coding Playground with real-time compiler simulation",
+        "Contextual AI Mentor providing adaptive hints without revealing direct answers",
+        "Structured paths: Basic Programming, Frontend Web, Database & SQL, and JavaScript",
+        "Competitive Global Leaderboard to rank learner progression"
+      ],
+      "metrics": "8+ Modules · AI Mentor · 100% Live"
+    },
+    {
+      "id": "pdam-tegal",
+      "title": "PDAM Tegal — IoT Smart Water Monitoring & Pump Automation System",
+      "company": "PDAM Tegal · Perumda Tirta Bahari",
+      "period": "2025 - 2026",
+      "year": "2025-2026",
+      "category": "Fullstack",
+      "featured": true,
+      "image": "/projects/pdam-dashboard.png",
+      "gallery": [
+        "/projects/pdam-dashboard.png",
+        "/projects/pdam-landing.png",
+        "/projects/pdam-analytics.png"
+      ],
+      "live_url": "",
+      "github_url": "https://github.com/rzranz",
+      "description": "Sistem IoT cerdas dan dashboard monitoring real-time terintegrasi untuk PDAM Kota Tegal (Perumda Air Minum Tirta Bahari). Menggunakan sensor ultrasonik jarak jauh untuk membaca level kapasitas bak penampungan air secara presisi, mengotomatisasi proteksi pompa air agar tidak menyala saat debit kosong, menyajikan visualisasi analitik historis 24 jam, serta mengirimkan push alert otomatis ke smartphone operator.",
+      "stack": ["Vue.js", "Laravel", "Tailwind CSS", "IoT Sensor Telemetry", "Chart.js", "REST API", "MySQL"],
+      "tags": ["IoT & Telemetry", "Smart City", "Municipal Utility", "Live System"],
+      "highlights": [
+        "Real-time Multi-Bak Monitoring: Pemantauan level sensor live bak penampungan air (Bak Utama & Bak Slawi)",
+        "Smart Pump Interlock Safety: Otomasi proteksi pompa air agar tidak menyala saat air kosong guna mengeliminasi risiko kerusakan dinamo",
+        "24-Hour Telemetry & Anomaly Logging: Grafik analitik fluktuasi debit air harian serta pencatatan log pembacaan sensor berkala",
+        "Multi-Platform Push Alerts: Sistem notifikasi otomatis langsung ke smartphone saat kapasitas air menyentuh batas kritis"
+      ],
+      "metrics": "Real-time Telemetry · Smart Pump Interlock · Multi-Bak IoT"
+    },
+    {
+      "id": "golang",
+      "title": "SIGAP JABAR — WebGIS Forest Conservation Platform",
+      "company": "Dinas Kehutanan Jawa Barat",
+      "period": "May 2026 - Sept 2026",
+      "year": "2026",
+      "category": "Backend & Cloud",
+      "featured": true,
+      "image": "/projects/sigap-jabar.png",
+      "live_url": "https://dishut.public.unikom.my.id/",
+      "github_url": "https://github.com/rzranz",
+      "description": "Designed robust backend architecture and relational database flow for a GIS-based forest conservation and land monitoring platform (SIGAP JABAR). Collaborated with cross-functional teams to ensure seamless data integration and accurate spatial mapping endpoints.",
+      "stack": ["Go", "PostgreSQL", "Laravel", "Docker", "CI/CD", "REST API", "WebGIS"],
+      "tags": ["WebGIS", "Government", "Microservice", "Live Production"],
+      "highlights": [
+        "Designed relational database flow and high-throughput backend architecture for GIS-based land monitoring",
+        "Collaborated with cross-functional teams to ensure seamless spatial mapping data integration",
+        "Automated deployment pipelines with Docker and CI/CD, guaranteeing sub-50ms endpoint queries"
+      ],
+      "metrics": "<50ms Latency · WebGIS Integrated · Live Production"
+    },
+    {
       "id": "spp",
-      "title": "SPP Payment Gateway & WhatsApp API",
-      "company": "RA Darul Fikri (Client Project)",
-      "period": "Jan - Aug 2025",
-      "description": "Web application for automated school fee invoicing & Pakasir Payment Gateway integration with Fonnte WhatsApp API instant digital receipt delivery.",
-      "stack": ["Laravel", "Vue.js", "React", "Pakasir Payment Gateway API", "Fonnte WhatsApp API", "MySQL"],
-      "tags": ["Fullstack", "Midtrans Live"]
+      "title": "SPP Darul Fikri — Payment Gateway & WhatsApp Automation",
+      "company": "RA Darul Fikri (Client Project & Thesis)",
+      "period": "Jan 2026 - Aug 2026",
+      "year": "2026",
+      "category": "Fullstack",
+      "featured": true,
+      "image": "/projects/darul-fikri.png",
+      "live_url": "https://ra.darulfikri.sch.id/",
+      "github_url": "https://github.com/rzranz",
+      "description": "Engineered an automated school fee (SPP) payment application using Laravel and Vue.js to digitize administrative workflows, replacing manual school records. Integrated Pakasir payment gateway for secure, trackable transactions, and Fonnte WhatsApp API to deliver real-time payment notifications to parents.",
+      "stack": ["Laravel", "Vue.js", "Pakasir Payment Gateway", "Fonnte WhatsApp API", "MySQL", "Tailwind CSS"],
+      "tags": ["Client Project", "Thesis (Tugas Akhir)", "Fintech", "Live Production"],
+      "highlights": [
+        "Built complete end-to-end digital tuition billing system, replacing manual pen-and-paper tracking",
+        "Integrated Pakasir payment gateway for secure, centralized, and traceable financial transactions",
+        "Embedded Fonnte WhatsApp API for instant real-time receipts and billing reminders to parents"
+      ],
+      "metrics": "100% Automated · Live at ra.darulfikri.sch.id"
+    },
+    {
+      "id": "hmif",
+      "title": "HMIF UNIKOM — Informatics Student Association Platform",
+      "company": "HMIF UNIKOM",
+      "company_url": "https://hmif.unikom.my.id/",
+      "period": "2024 - 2025",
+      "year": "2024-2025",
+      "category": "Fullstack",
+      "featured": true,
+      "image": "/projects/hmif.png",
+      "live_url": "https://hmif.unikom.my.id/",
+      "github_url": "https://github.com/rzranz",
+      "description": "Platform web portal dan operasional dinamis untuk Himpunan Mahasiswa Teknik Informatika UNIKOM. Mengelola komunikasi organisasi, publikasi kegiatan, arsip berita, serta informasi divisi secara terstruktur.",
+      "stack": ["Laravel", "React.js", "Tailwind CSS", "MySQL", "REST API"],
+      "tags": ["Organization Web", "Live Production", "Campus Tech"],
+      "highlights": [
+        "Dynamic content publishing and article archiving for informatics students",
+        "Event registration and automated attendee validation portal",
+        "Responsive, high-performance interface with optimized asset loading"
+      ],
+      "metrics": "Live Portal · Organization Operations"
+    },
+    {
+      "id": "hrms",
+      "title": "HRMS — Enterprise Human Resource Management System",
+      "company": "PT. YukMari Project",
+      "period": "Oct 2025 - Nov 2025",
+      "year": "2025",
+      "category": "Fullstack",
+      "featured": false,
+      "image": "/projects/hrms.jpg",
+      "live_url": "",
+      "github_url": "https://github.com/rzranz",
+      "description": "Fullstack Developer Intern project building a comprehensive Human Resource Management System (HRMS) to digitize HR processes. Streamlined employee data management, attendance tracking, and administrative workflows, significantly reducing manual processing time.",
+      "stack": ["Vue.js", "Tailwind CSS", "Laravel", "MySQL"],
+      "tags": ["Fullstack Intern", "Enterprise", "HRMS", "Attendance Tracking"],
+      "highlights": [
+        "Digitized HR administrative workflows, slashing manual record processing time",
+        "Automated employee attendance tracking and centralized staff profile records",
+        "Structured role-based access control (RBAC) ensuring enterprise employee privacy"
+      ],
+      "metrics": "Automated Workflows · Zero Data Redundancy"
+    },
+    {
+      "id": "innoventure",
+      "title": "Innoventure — Competition Registration & Automated Certificate Platform",
+      "company": "HMIF UNIKOM / Innoventure",
+      "period": "Aug 2025",
+      "year": "2025",
+      "category": "Backend & Cloud",
+      "featured": true,
+      "image": "/projects/innoventure.png",
+      "live_url": "https://innoventure.unikom.my.id/",
+      "github_url": "https://github.com/rzranz",
+      "description": "Backend Developer role developing efficient backend workflows for automated certificate generation. Streamlined centralized participant data collection APIs across multiple competition categories, ensuring data integrity.",
+      "stack": ["Laravel", "REST API", "MySQL", "Automated PDF Generation", "Docker"],
+      "tags": ["Event Tech", "Automated PDF", "REST API", "Live Platform"],
+      "highlights": [
+        "Engineered automated high-volume certificate generation pipelines for competition participants",
+        "Streamlined centralized participant data collection APIs across multiple competition categories",
+        "Maintained strict data validation preventing registration duplicates or credential mismatches"
+      ],
+      "metrics": "High-Volume PDF Batching · Multi-Category APIs · Live Platform"
     },
     {
       "id": "ar",
       "title": "AR SIBI Sign Language Educational App",
       "company": "Augmented Reality (AR) Project",
       "period": "Juni 2025",
-      "description": "Android Augmented Reality educational app displaying 3D gestural models for Indonesian Sign Language (SIBI) using Unity 3D & MediaPipe AI.",
+      "year": "2025",
+      "category": "AR & 3D",
+      "featured": true,
+      "image": "/projects/ar-sibi.jpg",
+      "live_url": "",
+      "github_url": "https://github.com/rzranz",
+      "description": "Android Augmented Reality educational application displaying interactive 3D gestural models for Indonesian Sign Language (SIBI) using MediaPipe AI tracking.",
       "stack": ["Unity 3D", "C#", "MediaPipe AI", "Android Studio"],
-      "tags": ["Augmented Reality", "AI Tracking"]
-    },
-    {
-      "id": "golang",
-      "title": "Backend REST API Project",
-      "company": "Dinas Kehutanan Jawa Barat",
-      "period": "May - Sept 2026",
-      "description": "Backend API integration and database management for government system.",
-      "stack": ["Go", "PostgreSQL", "Laravel", "Docker", "CI/CD", "REST API"],
-      "tags": ["Microservice", "High Performance"]
-    },
-    {
-      "id": "hrms",
-      "title": "HRMS — Enterprise Human Resource System",
-      "company": "PT. YukMari Project",
-      "period": "Okt - Nov 2025",
-      "description": "Internal HR management platform with employee attendance tracking, payroll workflows, and KPI evaluations.",
-      "stack": ["Vue.js", "Tailwind CSS", "Laravel", "MySQL"],
-      "tags": ["Enterprise", "Internship"]
+      "tags": ["Augmented Reality", "AI Tracking", "Inclusive Tech"],
+      "highlights": [
+        "Real-time hand gesture tracking via MediaPipe AI on mobile hardware",
+        "Interactive 3D sign language avatars with 360-degree rotation view",
+        "Optimized 60 FPS rendering pipeline on Android devices"
+      ],
+      "metrics": "60 FPS · 3D Hand Tracking"
     },
     {
       "id": "pos",
       "title": "Coffeeshop POS & Realtime Stock System",
-      "company": "Freelance",
+      "company": "Freelance Client",
       "period": "Feb 2025",
-      "description": "Web Point of Sales (POS) app built with Vue.js & Laravel featuring recipe-based inventory auto-deduction and QRIS transactions.",
-      "stack": ["Vue.js", "Laravel", "PHP", "Tailwind"],
-      "tags": ["POS", "Inventory"]
+      "year": "2025",
+      "category": "Fullstack",
+      "featured": false,
+      "image": "/projects/coffeeshop-pos.jpg",
+      "live_url": "",
+      "github_url": "https://github.com/rzranz",
+      "description": "Point of Sales (POS) web application featuring recipe-based inventory auto-deduction, QRIS dynamic transactions, and shift reports for local coffeeshop businesses.",
+      "stack": ["Vue.js", "Laravel", "PHP", "Tailwind CSS", "MySQL"],
+      "tags": ["POS", "Inventory Auto-Deduct", "QRIS", "Freelance"],
+      "highlights": [
+        "Recipe ingredient breakdown auto-deducted per order placed",
+        "Real-time daily cashier shift reconciliation reports",
+        "Seamless offline-tolerant order cart queue"
+      ],
+      "metrics": "Recipe Auto-Deduct · QRIS Live"
     }
   ]
 }
