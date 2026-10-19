@@ -5,6 +5,7 @@ import data from '../data/cv.json'
 import { BlurReveal } from './ui/blur-reveal'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLanguage } from '../lib/i18n'
+import { Particles } from './ui/particles'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -26,26 +27,17 @@ export default function Hero() {
       setCurrentRoleIndex((prev) => (prev + 1) % roles.length)
     }, 2000)
     return () => clearInterval(interval)
-  }, [])
+  }, [roles.length])
 
   useEffect(() => {
-    const tl = gsap.timeline()
-    // Image entrance animation
-    tl.fromTo('.hero-image',
-      { opacity: 0, scale: 0.95, filter: 'blur(10px)' },
-      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out', delay: 0.2 }
-    )
-
-    // Smooth scrub parallax for the entire hero content
     const ctx = gsap.context(() => {
       gsap.to('.hero-content-wrapper', {
-        y: 100, // Moves down slightly as user scrolls down, creating parallax
-        opacity: 0.2,
+        y: 60,
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: 'bottom top',
+          end: '+=100%',
           scrub: true,
         }
       })
@@ -57,29 +49,32 @@ export default function Hero() {
   const roleWords = data.profile.role.split(' ')
 
   return (
-    <section id="hero" ref={sectionRef} className="min-h-[100dvh] flex flex-col justify-center relative overflow-hidden">
-      <div className="hero-content-wrapper max-w-[1400px] mx-auto px-6 lg:px-12 w-full z-10 pt-20">
+    <section id="hero" ref={sectionRef} className="lg:sticky lg:top-0 min-h-[100svh] w-full z-10 flex flex-col justify-center overflow-hidden bg-[var(--color-canvas)]">
+      <Particles id="hero-particles" className="absolute inset-0 pointer-events-none z-0" />
+      <div className="hero-content-wrapper max-w-[1400px] mx-auto px-6 lg:px-12 w-full z-10 pt-28 pb-12 sm:pt-24 sm:pb-8 flex flex-col justify-center">
         
         {/* Top Label */}
-        <BlurReveal delay={0.1} className="mb-8 md:mb-12">
-          <span className="text-xs md:text-sm tracking-widest text-[var(--color-text-muted)] uppercase font-semibold">
+        <BlurReveal delay={0.1} className="mb-6 md:mb-10">
+          <span className="text-xs md:text-sm tracking-[0.25em] text-[var(--color-text-muted)] uppercase font-semibold">
             {t('hero.label')}
           </span>
         </BlurReveal>
 
-        {/* Huge Typography */}
+        {/* Huge Typography with Poppins Bold & letter-spacing control */}
         <div ref={textRef} className="will-change-transform">
           <h1 className="font-display font-bold text-[9vw] sm:text-[7vw] md:text-[6vw] lg:text-[5.5vw] xl:text-[6rem] tracking-tighter leading-[1] mb-6 sm:mb-8 flex flex-col uppercase">
-            <span className="text-[var(--color-text-muted)] mb-1 sm:mb-2 text-[6vw] sm:text-inherit">{t('hero.iam')}</span>
+            <span className="text-[var(--color-text-muted)] mb-1 sm:mb-2 text-[6vw] sm:text-inherit font-bold tracking-tight">
+              {t('hero.iam')}
+            </span>
             <div className="relative h-[2.2em] sm:h-[1.1em] text-[var(--color-text-main)] w-full">
-              <AnimatePresence>
+              <AnimatePresence mode="wait">
                 <motion.div
                   key={currentRoleIndex}
                   initial={{ y: 20, opacity: 0, filter: 'blur(8px)' }}
                   animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
                   exit={{ y: -20, opacity: 0, filter: 'blur(8px)' }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
-                  className="absolute inset-0 whitespace-normal sm:whitespace-nowrap break-words"
+                  className="absolute inset-0 whitespace-normal sm:whitespace-nowrap break-words font-extrabold tracking-tighter"
                 >
                   {roles[currentRoleIndex]}
                 </motion.div>
@@ -87,15 +82,21 @@ export default function Hero() {
             </div>
           </h1>
           
-          <BlurReveal delay={roleWords.length * 0.1} className="block text-[var(--color-text-muted)] text-base md:text-xl leading-relaxed max-w-[50ch] mb-10 font-sans">
+          <BlurReveal delay={roleWords.length * 0.1} className="block text-[var(--color-text-muted)] text-base md:text-xl leading-relaxed max-w-[50ch] mb-10 font-sans tracking-normal">
             {t('hero.desc')}
           </BlurReveal>
           
           <BlurReveal delay={(roleWords.length * 0.1) + 0.1} className="flex flex-row items-center justify-between w-full mt-4">
-            <a href="#about" className="rounded-[2rem] border border-[var(--color-border-subtle)] px-8 py-3 text-sm md:text-base font-semibold tracking-wider hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] transition-all uppercase">
+            <a 
+              href="#about" 
+              className="rounded-[2rem] border border-[var(--color-border-subtle)] px-8 py-3 text-sm md:text-base font-semibold tracking-wider hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] transition-all uppercase"
+            >
               {t('hero.about')}
             </a>
-            <a href="#works" className="flex items-center gap-2 text-sm md:text-base font-semibold tracking-wider border-b border-[var(--color-text-main)] pb-1 hover:opacity-70 transition-opacity uppercase">
+            <a 
+              href="#works" 
+              className="flex items-center gap-2 text-sm md:text-base font-semibold tracking-wider border-b border-[var(--color-text-main)] pb-1 hover:opacity-70 transition-opacity uppercase"
+            >
               {t('hero.recent')} <span className="text-xl leading-none">→</span>
             </a>
           </BlurReveal>

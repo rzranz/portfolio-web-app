@@ -105,7 +105,11 @@ export default function TechStack() {
   const centerIndex = Math.floor(techList.length / 2)
 
   return (
-    <section id="tech" ref={sectionRef} className="py-24 lg:py-32 bg-[var(--color-canvas)] border-b border-[var(--color-border-subtle)] overflow-hidden">
+    <section 
+      id="tech" 
+      ref={sectionRef} 
+      className="relative z-25 min-h-screen py-24 lg:py-32 bg-[var(--color-canvas)] shadow-[0_-25px_50px_rgba(0,0,0,0.35)] border-t border-[var(--color-border-subtle)] flex flex-col justify-center overflow-hidden"
+    >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full flex flex-col items-center gap-12 lg:gap-16">
         
         <div className="text-center">
@@ -128,7 +132,32 @@ export default function TechStack() {
           ))}
         </div>
 
+        {/* Domain Categorization: Pure Editorial Swiss Typography (Zero AI Slop Cards, Zero Pills) */}
+        {data.tech_categories && (
+          <div className="w-full max-w-4xl border-t border-[var(--color-border-subtle)] divide-y divide-[var(--color-border-subtle)] mt-4">
+            {data.tech_categories.map((cat, idx) => (
+              <div 
+                key={idx} 
+                className="py-3.5 sm:py-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-6 group transition-colors"
+              >
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-xs text-[var(--color-primary)] font-bold">
+                    0{idx + 1}
+                  </span>
+                  <h4 className="font-display font-bold text-sm sm:text-base text-[var(--color-text-main)] tracking-tight">
+                    {cat.category}
+                  </h4>
+                </div>
+                <p className="font-mono text-[11px] sm:text-xs text-[var(--color-text-muted)] tracking-wide sm:text-right">
+                  {cat.skills.join('  ·  ')}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
     </section>
   )
 }
+
