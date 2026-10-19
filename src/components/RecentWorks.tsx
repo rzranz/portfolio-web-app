@@ -69,7 +69,7 @@ export default function RecentWorks() {
       id="works" 
       className="md:sticky md:top-0 md:h-screen md:overflow-hidden relative min-h-screen w-full z-40 bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)] flex flex-col justify-center py-16 md:py-0"
     >
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:pl-12 lg:pr-28 w-full flex flex-col justify-center h-full">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:pl-12 lg:pr-28 w-full flex flex-col justify-start md:justify-center h-full">
         
         {/* Minimalist Section Header */}
         <header className="pt-4 lg:pt-6 pb-3 md:pb-4 border-b border-[var(--color-border-subtle)] flex flex-col md:flex-row md:items-end justify-between gap-3">
@@ -83,10 +83,10 @@ export default function RecentWorks() {
           </div>
 
           {/* Controls: Category Filter & View Mode Switcher (Pure Typography, Zero Rounded Pills) */}
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-6 w-full md:w-auto">
             
-            {/* Category Filters */}
-            <div className="hidden sm:flex items-center gap-3 font-mono text-xs text-[var(--color-text-muted)]">
+            {/* Category Filters: Horizontally scrollable on mobile */}
+            <div className="flex items-center gap-3 font-mono text-xs text-[var(--color-text-muted)] overflow-x-auto py-1 max-w-[220px] sm:max-w-none">
               {categories.map((cat) => (
                 <button
                   key={cat}
