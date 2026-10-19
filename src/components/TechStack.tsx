@@ -34,6 +34,7 @@ const CharacterV2 = ({
   centerIndex,
   scrollYProgress,
 }: CharacterProps) => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
   const distanceFromCenter = index - centerIndex
   const iconClass = techIcons[char] || 'devicon-devicon-plain'
 
@@ -55,6 +56,20 @@ const CharacterV2 = ({
     [0, 0.8],
     [0, 1]
   )
+
+  if (isMobile) {
+    return (
+      <div
+        title={char}
+        className="inline-flex flex-col items-center justify-center p-2 group transition-transform"
+      >
+        <i className={cn(iconClass, "text-3xl text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] transition-colors")} />
+        <span className="font-sans text-[9px] mt-1 text-[var(--color-text-muted)]">
+          {char}
+        </span>
+      </div>
+    )
+  }
 
   return (
     <motion.div
