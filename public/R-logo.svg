@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <mask id="chevron-cutout">
+      <rect width="120" height="120" fill="#FFFFFF" />
+      <path d="M 22 38 L 45 60 L 22 82" fill="none" stroke="#000000" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+    </mask>
+  </defs>
+
+  <!-- Kotak Hitam Utama (Ukuran 100x100 agar tonjolan di sudut kanan bawah terlihat jelas) -->
+  <rect x="2" y="2" width="98" height="98" rx="22" fill="#000000" />
+
+  <!-- Tonjolan Bulat di Ujung Kanan Bawah yang mematahkan bentuk kotak -->
+  <circle cx="100" cy="100" r="20" fill="#000000" />
+
+  <!-- Grup '>R' -->
+  <g transform="translate(-5, -6) scale(0.84)">
+    <path fill="#FFFFFF" fill-rule="evenodd" mask="url(#chevron-cutout)" d="M 40 22 H 74 C 92 22 102 31 102 46 C 102 58 94 67 81 69.5 L 99 98 H 78 L 63 70 H 59 V 98 H 40 V 22 Z M 59 36 H 73 C 80 36 84 40 84 46 C 84 52 80 56 73 56 H 59 V 36 Z" />
+    <path d="M 22 38 L 45 60 L 22 82" fill="none" stroke="#000000" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 22 38 L 45 60 L 22 82" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- Cutout pemisah hitam & Titik Putih di ujung -->
+  <circle cx="100" cy="100" r="13" fill="#FFFFFF" stroke="#000000" stroke-width="5" />
+</svg>
