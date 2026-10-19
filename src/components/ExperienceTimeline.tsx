@@ -84,7 +84,7 @@ export default function ExperienceTimeline() {
   const [activeStep, setActiveStep] = useState(1)
 
   useEffect(() => {
-    const isDesktop = window.matchMedia('(min-width: 1024px)').matches
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
     if (!isDesktop || !sectionRef.current || !trackRef.current) return
 
     const ctx = gsap.context(() => {
@@ -156,7 +156,7 @@ export default function ExperienceTimeline() {
     <section 
       id="experience" 
       ref={sectionRef} 
-      className="relative z-40 min-h-screen w-full bg-[var(--color-canvas)] shadow-[0_-25px_50px_rgba(0,0,0,0.35)] border-t border-[var(--color-border-subtle)] flex flex-col justify-between overflow-hidden"
+      className="md:sticky md:top-0 md:h-screen md:overflow-hidden relative min-h-screen w-full z-50 bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)] flex flex-col justify-between overflow-hidden"
     >
       {/* Editorial Header */}
       <div className="max-w-[1360px] mx-auto px-6 sm:px-10 lg:pl-12 lg:pr-28 w-full pt-20 md:pt-24 pb-4 z-20">
@@ -185,7 +185,7 @@ export default function ExperienceTimeline() {
       {/* ========================================================
           DESKTOP: Minimalist Scroll Review (Zero Slop, Pure Typography)
           ======================================================== */}
-      <div className="hidden lg:block relative w-full flex-1 overflow-hidden my-auto py-4">
+      <div className="hidden md:block relative w-full flex-1 overflow-hidden my-auto py-4">
         
         {/* Horizontal Scrolling Track */}
         <div 
@@ -273,7 +273,7 @@ export default function ExperienceTimeline() {
       {/* ========================================================
           MOBILE / TABLET: Vertical Connected Review
           ======================================================== */}
-      <div className="lg:hidden px-6 sm:px-10 pb-20 pt-4 space-y-8">
+      <div className="md:hidden px-6 sm:px-10 pb-20 pt-4 space-y-8">
         <div className="relative border-l-2 border-[var(--color-primary)]/40 pl-6 sm:pl-8 ml-3 space-y-10">
           {MILESTONES.map((item) => (
             <div key={item.index} className="relative space-y-2">
