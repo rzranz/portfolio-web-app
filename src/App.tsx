@@ -143,7 +143,7 @@ function App() {
         id="main-page-canvas"
         className={`relative z-10 w-full min-h-screen bg-[var(--color-canvas)] ${
           menuState === 'open'
-            ? 'canvas-perspective-layer rounded-3xl shadow-[-25px_25px_90px_rgba(0,0,0,0.45)] dark:shadow-[-25px_25px_90px_rgba(0,0,0,0.85)] border border-[var(--color-border-subtle)] ring-1 ring-black/10 dark:ring-white/10 select-none cursor-pointer'
+            ? 'canvas-perspective-layer rounded-2xl md:rounded-3xl shadow-[-15px_15px_60px_rgba(0,0,0,0.5)] md:shadow-[-25px_25px_90px_rgba(0,0,0,0.45)] dark:shadow-[-20px_20px_60px_rgba(0,0,0,0.9)] border border-[var(--color-border-subtle)] select-none cursor-pointer overflow-hidden'
             : menuState === 'closing'
             ? 'canvas-perspective-layer rounded-none shadow-none border-transparent ring-0 select-none pointer-events-none'
             : ''
@@ -152,14 +152,20 @@ function App() {
           menuState === 'open'
             ? {
                 transform: isMobile
-                  ? 'perspective(1200px) scale(0.65) translateX(-55%) rotateY(2deg)'
+                  ? 'translateX(-82%) scale(0.92)'
                   : 'perspective(1400px) scale(0.72) translateX(-24%) rotateY(3.5deg) rotateZ(-1.5deg)',
-                transformOrigin: `left ${originY || window.innerHeight / 2}px`,
+                transformOrigin: isMobile
+                  ? 'left center'
+                  : `left ${originY || window.innerHeight / 2}px`,
               }
             : menuState === 'closing'
             ? {
-                transform: 'perspective(1400px) scale(1) translateX(0%) rotateY(0deg) rotateZ(0deg)',
-                transformOrigin: `left ${originY || window.innerHeight / 2}px`,
+                transform: isMobile
+                  ? 'translateX(0%) scale(1)'
+                  : 'perspective(1400px) scale(1) translateX(0%) rotateY(0deg) rotateZ(0deg)',
+                transformOrigin: isMobile
+                  ? 'left center'
+                  : `left ${originY || window.innerHeight / 2}px`,
               }
             : undefined
         }

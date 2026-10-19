@@ -203,7 +203,7 @@ export default function StaggeredMenu({
       <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Top Header of the Menu Layer */}
-      <div className="staggered-header-item w-full flex items-center justify-between px-6 sm:px-10 lg:px-16 pt-6 sm:pt-8 relative z-10">
+      <div className="staggered-header-item w-full flex items-center justify-between pl-16 pr-5 sm:px-10 lg:px-16 pt-6 sm:pt-8 relative z-10">
         <div className="flex items-center gap-2.5">
           <img src="/RLogo.svg" alt="RLogo" className="w-6 h-6 rounded-md" />
           <div className="font-mono text-xs tracking-[0.2em] text-[var(--color-text-muted)] uppercase flex items-center gap-2">
@@ -226,7 +226,7 @@ export default function StaggeredMenu({
       </div>
 
       {/* Center Nav Items: Staggered Large Editorial Typography */}
-      <div className="w-full flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-4 my-auto relative z-10">
+      <div className="w-full flex-1 flex flex-col justify-center pl-16 pr-4 sm:px-10 lg:px-16 py-4 my-auto relative z-10">
         <div className="w-full max-w-2xl ml-auto flex flex-col space-y-1 sm:space-y-2">
           {DEFAULT_MENU_ITEMS.map((item, idx) => {
             const isHovered = hoveredIndex === idx
@@ -244,7 +244,7 @@ export default function StaggeredMenu({
                   onNavigate(item.href)
                 }}
               >
-                <div className="flex items-baseline gap-3 sm:gap-6">
+                <div className="flex items-baseline gap-2.5 sm:gap-6">
                   {/* Item Number */}
                   <span className={`font-mono text-xs sm:text-sm font-semibold tracking-wider transition-colors duration-300 ${
                     isHovered 
@@ -255,7 +255,7 @@ export default function StaggeredMenu({
                   </span>
 
                   {/* Main Giant Staggered Label (High contrast in Light & Dark mode) */}
-                  <h3 className={`font-display font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[4rem] xl:text-[4.8rem] tracking-tighter uppercase transition-all duration-300 ${
+                  <h3 className={`font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[4rem] xl:text-[4.8rem] tracking-tighter uppercase transition-all duration-300 ${
                     isHovered
                       ? 'text-[var(--color-primary)] translate-x-1.5 sm:translate-x-3'
                       : isAnyHovered 
@@ -272,7 +272,7 @@ export default function StaggeredMenu({
                     ? 'opacity-100 translate-x-0 text-[var(--color-primary)]' 
                     : 'opacity-0 translate-x-4 text-transparent'
                 }`}>
-                  <ArrowUpRight className="w-6 h-6 sm:w-8 sm:h-8" />
+                  <ArrowUpRight className="w-5 h-5 sm:w-8 sm:h-8" />
                 </div>
               </div>
             )
@@ -281,18 +281,18 @@ export default function StaggeredMenu({
       </div>
 
       {/* Bottom Footer Controls: Theme Switch, ATS CV, & Socials */}
-      <div className="w-full px-6 sm:px-10 lg:px-16 pb-6 sm:pb-8 relative z-10">
-        <div className="w-full max-w-2xl ml-auto pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div className="w-full pl-16 pr-4 sm:px-10 lg:px-16 pb-6 sm:pb-8 relative z-10">
+        <div className="w-full max-w-2xl ml-auto pt-4 sm:pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
           
           {/* Social Links */}
-          <div className="staggered-footer-item flex flex-wrap items-center gap-4 sm:gap-6">
+          <div className="staggered-footer-item flex flex-wrap items-center gap-3 sm:gap-6">
             {socialItems.map((s, idx) => (
               <a
                 key={idx}
                 href={s.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-1"
+                className="font-mono text-[11px] sm:text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-1"
               >
                 <span>{s.label}</span>
                 <ArrowUpRight className="w-3 h-3 opacity-60" />
@@ -301,7 +301,7 @@ export default function StaggeredMenu({
           </div>
 
           {/* Right side: Theme Mode Selection & Download ATS CV */}
-          <div className="staggered-footer-item flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+          <div className="staggered-footer-item flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-6">
             
             {/* Theme Mode Selector: Pure typography, zero rounded pill */}
             <div className="flex items-center gap-2 font-mono text-[11px] tracking-wider text-[var(--color-text-muted)]">
