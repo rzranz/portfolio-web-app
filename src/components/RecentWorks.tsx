@@ -67,17 +67,17 @@ export default function RecentWorks() {
   return (
     <section 
       id="works" 
-      className="relative z-30 min-h-screen w-full bg-[var(--color-canvas)] shadow-[0_-25px_50px_rgba(0,0,0,0.35)] border-t border-[var(--color-border-subtle)] pb-24 lg:pb-32"
+      className="md:sticky md:top-0 md:h-screen md:overflow-hidden relative min-h-screen w-full z-40 bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)] flex flex-col justify-center py-16 md:py-0"
     >
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:pl-12 lg:pr-28 w-full">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:pl-12 lg:pr-28 w-full flex flex-col justify-center h-full">
         
-        {/* Minimalist Section Header (Un-stick to prevent clash with pinned timeline) */}
-        <header className="pt-20 md:pt-24 pb-6 md:pb-8 border-b border-[var(--color-border-subtle)] flex flex-col md:flex-row md:items-end justify-between gap-4">
+        {/* Minimalist Section Header */}
+        <header className="pt-4 lg:pt-6 pb-3 md:pb-4 border-b border-[var(--color-border-subtle)] flex flex-col md:flex-row md:items-end justify-between gap-3">
           <div>
-            <span className="font-mono text-xs font-bold tracking-[0.2em] text-[var(--color-text-muted)] uppercase mb-2 block">
+            <span className="font-mono text-xs font-bold tracking-[0.2em] text-[var(--color-text-muted)] uppercase mb-1 block">
               {t('works.kicker')}
             </span>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight text-[var(--color-text-main)] leading-[1.05]">
+            <h2 className="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl tracking-tight text-[var(--color-text-main)] leading-[1.05]">
               {t('works.title')}
             </h2>
           </div>
@@ -144,7 +144,7 @@ export default function RecentWorks() {
             MODE A: Interactive Swap-In Showcase Stage (Skiper UI style)
             ======================================================== */}
         {viewMode === 'showcase' && (
-          <div className="pt-8 lg:pt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <div className="pt-4 lg:pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             
             {/* Left Column (lg:col-span-7): Dynamic Animated Swap-In Stage */}
             <div className="lg:col-span-7 space-y-4">
@@ -208,7 +208,7 @@ export default function RecentWorks() {
                   </div>
 
                   {/* Main High-Impact Screenshot Preview */}
-                  <div className="relative group bg-black/40 overflow-hidden aspect-[16/10] max-h-[460px] flex items-center justify-center">
+                  <div className="relative group bg-black/40 overflow-hidden aspect-[16/10] max-h-[340px] xl:max-h-[400px] flex items-center justify-center">
                     <img
                       src={currentImage}
                       alt={activeProject.title}
@@ -322,7 +322,7 @@ export default function RecentWorks() {
               </div>
 
               {/* Vertical Interactive List */}
-              <div className="space-y-2 max-h-[750px] overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-[420px] xl:max-h-[480px] overflow-y-auto pr-1">
                 {filteredProjects.map((proj, idx) => {
                   const isActive = proj.id === activeProjectId
                   const displayIndex = String(idx + 1).padStart(2, '0')
@@ -383,7 +383,7 @@ export default function RecentWorks() {
             MODE B: Full 2-Column Minimalist Editorial Grid View
             ======================================================== */}
         {viewMode === 'grid' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 border-b border-[var(--color-border-subtle)] pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 border-b border-[var(--color-border-subtle)] pt-4 max-h-[68vh] xl:max-h-[72vh] overflow-y-auto pr-2">
             {filteredProjects.map((exp, i) => {
               const isLeftCol = i % 2 === 0
               const projectIndex = String(i + 1).padStart(2, '0')
