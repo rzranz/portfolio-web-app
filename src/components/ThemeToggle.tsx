@@ -17,6 +17,13 @@ export default function ThemeToggle() {
       setIsDark(true)
       document.documentElement.classList.add('dark')
     }
+
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+
+    return () => observer.disconnect()
   }, [])
 
   // Animate the switch dot when state changes
