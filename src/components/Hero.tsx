@@ -30,6 +30,9 @@ export default function Hero() {
   }, [roles.length])
 
   useEffect(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+    if (isMobile) return
+
     const ctx = gsap.context(() => {
       gsap.to('.hero-content-wrapper', {
         y: 60,
@@ -70,10 +73,10 @@ export default function Hero() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentRoleIndex}
-                  initial={{ y: 20, opacity: 0, filter: 'blur(8px)' }}
-                  animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                  exit={{ y: -20, opacity: 0, filter: 'blur(8px)' }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  initial={{ y: 15, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -15, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
                   className="absolute inset-0 whitespace-normal sm:whitespace-nowrap break-words font-extrabold tracking-tighter"
                 >
                   {roles[currentRoleIndex]}
