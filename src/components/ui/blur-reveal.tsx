@@ -9,29 +9,36 @@ interface BlurRevealProps {
   duration?: number;
 }
 
+// Detect mobile once - skip blur filter on mobile (it's GPU-intensive)
+const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth < 768;
+
 export function BlurReveal({
   children,
   className,
   delay = 0,
-  duration = 0.8,
+  duration = 0.7,
 }: BlurRevealProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  // trigger animation when element comes into view
-  const isInView = useInView(ref, { once: true, margin: "-20px" });
+  const isInView = useInView(ref, { once: true, margin: "-10px" });
+
+  // On mobile: skip blur entirely, just do a simple fade-up
+  const initialState = IS_MOBILE
+    ? { opacity: 0, y: 16 }
+    : { opacity: 0, filter: "blur(10px)", y: 16 };
+
+  const animateState = IS_MOBILE
+    ? { opacity: 1, y: 0 }
+    : { opacity: 1, filter: "blur(0px)", y: 0 };
 
   return (
     <motion.span
       ref={ref}
-      initial={{ opacity: 0, filter: "blur(12px)", y: 20 }}
-      animate={
-        isInView
-          ? { opacity: 1, filter: "blur(0px)", y: 0 }
-          : { opacity: 0, filter: "blur(12px)", y: 20 }
-      }
+      initial={initialState}
+      animate={isInView ? animateState : initialState}
       transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.4, 0.25, 1], // Custom smooth ease
+        duration: IS_MOBILE ? duration * 0.7 : duration,
+        delay: IS_MOBILE ? delay * 0.5 : delay,
+        ease: [0.25, 0.4, 0.25, 1],
       }}
       className={cn("inline-block", className)}
     >

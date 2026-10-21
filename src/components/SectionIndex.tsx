@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import gsap from 'gsap'
 import { useLanguage } from '../lib/i18n'
+
 
 const SECTIONS = [
   { id: 'hero', label: '00' },
@@ -55,32 +55,15 @@ export default function SectionIndex() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
 
-    gsap.to('main', { 
-      filter: 'blur(6px) brightness(0.8)', 
-      duration: 0.35, 
-      ease: 'power2.out' 
-    })
-
     const lenis = (window as unknown as { lenis?: { scrollTo: (target: string, options: unknown) => void } }).lenis
-    
+
     if (lenis && typeof lenis.scrollTo === 'function') {
       lenis.scrollTo(`#${id}`, {
-        duration: 1.4,
+        duration: 1.2,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        onComplete: () => {
-          gsap.to('main', { 
-            filter: 'blur(0px) brightness(1)', 
-            duration: 0.5, 
-            ease: 'power2.inOut',
-            clearProps: 'filter'
-          })
-        }
       })
     } else {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-      setTimeout(() => {
-        gsap.to('main', { filter: 'blur(0px) brightness(1)', duration: 0.5, clearProps: 'filter' })
-      }, 1200)
     }
   }
 

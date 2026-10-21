@@ -9,20 +9,19 @@ interface ParticlesProps {
   color?: string;
 }
 
+// Detect mobile once at module level - stable, no re-runs on resize
+const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth < 768;
+
 export function Particles({ id, className, variant = "default", color = "#9333ea" }: ParticlesProps) {
   const autoId = useId();
   const particleId = id || `particles-${autoId.replace(/:/g, '')}`;
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-
   const options = useMemo(() => ({
     fullScreen: { enable: false },
     background: {
-      color: {
-        value: "transparent",
-      },
+      color: { value: "transparent" },
     },
-    fpsLimit: isMobile ? 30 : 60,
+    fpsLimit: 45,
     interactivity: {
       events: {
         onClick: { enable: false },
@@ -30,46 +29,39 @@ export function Particles({ id, className, variant = "default", color = "#9333ea
       },
     },
     particles: {
-      color: {
-        value: color,
-      },
+      color: { value: color },
       links: {
         color: color,
         distance: 140,
-        enable: !isMobile, // Disable expensive line distance calculations on mobile
-        opacity: 0.3,
+        enable: true,
+        opacity: 0.25,
         width: 1,
       },
       move: {
         direction: "none" as const,
         enable: true,
-        outModes: {
-          default: "bounce" as const,
-        },
+        outModes: { default: "bounce" as const },
         random: true,
-        speed: isMobile ? 0.3 : 0.5,
+        speed: 0.4,
         straight: false,
       },
       number: {
-        density: {
-          enable: !isMobile,
-          width: 800,
-          height: 800,
-        },
-        value: isMobile ? 14 : variant === "dense" ? 100 : 60,
+        density: { enable: true, width: 800, height: 800 },
+        value: variant === "dense" ? 60 : 35,
       },
       opacity: {
-        value: { min: 0.15, max: 0.6 },
+        value: { min: 0.1, max: 0.45 },
       },
-      shape: {
-        type: "circle" as const,
-      },
-      size: {
-        value: { min: 1, max: 2.5 },
-      },
+      shape: { type: "circle" as const },
+      size: { value: { min: 1, max: 2 } },
     },
-    detectRetina: !isMobile, // Avoid 3x massive Retina canvas on iPhone 15 Pro
-  }), [variant, color, isMobile]);
+    detectRetina: false, // disable retina to halve canvas resolution
+  }), [variant, color]);
+
+  // Skip rendering particles component on mobile for performance
+  if (IS_MOBILE) {
+    return null;
+  }
 
   return (
     <ParticlesComponent
