@@ -18,7 +18,7 @@ export const translations: Translations = {
   'nav.status': { en: 'Available for Hire', id: 'Tersedia untuk Rekrutmen' },
   'menu.home': { en: 'Home', id: 'Beranda' },
   'menu.about': { en: 'About', id: 'Tentang' },
-  'menu.experience': { en: 'Experience', id: 'Pengalaman' },
+  'menu.experience': { en: 'Experience', id: 'Organisasi' },
   'menu.works': { en: 'Works', id: 'Karya' },
   'menu.contact': { en: 'Contact', id: 'Kontak' },
   'menu.cv': { en: 'DOWNLOAD CV (ATS)', id: 'DOWNLOAD CV (ATS)' },

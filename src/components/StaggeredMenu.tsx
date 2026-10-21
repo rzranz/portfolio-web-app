@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useLanguage } from '../lib/i18n'
-import { ArrowUpRight, X, Globe } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 export interface MenuItem {
   number: string
@@ -22,7 +22,7 @@ interface StaggeredMenuProps {
   position?: 'left' | 'right'
 }
 
-const DEFAULT_MENU_ITEMS: MenuItem[] = [
+export const DEFAULT_MENU_ITEMS: MenuItem[] = [
   { number: '00', labelKey: 'menu.home', href: '#hero' },
   { number: '01', labelKey: 'menu.about', href: '#about' },
   { number: '02', labelKey: 'menu.works', href: '#works' },
@@ -43,7 +43,7 @@ export default function StaggeredMenu({
   socialItems = DEFAULT_SOCIALS,
   position = 'right'
 }: StaggeredMenuProps) {
-  const { t, language, toggleLanguage } = useLanguage()
+  const { t } = useLanguage()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const menuContainerRef = useRef<HTMLDivElement>(null)
   const [themeMode, setThemeMode] = useState<'light' | 'dark' | 'system'>('dark')
@@ -149,56 +149,40 @@ export default function StaggeredMenu({
   return (
     <div 
       ref={menuContainerRef}
-      className={`fixed inset-0 z-[100] bg-[var(--color-canvas)]/98 backdrop-blur-2xl transition-all duration-200 overflow-hidden flex flex-col justify-between ${
+      className={`fixed inset-0 z-30 transition-opacity duration-300 overflow-hidden flex flex-col justify-between pointer-events-none ${
         isOpen 
-          ? 'opacity-100 pointer-events-auto visible' 
-          : 'opacity-0 pointer-events-none invisible'
+          ? 'opacity-100 visible' 
+          : 'opacity-0 invisible'
       }`}
       aria-hidden={!isOpen}
     >
-      {/* Ambient background glow matching purple theme */}
-      <div className="absolute top-1/4 right-1/4 w-[450px] h-[450px] bg-[var(--color-primary)]/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
+      {/* Top Header of the Menu Layer: Center dot indicator and Top-Right TUTUP button */}
+      <div className="staggered-header-item w-full pt-6 sm:pt-8 px-6 sm:px-10 lg:px-16 relative z-10 flex items-center justify-between pointer-events-none">
+        {/* Left spacer so center and right elements align cleanly */}
+        <div className="w-24" />
 
-      {/* Top Header of the Menu Layer */}
-      <div className="staggered-header-item w-full pt-6 sm:pt-8 px-6 sm:px-10 lg:px-16 relative z-10">
-        <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <img src="/RLogo.svg" alt="RLogo" className="w-6 h-6 rounded-md" />
-            <div className="font-mono text-xs tracking-[0.2em] text-[var(--color-text-muted)] uppercase flex items-center gap-2">
-              <span>RANN</span>
-              <span className="text-[var(--color-primary)]">/</span>
-              <span>NAVIGATION</span>
-            </div>
+        {/* Center circle indicator matching reference image */}
+        <div className="flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full border border-white/20 dark:border-white/25 flex items-center justify-center">
+            <span className="w-1.5 h-1.5 rounded-full bg-white" />
           </div>
+        </div>
 
-          <div className="flex items-center gap-3">
-            {/* Language Toggle in Menu */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 text-[var(--color-text-main)] uppercase tracking-wider cursor-pointer"
-              title="Toggle Language"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{language.toUpperCase()}</span>
-            </button>
-
-            {/* Close Button: Pure typography, zero rounded pill */}
-            <button
-              onClick={onClose}
-              className="group flex items-center gap-2 font-mono text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] transition-colors cursor-pointer py-1 px-1.5 select-none"
-              aria-label={t('nav.close')}
-            >
-              <span>{t('nav.close')}</span>
-              <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
-            </button>
-          </div>
+        {/* Top Right: TUTUP / CLOSE button (Pure typography matching reference image) */}
+        <div className="flex items-center justify-end w-24 pointer-events-auto">
+          <button
+            onClick={onClose}
+            className="font-mono text-xs md:text-sm font-extrabold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] transition-colors cursor-pointer py-1 select-none"
+            aria-label={t('nav.close')}
+          >
+            {t('nav.close')}
+          </button>
         </div>
       </div>
 
-      {/* Center Nav Items: Staggered Large Editorial Typography */}
-      <div className="w-full flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-4 my-auto relative z-10">
-        <div className="w-full max-w-6xl mx-auto flex flex-col space-y-1 sm:space-y-2">
+      {/* Center Nav Items: Staggered Massive Editorial Typography aligned to the right */}
+      <div className="w-full flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-4 my-auto relative z-10 pointer-events-none">
+        <div className="w-full max-w-2xl ml-auto flex flex-col space-y-2 sm:space-y-3 pointer-events-auto text-right">
           {DEFAULT_MENU_ITEMS.map((item, idx) => {
             const isHovered = hoveredIndex === idx
             const isAnyHovered = hoveredIndex !== null
@@ -206,54 +190,34 @@ export default function StaggeredMenu({
 
             return (
               <div 
-                key={item.number}
-                className="staggered-menu-item relative flex items-baseline justify-between group cursor-pointer py-1.5 sm:py-2 select-none border-b border-transparent hover:border-[var(--color-border-subtle)] transition-colors"
+                key={item.labelKey}
+                className="staggered-menu-item relative flex items-center justify-end group cursor-pointer py-1 sm:py-1.5 select-none"
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 onClick={() => onNavigate(item.href)}
               >
-                <div className="flex items-baseline gap-3 sm:gap-6">
-                  {/* Item Number */}
-                  <span className={`font-mono text-xs sm:text-sm font-semibold tracking-wider transition-colors duration-200 ${
-                    isHovered 
-                      ? 'text-[var(--color-primary)]' 
-                      : 'text-[var(--color-text-muted)]'
-                  }`}>
-                    {item.number}
-                  </span>
-
-                  {/* Main Giant Staggered Label */}
-                  <h3 className={`font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[4rem] xl:text-[4.5rem] tracking-tighter uppercase transition-all duration-200 ${
-                    isHovered
-                      ? 'text-[var(--color-primary)] translate-x-2'
-                      : isAnyHovered 
-                        ? 'text-[var(--color-text-muted)]/30' 
-                        : 'text-[var(--color-text-main)]'
-                  }`}>
-                    {label}
-                  </h3>
-                </div>
-
-                {/* Right Arrow indicator on hover */}
-                <div className={`transition-all duration-200 transform ${
-                  isHovered 
-                    ? 'opacity-100 translate-x-0 text-[var(--color-primary)]' 
-                    : 'opacity-0 translate-x-3 text-transparent'
+                {/* Main Giant Staggered Label matching reference image */}
+                <h3 className={`font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] tracking-tight uppercase transition-all duration-200 ${
+                  isHovered
+                    ? 'text-white translate-x-[-8px]'
+                    : isAnyHovered 
+                      ? 'text-[#52525b]/40' 
+                      : 'text-[#8e8e93] dark:text-[#a1a1aa] hover:text-white'
                 }`}>
-                  <ArrowUpRight className="w-5 h-5 sm:w-8 sm:h-8" />
-                </div>
+                  {label}
+                </h3>
               </div>
             )
           })}
         </div>
       </div>
 
-      {/* Bottom Footer Controls: Theme Switch, ATS CV, & Socials */}
-      <div className="w-full px-6 sm:px-10 lg:px-16 pb-6 sm:pb-8 relative z-10">
-        <div className="w-full max-w-6xl mx-auto pt-4 sm:pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
+      {/* Bottom Footer Controls: Theme Switch (Vertical stacked) & Download ATS CV */}
+      <div className="w-full px-6 sm:px-10 lg:px-16 pb-8 sm:pb-10 relative z-10 pointer-events-none">
+        <div className="w-full max-w-2xl ml-auto flex flex-col sm:flex-row items-end sm:items-end justify-between gap-6 pointer-events-auto">
           
-          {/* Social Links */}
-          <div className="staggered-footer-item flex flex-wrap items-center gap-4 sm:gap-6">
+          {/* Social Links on bottom-left of footer area */}
+          <div className="staggered-footer-item flex flex-wrap items-center gap-4 sm:gap-6 order-2 sm:order-1">
             {socialItems.map((s, idx) => (
               <a
                 key={idx}
@@ -268,47 +232,48 @@ export default function StaggeredMenu({
             ))}
           </div>
 
-          {/* Right side: Theme Mode Selection & Download ATS CV */}
-          <div className="staggered-footer-item flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
+          {/* Right side: Vertical Theme Selector & Download CV ATS matching reference image */}
+          <div className="staggered-footer-item flex flex-col items-end gap-5 order-1 sm:order-2 text-right">
             
-            {/* Theme Mode Selector: Pure typography, zero rounded pill */}
-            <div className="flex items-center gap-2 font-mono text-[11px] tracking-wider text-[var(--color-text-muted)]">
+            {/* Theme Mode Selector: Stacked Vertically with active indicator block */}
+            <div className="flex flex-col items-end gap-1 font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--color-text-muted)] select-none">
               <button 
                 onClick={() => handleThemeChange('light')}
-                className={`cursor-pointer uppercase hover:text-[var(--color-text-main)] transition-colors ${
-                  themeMode === 'light' ? 'text-[var(--color-primary)] font-bold' : ''
+                className={`cursor-pointer uppercase hover:text-white transition-colors flex items-center gap-1.5 ${
+                  themeMode === 'light' ? 'text-white font-black' : 'text-[#71717a]'
                 }`}
               >
-                {t('menu.light')}
+                <span>{t('menu.light')}</span>
+                {themeMode === 'light' && <span className="inline-block w-2 h-2 bg-white" />}
               </button>
-              <span>·</span>
+              
               <button 
                 onClick={() => handleThemeChange('dark')}
-                className={`cursor-pointer uppercase hover:text-[var(--color-text-main)] transition-colors flex items-center gap-1 ${
-                  themeMode === 'dark' ? 'text-[var(--color-primary)] font-bold' : ''
+                className={`cursor-pointer uppercase hover:text-white transition-colors flex items-center gap-1.5 ${
+                  themeMode === 'dark' ? 'text-white font-black' : 'text-[#71717a]'
                 }`}
               >
                 <span>{t('menu.dark')}</span>
-                {themeMode === 'dark' && <span className="inline-block w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full" />}
+                {themeMode === 'dark' && <span className="inline-block w-2 h-2 bg-white" />}
               </button>
-              <span>·</span>
+              
               <button 
                 onClick={() => handleThemeChange('system')}
-                className={`cursor-pointer uppercase hover:text-[var(--color-text-main)] transition-colors ${
-                  themeMode === 'system' ? 'text-[var(--color-primary)] font-bold' : ''
+                className={`cursor-pointer uppercase hover:text-white transition-colors flex items-center gap-1.5 ${
+                  themeMode === 'system' ? 'text-white font-black' : 'text-[#71717a]'
                 }`}
               >
-                {t('menu.system')}
+                <span>{t('menu.system')}</span>
+                {themeMode === 'system' && <span className="inline-block w-2 h-2 bg-white" />}
               </button>
             </div>
 
             {/* DOWNLOAD CV (ATS) */}
             <a
               href="mailto:randizakariaputra22@gmail.com?subject=Request%20CV%20ATS%20-%20Randi%20Zakaria%20Putra"
-              className="font-mono text-[11px] font-bold text-[var(--color-text-main)] hover:text-[var(--color-primary)] tracking-wider uppercase transition-colors inline-flex items-center gap-1"
+              className="font-mono text-xs font-bold text-[var(--color-text-main)] hover:text-[var(--color-primary)] tracking-[0.2em] uppercase transition-colors inline-flex items-center gap-1"
             >
               <span>{t('menu.cv')}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[var(--color-primary)]" />
             </a>
 
           </div>
