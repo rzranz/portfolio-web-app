@@ -68,7 +68,7 @@ function App() {
 
     const tickerFn = (time: number) => lenis.raf(time * 1000)
     gsap.ticker.add(tickerFn)
-    gsap.ticker.lagSmoothing(0)
+    gsap.ticker.lagSmoothing(500, 33)
 
     return () => {
       lenis.destroy()
@@ -100,7 +100,10 @@ function App() {
   // Direct, lag-free navigation to target sections
   const handleNavigate = (href: string) => {
     setIsMenuOpen(false)
-    scrollToSection(href, 1.2)
+    // Micro-delay (160ms) avoids GPU contention between 3D un-tilt and Lenis scroll
+    setTimeout(() => {
+      scrollToSection(href, 1.1)
+    }, 160)
   }
 
   return (

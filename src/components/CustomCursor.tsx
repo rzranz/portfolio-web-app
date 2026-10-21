@@ -99,14 +99,13 @@ export default function CustomCursor() {
       className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden hidden lg:block"
       style={{ opacity: 0, transition: 'opacity 0.3s' }}
     >
-      {/* Primary Dot */}
+      {/* Primary Dot - instant rAF positioning without CSS interpolation fighting */}
       <div
         ref={dotRef}
         className="fixed -top-1.5 -left-1.5 h-3 w-3 rounded-full bg-[var(--color-primary)] shadow-[0_0_10px_var(--color-primary)]"
         style={{
           transform: 'translate3d(-100px, -100px, 0)',
           willChange: 'transform',
-          transition: 'transform 50ms linear',
         }}
       />
       {/* Elastic Trailing Ring */}
@@ -116,7 +115,7 @@ export default function CustomCursor() {
         style={{
           transform: 'translate3d(-100px, -100px, 0)',
           willChange: 'transform',
-          transition: 'background-color 150ms ease, transform 150ms ease',
+          transition: 'background-color 150ms ease',
         }}
       />
     </div>
