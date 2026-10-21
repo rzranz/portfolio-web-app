@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useLanguage } from '../lib/i18n'
-import { ArrowUpRight, X } from 'lucide-react'
+import { ArrowUpRight, X, Globe } from 'lucide-react'
 
 export interface MenuItem {
   number: string
@@ -45,7 +45,7 @@ export default function StaggeredMenu({
   socialItems = DEFAULT_SOCIALS,
   position = 'right'
 }: StaggeredMenuProps) {
-  const { t } = useLanguage()
+  const { t, language, toggleLanguage } = useLanguage()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const menuContainerRef = useRef<HTMLDivElement>(null)
   const [themeMode, setThemeMode] = useState<'light' | 'dark' | 'system'>('dark')
@@ -203,7 +203,7 @@ export default function StaggeredMenu({
       <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Top Header of the Menu Layer */}
-      <div className="staggered-header-item w-full flex items-center justify-between pl-16 pr-5 sm:px-10 lg:px-16 pt-6 sm:pt-8 relative z-10">
+      <div className="staggered-header-item w-full flex items-center justify-between pl-[76px] pr-5 sm:px-10 lg:px-16 pt-6 sm:pt-8 relative z-10">
         <div className="flex items-center gap-2.5">
           <img src="/RLogo.svg" alt="RLogo" className="w-6 h-6 rounded-md" />
           <div className="font-mono text-xs tracking-[0.2em] text-[var(--color-text-muted)] uppercase flex items-center gap-2">
@@ -213,20 +213,32 @@ export default function StaggeredMenu({
           </div>
         </div>
 
-        {/* Close Button: Pure typography, zero rounded pill */}
-        <button
-          onClick={onClose}
-          disabled={isClosing}
-          className="group flex items-center gap-2 font-mono text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] transition-colors cursor-pointer py-1 px-1.5 select-none disabled:pointer-events-none"
-          aria-label={t('nav.close')}
-        >
-          <span>{t('nav.close')}</span>
-          <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Language Toggle in Menu */}
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 text-[var(--color-text-main)] uppercase tracking-wider cursor-pointer"
+            title="Toggle Language"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            <span>{language.toUpperCase()}</span>
+          </button>
+
+          {/* Close Button: Pure typography, zero rounded pill */}
+          <button
+            onClick={onClose}
+            disabled={isClosing}
+            className="group flex items-center gap-2 font-mono text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] transition-colors cursor-pointer py-1 px-1.5 select-none disabled:pointer-events-none"
+            aria-label={t('nav.close')}
+          >
+            <span>{t('nav.close')}</span>
+            <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
+          </button>
+        </div>
       </div>
 
       {/* Center Nav Items: Staggered Large Editorial Typography */}
-      <div className="w-full flex-1 flex flex-col justify-center pl-16 pr-4 sm:px-10 lg:px-16 py-4 my-auto relative z-10">
+      <div className="w-full flex-1 flex flex-col justify-center pl-[76px] pr-4 sm:px-10 lg:px-16 py-4 my-auto relative z-10">
         <div className="w-full max-w-2xl ml-auto flex flex-col space-y-1 sm:space-y-2">
           {DEFAULT_MENU_ITEMS.map((item, idx) => {
             const isHovered = hoveredIndex === idx
@@ -281,7 +293,7 @@ export default function StaggeredMenu({
       </div>
 
       {/* Bottom Footer Controls: Theme Switch, ATS CV, & Socials */}
-      <div className="w-full pl-16 pr-4 sm:px-10 lg:px-16 pb-6 sm:pb-8 relative z-10">
+      <div className="w-full pl-[76px] pr-4 sm:px-10 lg:px-16 pb-6 sm:pb-8 relative z-10">
         <div className="w-full max-w-2xl ml-auto pt-4 sm:pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
           
           {/* Social Links */}

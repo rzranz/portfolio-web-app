@@ -32,46 +32,50 @@ function App() {
 
   // Track responsive mobile viewport & scroll position
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    let resizeTimer: ReturnType<typeof setTimeout>
+    const handleResize = () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(() => setIsMobile(window.innerWidth < 768), 100)
+    }
     const handleScroll = () => setIsScrolled(window.scrollY > 24)
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize, { passive: true })
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    handleResize()
 
     return () => {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('scroll', handleScroll)
+      clearTimeout(resizeTimer)
     }
   }, [])
 
   useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches
+    const isMobileDevice = window.matchMedia("(max-width: 768px)").matches
 
-    if (isMobile) return
+    if (isMobileDevice) return
 
-    // Initialize Lenis on desktop
+    // Initialize Lenis on desktop only
     const lenis = new Lenis({
-      duration: 1.4,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 2,
     })
 
     ;(window as unknown as { lenis: Lenis }).lenis = lenis
 
     lenis.on('scroll', ScrollTrigger.update)
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000)
-    })
-    gsap.ticker.lagSmoothing(0, 0)
+
+    const tickerFn = (time: number) => lenis.raf(time * 1000)
+    gsap.ticker.add(tickerFn)
+    gsap.ticker.lagSmoothing(0)
 
     return () => {
       lenis.destroy()
-      gsap.ticker.remove((time) => lenis.raf(time * 1000))
+      gsap.ticker.remove(tickerFn)
+      delete (window as unknown as { lenis?: Lenis }).lenis
     }
   }, [])
 
@@ -138,6 +142,66 @@ function App() {
         <SectionIndex />
       </div>
 
+      {/* ── Header is OUTSIDE canvas so it's never affected by canvas transform/pointer-events ── */}
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center justify-between ${
+          menuState !== 'closed'
+            ? 'opacity-0 pointer-events-none'
+            : isScrolled 
+            ? 'opacity-100 bg-[var(--color-canvas)]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.15)] py-3 sm:py-4 px-4 sm:px-6 md:px-8 pointer-events-none' 
+            : 'opacity-100 bg-transparent py-4 sm:py-6 px-4 sm:px-6 md:px-8 pointer-events-none'
+        }`}
+      >
+        <div className="flex items-center gap-3 md:gap-5 pointer-events-auto">
+          <a 
+            href="#hero" 
+            className="flex items-center gap-2.5 hover:opacity-85 transition-opacity group"
+          >
+            <img 
+              src="/RLogo.svg" 
+              alt="RLogo" 
+              className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform" 
+            />
+            <span className="font-display font-bold text-lg md:text-xl tracking-wider text-[var(--color-text-main)]">
+              RANN<span className="text-[var(--color-primary)]">.</span>
+            </span>
+          </a>
+
+          {/* Language Switch */}
+          <button 
+            onClick={toggleLanguage} 
+            className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 uppercase tracking-wider cursor-pointer"
+            title="Toggle Language"
+          >
+            <Globe className="w-3.5 h-3.5" /> 
+            <span>{language.toUpperCase()}</span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
+          <ThemeToggle />
+          
+          {/* Menu Trigger — always visible, always pointer-events-auto */}
+          <button 
+            onClick={toggleMenu} 
+            className={`text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase transition-all duration-300 cursor-pointer py-1 px-1.5 group select-none ${
+              menuState === 'open'
+                ? 'opacity-0 pointer-events-none'
+                : menuState === 'closing'
+                ? 'opacity-60 pointer-events-none'
+                : 'text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100'
+            }`}
+            aria-expanded={menuState === 'open'}
+            aria-label={t('nav.menu')}
+          >
+            <span className="relative inline-block">
+              {t('nav.menu')}
+              <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
+            </span>
+          </button>
+        </div>
+      </header>
+
       {/* Front Page Canvas Surface with 3D Pullback & Inverse Restore Effect */}
       <div
         id="main-page-canvas"
@@ -180,64 +244,6 @@ function App() {
             title="Click to close menu"
           />
         )}
-
-        {/* Modern Cyber-Editorial Header with Adaptive Frosted-Glass on Scroll */}
-        <header 
-          className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 flex items-center justify-between pointer-events-none ${
-            isScrolled 
-              ? 'bg-[var(--color-canvas)]/85 backdrop-blur-md border-b border-[var(--color-border-subtle)]/60 py-3 sm:py-4 px-4 sm:px-6 md:px-8 shadow-sm' 
-              : 'bg-transparent py-4 sm:py-6 px-4 sm:px-6 md:px-8'
-          }`}
-        >
-          <div className="flex items-center gap-3 md:gap-5 pointer-events-auto">
-            <a 
-              href="#hero" 
-              className="flex items-center gap-2.5 hover:opacity-85 transition-opacity group"
-            >
-              <img 
-                src="/RLogo.svg" 
-                alt="RLogo" 
-                className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform" 
-              />
-              <span className="font-display font-bold text-lg md:text-xl tracking-wider text-[var(--color-text-main)]">
-                RANN<span className="text-[var(--color-primary)]">.</span>
-              </span>
-            </a>
-
-            {/* Language Switch */}
-            <button 
-              onClick={toggleLanguage} 
-              className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/60 backdrop-blur-md uppercase tracking-wider cursor-pointer"
-              title="Toggle Language"
-            >
-              <Globe className="w-3.5 h-3.5" /> 
-              <span>{language.toUpperCase()}</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
-            <ThemeToggle />
-            
-            {/* Minimalist Editorial Menu Trigger: Pure typography, zero rounded pill */}
-            <button 
-              onClick={toggleMenu} 
-              className={`text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase transition-all duration-300 cursor-pointer py-1 px-1.5 group select-none ${
-                menuState === 'open'
-                  ? 'opacity-0 pointer-events-none'
-                  : menuState === 'closing'
-                  ? 'opacity-60 pointer-events-none'
-                  : 'text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100'
-              }`}
-              aria-expanded={menuState === 'open'}
-              aria-label={t('nav.menu')}
-            >
-              <span className="relative inline-block">
-                {t('nav.menu')}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
-              </span>
-            </button>
-          </div>
-        </header>
 
         <main className="relative z-10">
           {/* 00: Hero (sticky top-0 z-10) */}
