@@ -17,45 +17,28 @@ import CustomCursor from './components/CustomCursor'
 import StaggeredMenu from './components/StaggeredMenu'
 import { useLanguage } from './lib/i18n'
 
-gsap.registerPlugin(ScrollTrigger)
+import { scrollToSection } from './lib/scroll'
 
-type MenuState = 'closed' | 'open' | 'closing'
+gsap.registerPlugin(ScrollTrigger)
 
 function App() {
   const { language, toggleLanguage, t } = useLanguage()
-  const [menuState, setMenuState] = useState<MenuState>('closed')
-  const [originY, setOriginY] = useState(0)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobile, setIsMobile] = useState(() => 
-    typeof window !== 'undefined' ? window.innerWidth < 768 : false
-  )
 
-  // Track responsive mobile viewport & scroll position
+  // Track scroll position for navbar styling
   useEffect(() => {
-    let resizeTimer: ReturnType<typeof setTimeout>
-    const handleResize = () => {
-      clearTimeout(resizeTimer)
-      resizeTimer = setTimeout(() => setIsMobile(window.innerWidth < 768), 100)
-    }
     const handleScroll = () => setIsScrolled(window.scrollY > 24)
-
-    window.addEventListener('resize', handleResize, { passive: true })
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      window.removeEventListener('scroll', handleScroll)
-      clearTimeout(resizeTimer)
-    }
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Initialize Lenis smooth scroll on desktop
   useEffect(() => {
     const isMobileDevice = window.matchMedia("(max-width: 768px)").matches
-
     if (isMobileDevice) return
 
-    // Initialize Lenis on desktop only
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -79,73 +62,43 @@ function App() {
     }
   }, [])
 
-  // Handle Lenis pause when menu is open or transitioning
+  // Pause Lenis scrolling while menu overlay is active
   useEffect(() => {
     const lenis = (window as unknown as { lenis?: Lenis }).lenis
     if (!lenis) return
-    if (menuState !== 'closed') {
+    if (isMenuOpen) {
       lenis.stop()
     } else {
       lenis.start()
     }
-  }, [menuState])
+  }, [isMenuOpen])
 
-  const toggleMenu = () => {
-    if (menuState === 'closing') return
-    if (menuState === 'closed') {
-      setOriginY(window.scrollY + window.innerHeight / 2)
-      setMenuState('open')
-    } else {
-      closeMenu()
-    }
-  }
-
-  const closeMenu = (onComplete?: () => void) => {
-    if (menuState !== 'open') return
-    setMenuState('closing')
-
-    // 680ms timeout lets the 700ms inverse animation complete cleanly
-    setTimeout(() => {
-      setMenuState('closed')
-      onComplete?.()
-    }, 680)
-  }
-
+  // Direct, lag-free navigation to target sections
   const handleNavigate = (href: string) => {
-    closeMenu(() => {
-      const target = document.querySelector(href)
-      if (target) {
-        const lenis = (window as unknown as { lenis?: Lenis }).lenis
-        if (lenis) {
-          lenis.scrollTo(target as HTMLElement, { offset: 0, duration: 1.2 })
-        } else {
-          target.scrollIntoView({ behavior: 'smooth' })
-        }
-      }
-    })
+    setIsMenuOpen(false)
+    scrollToSection(href, 1.0)
   }
 
   return (
     <div className="relative min-h-screen w-full bg-[var(--color-canvas)] overflow-x-clip selection:bg-[var(--color-primary)] selection:text-white">
       <CustomCursor />
 
-      {/* Background Staggered Menu Layer */}
+      {/* Top-Level Fullscreen Staggered Menu Overlay */}
       <StaggeredMenu 
-        isOpen={menuState === 'open'} 
-        isClosing={menuState === 'closing'}
-        onClose={() => closeMenu()} 
+        isOpen={isMenuOpen} 
+        onClose={() => setIsMenuOpen(false)} 
         onNavigate={handleNavigate} 
       />
 
       {/* Section Index on right edge (hidden during menu open) */}
-      <div className={`transition-opacity duration-500 ${menuState === 'open' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <div className={`transition-opacity duration-300 ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <SectionIndex />
       </div>
 
-      {/* ── Header is OUTSIDE canvas so it's never affected by canvas transform/pointer-events ── */}
+      {/* Fixed Header Navbar */}
       <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center justify-between ${
-          menuState !== 'closed'
+          isMenuOpen
             ? 'opacity-0 pointer-events-none'
             : isScrolled 
             ? 'opacity-100 bg-[var(--color-canvas)]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.15)] py-3 sm:py-4 px-4 sm:px-6 md:px-8 pointer-events-none' 
@@ -181,17 +134,15 @@ function App() {
         <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
           <ThemeToggle />
           
-          {/* Menu Trigger — always visible, always pointer-events-auto */}
+          {/* Menu Trigger */}
           <button 
-            onClick={toggleMenu} 
+            onClick={() => setIsMenuOpen(true)} 
             className={`text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase transition-all duration-300 cursor-pointer py-1 px-1.5 group select-none ${
-              menuState === 'open'
+              isMenuOpen
                 ? 'opacity-0 pointer-events-none'
-                : menuState === 'closing'
-                ? 'opacity-60 pointer-events-none'
                 : 'text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100'
             }`}
-            aria-expanded={menuState === 'open'}
+            aria-expanded={isMenuOpen}
             aria-label={t('nav.menu')}
           >
             <span className="relative inline-block">
@@ -202,49 +153,13 @@ function App() {
         </div>
       </header>
 
-      {/* Front Page Canvas Surface with 3D Pullback & Inverse Restore Effect */}
+      {/* Main Page Content Canvas */}
       <div
         id="main-page-canvas"
-        className={`relative z-10 w-full min-h-screen bg-[var(--color-canvas)] ${
-          menuState === 'open'
-            ? 'canvas-perspective-layer rounded-2xl md:rounded-3xl shadow-[-15px_15px_60px_rgba(0,0,0,0.5)] md:shadow-[-25px_25px_90px_rgba(0,0,0,0.45)] dark:shadow-[-20px_20px_60px_rgba(0,0,0,0.9)] border border-[var(--color-border-subtle)] select-none cursor-pointer overflow-hidden'
-            : menuState === 'closing'
-            ? 'canvas-perspective-layer rounded-none shadow-none border-transparent ring-0 select-none pointer-events-none'
-            : ''
+        className={`relative z-10 w-full min-h-screen bg-[var(--color-canvas)] transition-all duration-300 ease-out ${
+          isMenuOpen ? 'scale-[0.985] opacity-40 pointer-events-none select-none' : 'opacity-100'
         }`}
-        style={
-          menuState === 'open'
-            ? {
-                transform: isMobile
-                  ? 'translateX(-82%) scale(0.92)'
-                  : 'perspective(1400px) scale(0.72) translateX(-24%) rotateY(3.5deg) rotateZ(-1.5deg)',
-                transformOrigin: isMobile
-                  ? 'left center'
-                  : `left ${originY || window.innerHeight / 2}px`,
-              }
-            : menuState === 'closing'
-            ? {
-                transform: isMobile
-                  ? 'translateX(0%) scale(1)'
-                  : 'perspective(1400px) scale(1) translateX(0%) rotateY(0deg) rotateZ(0deg)',
-                transformOrigin: isMobile
-                  ? 'left center'
-                  : `left ${originY || window.innerHeight / 2}px`,
-              }
-            : undefined
-        }
-        onClick={menuState === 'open' ? () => closeMenu() : undefined}
       >
-        {/* Subtle click overlay when menu is open */}
-        {(menuState === 'open' || menuState === 'closing') && (
-          <div 
-            className={`absolute inset-0 z-50 bg-black/20 rounded-3xl transition-opacity duration-500 cursor-pointer ${
-              menuState === 'closing' ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:bg-black/15'
-            }`}
-            title="Click to close menu"
-          />
-        )}
-
         <main className="relative z-10">
           {/* 00: Hero (sticky top-0 z-10) */}
           <Hero />

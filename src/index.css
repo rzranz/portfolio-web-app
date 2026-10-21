@@ -136,13 +136,6 @@
   transform: scale(1.2);
 }
 
-/* Front canvas 3D pullback & restore transition — GPU-composited properties only */
-.canvas-perspective-layer {
-  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-radius 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 600ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
-}
 
 
 /* =====================================================

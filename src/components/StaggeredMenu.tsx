@@ -16,7 +16,6 @@ export interface SocialItem {
 
 interface StaggeredMenuProps {
   isOpen: boolean
-  isClosing?: boolean
   onClose: () => void
   onNavigate: (href: string) => void
   socialItems?: SocialItem[]
@@ -39,7 +38,6 @@ const DEFAULT_SOCIALS: SocialItem[] = [
 
 export default function StaggeredMenu({
   isOpen,
-  isClosing = false,
   onClose,
   onNavigate,
   socialItems = DEFAULT_SOCIALS,
@@ -88,7 +86,7 @@ export default function StaggeredMenu({
     }
   }
 
-  // Staggered entrance and exit animations (exact mirror inverse)
+  // Fast, hardware-accelerated staggered entrance animation
   useEffect(() => {
     if (!menuContainerRef.current) return
 
@@ -96,150 +94,111 @@ export default function StaggeredMenu({
     const bottomEls = menuContainerRef.current.querySelectorAll('.staggered-footer-item')
     const headerEl = menuContainerRef.current.querySelector('.staggered-header-item')
 
-    if (isOpen && !isClosing) {
-      // Clear any stale hover state
+    if (isOpen) {
       setHoveredIndex(null)
-
-      // Stop previous tweens
       gsap.killTweensOf([items, bottomEls, headerEl])
 
-      // 1. Header entrance: slide down from top
+      // 1. Header entrance
       if (headerEl) {
         gsap.fromTo(headerEl,
-          { opacity: 0, y: -20 },
-          { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 0.1 }
+          { opacity: 0, y: -16 },
+          { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
         )
       }
 
-      // 2. Menu items entrance: cascade in forward order (00 -> 04)
+      // 2. Menu items entrance: cascade in smoothly (00 -> 04)
       gsap.fromTo(items,
         { 
           opacity: 0, 
-          x: position === 'right' ? 70 : -70,
-          y: 20
+          x: position === 'right' ? 40 : -40,
+          y: 10
         },
         { 
           opacity: 1, 
           x: 0, 
           y: 0, 
-          duration: 0.55, 
-          stagger: 0.065, 
+          duration: 0.4, 
+          stagger: 0.05, 
           ease: 'power3.out',
-          delay: 0.12 
+          delay: 0.05 
         }
       )
 
-      // 3. Footer entrance: slide up from bottom
+      // 3. Footer entrance
       gsap.fromTo(bottomEls,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.35 }
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.35, stagger: 0.04, ease: 'power2.out', delay: 0.15 }
       )
-    } else if (isClosing) {
-      // Clear hover state immediately so styles don't conflict during transition
+    } else {
       setHoveredIndex(null)
-
-      // Stop previous tweens
       gsap.killTweensOf([items, bottomEls, headerEl])
-
-      // 1. Menu items exit: cascade OUT in exact REVERSE order (04 -> 00)
-      gsap.to(items, {
-        opacity: 0,
-        x: position === 'right' ? 70 : -70,
-        y: -15,
-        duration: 0.35,
-        stagger: {
-          each: 0.045,
-          from: 'end' // Reverses order: 04 -> 03 -> 02 -> 01 -> 00
-        },
-        ease: 'power3.in'
-      })
-
-      // 2. Header exit: slide back up to top
-      if (headerEl) {
-        gsap.to(headerEl, {
-          opacity: 0,
-          y: -20,
-          duration: 0.28,
-          ease: 'power2.in'
-        })
-      }
-
-      // 3. Footer exit: slide back down to bottom
-      gsap.to(bottomEls, {
-        opacity: 0,
-        y: 20,
-        duration: 0.28,
-        stagger: 0.03,
-        ease: 'power2.in'
-      })
     }
-  }, [isOpen, isClosing, position])
+  }, [isOpen, position])
 
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen && !isClosing) {
+      if (e.key === 'Escape' && isOpen) {
         onClose()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, isClosing, onClose])
+  }, [isOpen, onClose])
 
   return (
     <div 
       ref={menuContainerRef}
-      className={`fixed inset-0 z-0 bg-[var(--color-canvas)] transition-opacity duration-600 overflow-hidden flex flex-col justify-between ${
-        isOpen && !isClosing 
-          ? 'opacity-100 pointer-events-auto' 
-          : isClosing
-          ? 'opacity-100 pointer-events-none'
-          : 'opacity-0 pointer-events-none'
+      className={`fixed inset-0 z-[100] bg-[var(--color-canvas)]/98 backdrop-blur-2xl transition-all duration-200 overflow-hidden flex flex-col justify-between ${
+        isOpen 
+          ? 'opacity-100 pointer-events-auto visible' 
+          : 'opacity-0 pointer-events-none invisible'
       }`}
       aria-hidden={!isOpen}
     >
       {/* Ambient background glow matching purple theme */}
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--color-primary)]/10 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-[450px] h-[450px] bg-[var(--color-primary)]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Top Header of the Menu Layer */}
-      <div className="staggered-header-item w-full flex items-center justify-between pl-[76px] pr-5 sm:px-10 lg:px-16 pt-6 sm:pt-8 relative z-10">
-        <div className="flex items-center gap-2.5">
-          <img src="/RLogo.svg" alt="RLogo" className="w-6 h-6 rounded-md" />
-          <div className="font-mono text-xs tracking-[0.2em] text-[var(--color-text-muted)] uppercase flex items-center gap-2">
-            <span>RANN</span>
-            <span className="text-[var(--color-primary)]">/</span>
-            <span>NAVIGATION</span>
+      <div className="staggered-header-item w-full pt-6 sm:pt-8 px-6 sm:px-10 lg:px-16 relative z-10">
+        <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <img src="/RLogo.svg" alt="RLogo" className="w-6 h-6 rounded-md" />
+            <div className="font-mono text-xs tracking-[0.2em] text-[var(--color-text-muted)] uppercase flex items-center gap-2">
+              <span>RANN</span>
+              <span className="text-[var(--color-primary)]">/</span>
+              <span>NAVIGATION</span>
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-3">
-          {/* Language Toggle in Menu */}
-          <button
-            onClick={toggleLanguage}
-            className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 text-[var(--color-text-main)] uppercase tracking-wider cursor-pointer"
-            title="Toggle Language"
-          >
-            <Globe className="w-3.5 h-3.5" />
-            <span>{language.toUpperCase()}</span>
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Language Toggle in Menu */}
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 text-[var(--color-text-main)] uppercase tracking-wider cursor-pointer"
+              title="Toggle Language"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>{language.toUpperCase()}</span>
+            </button>
 
-          {/* Close Button: Pure typography, zero rounded pill */}
-          <button
-            onClick={onClose}
-            disabled={isClosing}
-            className="group flex items-center gap-2 font-mono text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] transition-colors cursor-pointer py-1 px-1.5 select-none disabled:pointer-events-none"
-            aria-label={t('nav.close')}
-          >
-            <span>{t('nav.close')}</span>
-            <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
-          </button>
+            {/* Close Button: Pure typography, zero rounded pill */}
+            <button
+              onClick={onClose}
+              className="group flex items-center gap-2 font-mono text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] transition-colors cursor-pointer py-1 px-1.5 select-none"
+              aria-label={t('nav.close')}
+            >
+              <span>{t('nav.close')}</span>
+              <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Center Nav Items: Staggered Large Editorial Typography */}
-      <div className="w-full flex-1 flex flex-col justify-center pl-[76px] pr-4 sm:px-10 lg:px-16 py-4 my-auto relative z-10">
-        <div className="w-full max-w-2xl ml-auto flex flex-col space-y-1 sm:space-y-2">
+      <div className="w-full flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-4 my-auto relative z-10">
+        <div className="w-full max-w-6xl mx-auto flex flex-col space-y-1 sm:space-y-2">
           {DEFAULT_MENU_ITEMS.map((item, idx) => {
             const isHovered = hoveredIndex === idx
             const isAnyHovered = hoveredIndex !== null
@@ -248,17 +207,14 @@ export default function StaggeredMenu({
             return (
               <div 
                 key={item.number}
-                className="staggered-menu-item relative flex items-baseline justify-between group cursor-pointer py-1.5 sm:py-2 select-none"
-                onMouseEnter={() => !isClosing && setHoveredIndex(idx)}
-                onMouseLeave={() => !isClosing && setHoveredIndex(null)}
-                onClick={() => {
-                  if (isClosing) return
-                  onNavigate(item.href)
-                }}
+                className="staggered-menu-item relative flex items-baseline justify-between group cursor-pointer py-1.5 sm:py-2 select-none border-b border-transparent hover:border-[var(--color-border-subtle)] transition-colors"
+                onMouseEnter={() => setHoveredIndex(idx)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => onNavigate(item.href)}
               >
-                <div className="flex items-baseline gap-2.5 sm:gap-6">
+                <div className="flex items-baseline gap-3 sm:gap-6">
                   {/* Item Number */}
-                  <span className={`font-mono text-xs sm:text-sm font-semibold tracking-wider transition-colors duration-300 ${
+                  <span className={`font-mono text-xs sm:text-sm font-semibold tracking-wider transition-colors duration-200 ${
                     isHovered 
                       ? 'text-[var(--color-primary)]' 
                       : 'text-[var(--color-text-muted)]'
@@ -266,10 +222,10 @@ export default function StaggeredMenu({
                     {item.number}
                   </span>
 
-                  {/* Main Giant Staggered Label (High contrast in Light & Dark mode) */}
-                  <h3 className={`font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[4rem] xl:text-[4.8rem] tracking-tighter uppercase transition-all duration-300 ${
+                  {/* Main Giant Staggered Label */}
+                  <h3 className={`font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[4rem] xl:text-[4.5rem] tracking-tighter uppercase transition-all duration-200 ${
                     isHovered
-                      ? 'text-[var(--color-primary)] translate-x-1.5 sm:translate-x-3'
+                      ? 'text-[var(--color-primary)] translate-x-2'
                       : isAnyHovered 
                         ? 'text-[var(--color-text-muted)]/30' 
                         : 'text-[var(--color-text-main)]'
@@ -279,10 +235,10 @@ export default function StaggeredMenu({
                 </div>
 
                 {/* Right Arrow indicator on hover */}
-                <div className={`transition-all duration-300 transform ${
+                <div className={`transition-all duration-200 transform ${
                   isHovered 
                     ? 'opacity-100 translate-x-0 text-[var(--color-primary)]' 
-                    : 'opacity-0 translate-x-4 text-transparent'
+                    : 'opacity-0 translate-x-3 text-transparent'
                 }`}>
                   <ArrowUpRight className="w-5 h-5 sm:w-8 sm:h-8" />
                 </div>
@@ -293,11 +249,11 @@ export default function StaggeredMenu({
       </div>
 
       {/* Bottom Footer Controls: Theme Switch, ATS CV, & Socials */}
-      <div className="w-full pl-[76px] pr-4 sm:px-10 lg:px-16 pb-6 sm:pb-8 relative z-10">
-        <div className="w-full max-w-2xl ml-auto pt-4 sm:pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
+      <div className="w-full px-6 sm:px-10 lg:px-16 pb-6 sm:pb-8 relative z-10">
+        <div className="w-full max-w-6xl mx-auto pt-4 sm:pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
           
           {/* Social Links */}
-          <div className="staggered-footer-item flex flex-wrap items-center gap-3 sm:gap-6">
+          <div className="staggered-footer-item flex flex-wrap items-center gap-4 sm:gap-6">
             {socialItems.map((s, idx) => (
               <a
                 key={idx}
@@ -313,7 +269,7 @@ export default function StaggeredMenu({
           </div>
 
           {/* Right side: Theme Mode Selection & Download ATS CV */}
-          <div className="staggered-footer-item flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-6">
+          <div className="staggered-footer-item flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
             
             {/* Theme Mode Selector: Pure typography, zero rounded pill */}
             <div className="flex items-center gap-2 font-mono text-[11px] tracking-wider text-[var(--color-text-muted)]">

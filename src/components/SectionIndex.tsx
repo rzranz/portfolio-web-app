@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLanguage } from '../lib/i18n'
-
+import { scrollToSection } from '../lib/scroll'
 
 const SECTIONS = [
   { id: 'hero', label: '00' },
@@ -54,25 +54,15 @@ export default function SectionIndex() {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
-
-    const lenis = (window as unknown as { lenis?: { scrollTo: (target: string, options: unknown) => void } }).lenis
-
-    if (lenis && typeof lenis.scrollTo === 'function') {
-      lenis.scrollTo(`#${id}`, {
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      })
-    } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-    }
+    scrollToSection(id, 1.2)
   }
 
   const scrollAction = () => {
     if (atBottom) {
-      handleNavClick({ preventDefault: () => {} } as any, 'hero')
+      scrollToSection('hero', 1.2)
     } else {
       const nextIndex = Math.min(activeIndex + 1, SECTIONS.length - 1)
-      handleNavClick({ preventDefault: () => {} } as any, SECTIONS[nextIndex].id)
+      scrollToSection(SECTIONS[nextIndex].id, 1.2)
     }
   }
 
