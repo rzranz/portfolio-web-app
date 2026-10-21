@@ -7,15 +7,15 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     // Check initial preference on mount
-    const isDarkOS = window.matchMedia('(prefers-color-scheme: dark)').matches
     const saved = localStorage.getItem('theme')
     
-    if (saved === 'light' || (!saved && !isDarkOS)) {
+    if (saved === 'light') {
       setIsDark(false)
       document.documentElement.classList.remove('dark')
     } else {
       setIsDark(true)
       document.documentElement.classList.add('dark')
+      if (!saved) localStorage.setItem('theme', 'dark')
     }
 
     const observer = new MutationObserver(() => {
