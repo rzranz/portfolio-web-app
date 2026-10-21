@@ -91,61 +91,52 @@ export default function ExperienceTimeline() {
       const track = trackRef.current!
       const totalMilestones = MILESTONES.length
       const scrollDistance = () => Math.max(0, track.scrollWidth - window.innerWidth + 180)
+      const scrubDistance = Math.max(1200, track.scrollWidth - window.innerWidth + 300)
+      const holdDistance = 400 // Comfortable pause to view Milestone 06 before Contact rises
+      const exitDistance = window.innerHeight // Extra pin duration so Contact slides up over it
+      const totalDistance = scrubDistance + holdDistance + exitDistance
 
       // Timeline scrub pinned to section - buttery smooth, zero-jump scrub with anticipatePin
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${Math.max(1200, track.scrollWidth - window.innerWidth + 200)}`,
+          end: () => `+=${totalDistance}`,
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
           scrub: 0.6,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
+            const milestoneRatio = scrubDistance / totalDistance
+            const milestoneProgress = Math.min(1, self.progress / milestoneRatio)
             const step = Math.min(
               totalMilestones,
-              Math.max(1, Math.floor(self.progress * totalMilestones) + 1)
+              Math.max(1, Math.floor(milestoneProgress * totalMilestones) + 1)
             )
             setActiveStep(step)
           }
         }
       })
 
-      // 1. Horizontal track movement
+      // 1. Horizontal track movement: completed across scrubDistance
       tl.to(track, {
         x: () => -scrollDistance(),
-        ease: 'none'
+        ease: 'none',
+        duration: scrubDistance
       }, 0)
 
-      // 2. Active line progress fill
+      // 2. Active line progress fill: completed across scrubDistance
       if (activeLineRef.current) {
         tl.to(activeLineRef.current, {
           scaleX: 1,
-          ease: 'none'
+          ease: 'none',
+          duration: scrubDistance
         }, 0)
       }
 
-      // 3. Step-by-step reveal: crisp, instant transition without blur delays
-      const milestoneNodes = gsap.utils.toArray<HTMLElement>('.review-node')
-      milestoneNodes.forEach((node, idx) => {
-        if (idx === 0) return // First node is active by default
-
-        const triggerProgress = idx / (totalMilestones - 1)
-
-        tl.fromTo(
-          node,
-          { opacity: 0.2, y: 15 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.2,
-            ease: 'power2.out'
-          },
-          Math.max(0, triggerProgress - 0.08)
-        )
-      })
+      // 3. Stationary hold phase: Experience stays pinned while Contact card slides up over it
+      tl.to({}, { duration: holdDistance + exitDistance }, scrubDistance)
 
     }, sectionRef)
 
@@ -156,7 +147,7 @@ export default function ExperienceTimeline() {
     <section 
       id="experience" 
       ref={sectionRef} 
-      className="md:sticky md:top-0 md:h-screen md:overflow-hidden relative min-h-screen w-full z-50 bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] border-t border-[var(--color-border-subtle)] flex flex-col justify-between overflow-hidden"
+      className="relative min-h-screen w-full z-50 bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col justify-between py-12 md:py-0"
     >
       {/* Editorial Header */}
       <div className="max-w-[1360px] mx-auto px-6 sm:px-10 lg:pl-12 lg:pr-28 w-full pt-20 md:pt-24 pb-4 z-20">
@@ -202,24 +193,35 @@ export default function ExperienceTimeline() {
           />
 
           {MILESTONES.map((item, idx) => {
-            const isFirst = idx === 0
+            const isCurrentActive = activeStep === idx + 1
+            const isPassed = activeStep > idx + 1
 
             return (
               <div 
                 key={item.index}
-                className={`review-node flex-shrink-0 w-[380px] xl:w-[420px] flex flex-col justify-start relative select-none transition-opacity duration-300 ${
-                  isFirst ? 'opacity-100' : 'opacity-20'
+                className={`review-node flex-shrink-0 w-[380px] xl:w-[440px] flex flex-col justify-start relative select-none transition-all duration-300 p-6 rounded-2xl border ${
+                  isCurrentActive
+                    ? 'border-[var(--color-primary)] bg-[var(--color-surface)] shadow-[0_12px_35px_var(--color-border-glow)] opacity-100 scale-[1.02]'
+                    : isPassed
+                    ? 'border-[var(--color-border-subtle)] bg-[var(--color-surface)]/60 opacity-90'
+                    : 'border-[var(--color-border-subtle)]/60 bg-[var(--color-surface)]/40 opacity-80'
                 }`}
               >
                 {/* 1. Artistic Outline Numeral (Adaptive Light/Dark Contrast) */}
-                <div className="node-number font-display font-black text-6xl xl:text-7xl leading-none tracking-tighter text-[var(--color-text-muted)]/25 select-none transition-all duration-300 h-[70px] flex items-end">
+                <div className={`node-number font-display font-black text-6xl xl:text-7xl leading-none tracking-tighter select-none transition-colors duration-300 h-[70px] flex items-end ${
+                  isCurrentActive ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]/25'
+                }`}>
                   {item.index}
                 </div>
 
                 {/* 2. Timeline Axis Row (Dot) */}
                 <div className="relative h-10 flex items-center my-1 z-20">
-                  <div className={`node-dot w-4 h-4 rounded-full border-2 border-[var(--color-primary)] bg-[var(--color-canvas)] transition-all duration-300 shadow-[0_0_12px_var(--color-primary)] ${
-                    isFirst ? 'scale-110' : ''
+                  <div className={`node-dot w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+                    isCurrentActive
+                      ? 'border-[var(--color-primary)] bg-[var(--color-primary)] scale-125 ring-4 ring-[var(--color-primary)]/20 shadow-[0_0_16px_var(--color-primary)]'
+                      : isPassed
+                      ? 'border-[var(--color-primary)] bg-[var(--color-primary)] shadow-[0_0_8px_var(--color-primary)]'
+                      : 'border-[var(--color-border-subtle)] bg-[var(--color-canvas)]'
                   }`} />
                 </div>
 
