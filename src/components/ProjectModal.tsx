@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink, Layers } from 'lucide-react'
-import { GithubLogo } from '@phosphor-icons/react'
+import { Github } from './icons/BrandIcons'
+
 import { useLanguage } from '../lib/i18n'
 
 export interface ProjectData {
@@ -233,7 +234,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[var(--color-border-subtle)] text-[var(--color-text-main)] hover:bg-[var(--color-surface-hover)] font-mono text-xs font-medium transition-colors"
                 >
-                  <GithubLogo className="w-4 h-4" />
+                  <Github className="w-4 h-4" />
                   {t('works.source')}
                 </a>
               )}
