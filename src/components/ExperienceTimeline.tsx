@@ -114,7 +114,7 @@ export default function ExperienceTimeline() {
               totalMilestones,
               Math.max(1, Math.floor(milestoneProgress * totalMilestones) + 1)
             )
-            setActiveStep(step)
+            setActiveStep((prev) => (prev !== step ? step : prev))
           }
         }
       })

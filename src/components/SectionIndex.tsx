@@ -21,7 +21,8 @@ export default function SectionIndex() {
       const scrollTop = window.scrollY
       const docHeight = document.documentElement.scrollHeight - viewportHeight
 
-      setAtBottom(scrollTop > docHeight - 120)
+      const nextAtBottom = scrollTop > docHeight - 120
+      setAtBottom((prev) => (prev !== nextAtBottom ? nextAtBottom : prev))
 
       // Calculate which section is currently active based on viewport position
       const centerLine = viewportHeight * 0.45
@@ -32,7 +33,7 @@ export default function SectionIndex() {
           const rect = el.getBoundingClientRect()
           // If the element's top is at or above the center line, and its bottom is below
           if (rect.top <= centerLine && rect.bottom > 80) {
-            setActiveIndex(i)
+            setActiveIndex((prev) => (prev !== i ? i : prev))
             return
           }
         }
@@ -40,7 +41,7 @@ export default function SectionIndex() {
 
       // Default to 0 if at top
       if (scrollTop < viewportHeight * 0.5) {
-        setActiveIndex(0)
+        setActiveIndex((prev) => (prev !== 0 ? 0 : prev))
       }
     }
 
