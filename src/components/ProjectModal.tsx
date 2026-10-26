@@ -67,7 +67,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     <AnimatePresence>
       <div 
         data-lenis-prevent="true"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10"
+        className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 md:p-10"
       >
         {/* Backdrop */}
         <motion.div

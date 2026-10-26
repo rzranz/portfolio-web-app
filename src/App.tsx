@@ -36,7 +36,11 @@ function App() {
       clearTimeout(resizeTimer)
       resizeTimer = setTimeout(() => setIsMobile(window.innerWidth < 768), 100)
     }
-    const handleScroll = () => setIsScrolled(window.scrollY > 24)
+    const handleScroll = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop
+      const nextScrolled = scrollY > 24
+      setIsScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev))
+    }
 
     window.addEventListener('resize', handleResize, { passive: true })
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -65,10 +69,14 @@ function App() {
     ;(window as unknown as { lenis: Lenis }).lenis = lenis
 
     lenis.on('scroll', ScrollTrigger.update)
+    lenis.on('scroll', (e: { scroll: number }) => {
+      const nextScrolled = e.scroll > 24
+      setIsScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev))
+    })
 
     const tickerFn = (time: number) => lenis.raf(time * 1000)
     gsap.ticker.add(tickerFn)
-    gsap.ticker.lagSmoothing(500, 33)
+    gsap.ticker.lagSmoothing(0)
 
     return () => {
       lenis.destroy()
@@ -118,7 +126,7 @@ function App() {
         <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
       </div>
 
-      {/* Menu Interaction Layer (z-30) */}
+      {/* Menu Interaction Layer */}
       <StaggeredMenu 
         isOpen={isMenuOpen} 
         onClose={closeMenu} 
@@ -130,12 +138,70 @@ function App() {
         <SectionIndex />
       </div>
 
+      {/* Fixed Header Navbar: Stays at the top on scroll, background follows page */}
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center justify-between ${
+          isScrolled 
+            ? 'bg-[var(--color-canvas)]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.15)] border-b border-[var(--color-border-subtle)] py-3 sm:py-4 px-4 sm:px-6 md:px-8' 
+            : 'bg-transparent border-b border-transparent py-4 sm:py-6 px-4 sm:px-6 md:px-8'
+        } ${
+          isMenuOpen ? 'opacity-0 pointer-events-none -translate-y-2' : 'opacity-100 translate-y-0'
+        }`}
+      >
+        <div className="flex items-center gap-3 md:gap-5 pointer-events-auto">
+          <a 
+            href="#hero" 
+            onClick={(e) => {
+              e.preventDefault()
+              scrollToSection('#hero')
+            }}
+            className="flex items-center gap-2.5 hover:opacity-85 transition-opacity group cursor-pointer"
+          >
+            <img 
+              src="/RLogo.svg" 
+              alt="RLogo" 
+              className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform" 
+            />
+            <span className="font-display font-bold text-lg md:text-xl tracking-wider text-[var(--color-text-main)]">
+              RANN<span className="text-[var(--color-primary)]">.</span>
+            </span>
+          </a>
+
+          {/* Language Switch */}
+          <button 
+            onClick={toggleLanguage} 
+            className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 uppercase tracking-wider cursor-pointer"
+            title="Toggle Language"
+          >
+            <Globe className="w-3.5 h-3.5" /> 
+            <span>{language.toUpperCase()}</span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
+          <ThemeToggle />
+          
+          {/* Menu Trigger on Canvas Header */}
+          <button 
+            onClick={openMenu} 
+            className="text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase transition-all duration-300 cursor-pointer py-1 px-1.5 group select-none text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100"
+            aria-expanded={isMenuOpen}
+            aria-label={t('nav.menu')}
+          >
+            <span className="relative inline-block">
+              {t('nav.menu')}
+              <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
+            </span>
+          </button>
+        </div>
+      </header>
+
       {/* Front Page Canvas Surface with Calibrated 3D Pullback ("aga miring") Effect */}
       <div
         id="main-page-canvas"
         className={`relative z-10 w-full min-h-screen bg-[var(--color-canvas)] canvas-perspective-layer ${
           isMenuOpen
-            ? 'rounded-2xl md:rounded-3xl shadow-[-25px_25px_80px_rgba(0,0,0,0.85)] border border-[var(--color-border-subtle)] select-none cursor-pointer'
+            ? 'canvas-active-3d rounded-2xl md:rounded-3xl shadow-[-25px_25px_80px_rgba(0,0,0,0.85)] border border-[var(--color-border-subtle)] select-none cursor-pointer'
             : 'rounded-none shadow-none border-transparent ring-0'
         }`}
         style={
@@ -159,62 +225,6 @@ function App() {
             title="Click to close menu"
           />
         )}
-
-        {/* Fixed Header Navbar: Tilts naturally with canvas when menu is open */}
-        <header 
-          className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 flex items-center justify-between ${
-            isScrolled 
-              ? 'bg-[var(--color-canvas)]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.15)] py-3 sm:py-4 px-4 sm:px-6 md:px-8' 
-              : 'bg-transparent py-4 sm:py-6 px-4 sm:px-6 md:px-8'
-          }`}
-        >
-          <div className="flex items-center gap-3 md:gap-5 pointer-events-auto">
-            <a 
-              href="#hero" 
-              className="flex items-center gap-2.5 hover:opacity-85 transition-opacity group"
-            >
-              <img 
-                src="/RLogo.svg" 
-                alt="RLogo" 
-                className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform" 
-              />
-              <span className="font-display font-bold text-lg md:text-xl tracking-wider text-[var(--color-text-main)]">
-                RANN<span className="text-[var(--color-primary)]">.</span>
-              </span>
-            </a>
-
-            {/* Language Switch */}
-            <button 
-              onClick={toggleLanguage} 
-              className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 uppercase tracking-wider cursor-pointer"
-              title="Toggle Language"
-            >
-              <Globe className="w-3.5 h-3.5" /> 
-              <span>{language.toUpperCase()}</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
-            <ThemeToggle />
-            
-            {/* Menu Trigger on Canvas Header: Hidden when menu is already open */}
-            <button 
-              onClick={openMenu} 
-              className={`text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase transition-all duration-300 cursor-pointer py-1 px-1.5 group select-none ${
-                isMenuOpen
-                  ? 'opacity-0 pointer-events-none'
-                  : 'text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100'
-              }`}
-              aria-expanded={isMenuOpen}
-              aria-label={t('nav.menu')}
-            >
-              <span className="relative inline-block">
-                {t('nav.menu')}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
-              </span>
-            </button>
-          </div>
-        </header>
 
         <main className="relative z-10">
           {/* 00: Hero (sticky top-0 z-10) */}

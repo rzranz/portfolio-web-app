@@ -149,7 +149,7 @@ export default function StaggeredMenu({
   return (
     <div 
       ref={menuContainerRef}
-      className={`fixed inset-0 z-30 transition-opacity duration-300 overflow-hidden flex flex-col justify-between pointer-events-none ${
+      className={`fixed inset-0 z-[60] transition-opacity duration-300 overflow-hidden flex flex-col justify-between pointer-events-none ${
         isOpen 
           ? 'opacity-100 visible' 
           : 'opacity-0 invisible'
