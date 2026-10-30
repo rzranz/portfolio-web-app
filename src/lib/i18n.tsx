@@ -40,7 +40,7 @@ export const translations: Translations = {
   'about.uni': { en: 'Universitas Komputer Indonesia (2022-2026)', id: 'Universitas Komputer Indonesia (2022-2026)' },
   'about.degree': { en: 'Bachelor of Informatics Engineering (GPA: 3.43)', id: 'S1 Teknik Informatika (IPK: 3.43)' },
   'about.p1': { 
-    en: 'I am a Fullstack Software Engineer with a proven track record of building scalable web applications. My expertise lies in architecting robust backend systems and creating responsive, intuitive frontends.', 
+    en: 'I am a Fullstack Software Engineer with a proven track record of building scalable web applications. My expertise lies in architecting reliable backend systems and creating responsive, intuitive frontends.', 
     id: 'Saya adalah seorang Fullstack Software Engineer dengan rekam jejak yang terbukti dalam membangun aplikasi web yang skalabel. Keahlian saya terletak pada perancangan sistem backend yang kuat dan pembuatan frontend yang responsif dan intuitif.' 
   },
   'about.p2': { 

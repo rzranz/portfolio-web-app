@@ -53,7 +53,7 @@
     },
     {
       "category": "Tools & Infrastructure",
-      "skills": ["Git", "Docker", "Postman", "PostgreSQL", "MySQL", "VS Code"]
+      "skills": ["Git", "Docker", "Postman", "PostgreSQL", "MySQL", "SQLite", "VS Code"]
     },
     {
       "category": "AI, AR & Game Tech",
@@ -63,7 +63,7 @@
   "tech_stack": [
     "Laravel", "Springboot", "Go-Lang", "Django",
     "Vue JS", "React", "Next JS", "Tailwind",
-    "PostgreSQL", "MySQL", "Docker", "Git", "Unity", "Three.js"
+    "PostgreSQL", "MySQL", "SQLite", "Docker", "Git", "Unity", "Three.js"
   ],
   "categories": [
     "All",
@@ -73,6 +73,27 @@
     "AR & 3D"
   ],
   "experience": [
+    {
+      "id": "golang",
+      "title": "SIGAP JABAR — WebGIS Forest Conservation Platform",
+      "company": "Dinas Kehutanan Jawa Barat",
+      "period": "May 2026 - Sept 2026",
+      "year": "2026",
+      "category": "Backend & Cloud",
+      "featured": true,
+      "image": "/projects/sigap-jabar.png",
+      "live_url": "https://dishut.public.unikom.my.id/",
+      "github_url": "https://github.com/rzranz",
+      "description": "Designed high-performance backend architecture and relational database flow for a GIS-based forest conservation and land monitoring platform (SIGAP JABAR). Collaborated with cross-functional teams to ensure stable data integration and accurate spatial mapping endpoints.",
+      "stack": ["Go", "PostgreSQL", "Laravel", "Docker", "CI/CD", "REST API", "WebGIS"],
+      "tags": ["WebGIS", "Government", "Microservice", "Live Production"],
+      "highlights": [
+        "Designed relational database flow and high-throughput backend architecture for GIS-based land monitoring",
+        "Collaborated with cross-functional teams to ensure stable spatial mapping data integration",
+        "Automated deployment pipelines with Docker and CI/CD, guaranteeing sub-50ms endpoint queries"
+      ],
+      "metrics": "<50ms Latency · WebGIS Integrated · Live Production"
+    },
     {
       "id": "ic-gamez",
       "title": "IC Game-Z — Gamified Learning & AI Platform",
@@ -95,6 +116,58 @@
         "Competitive Global Leaderboard to rank learner progression"
       ],
       "metrics": "8+ Modules · AI Mentor · 100% Live"
+    },
+    {
+      "id": "spp",
+      "title": "SPP Darul Fikri — Payment Gateway & WhatsApp Automation",
+      "company": "RA Darul Fikri (Client Project & Thesis)",
+      "period": "Jan 2026 - Aug 2026",
+      "year": "2026",
+      "category": "Fullstack",
+      "featured": true,
+      "image": "/projects/darul-fikri.png",
+      "live_url": "https://ra.darulfikri.sch.id/",
+      "github_url": "https://github.com/rzranz",
+      "description": "Engineered an automated school fee (SPP) payment application using Laravel and Vue.js to digitize administrative workflows, replacing manual school records. Integrated Pakasir payment gateway for secure, trackable transactions, and Fonnte WhatsApp API to deliver real-time payment notifications to parents.",
+      "stack": ["Laravel", "Vue.js", "Pakasir Payment Gateway", "Fonnte WhatsApp API", "MySQL", "Tailwind CSS"],
+      "tags": ["Client Project", "Thesis (Tugas Akhir)", "Fintech", "Live Production"],
+      "highlights": [
+        "Built complete end-to-end digital tuition billing system, replacing manual pen-and-paper tracking",
+        "Integrated Pakasir payment gateway for secure, centralized, and traceable financial transactions",
+        "Embedded Fonnte WhatsApp API for instant real-time receipts and billing reminders to parents"
+      ],
+      "metrics": "100% Automated · Live at ra.darulfikri.sch.id"
+    },
+    {
+      "id": "flowledger",
+      "title": "FlowLedger — Personal Financial Tracker",
+      "company": "Personal Engineering Project",
+      "company_url": "https://github.com/rzranz/flowledger",
+      "period": "2026",
+      "year": "2026",
+      "category": "Fullstack",
+      "featured": true,
+      "image": "/projects/flowledger-web.png",
+      "gallery": [
+        "/projects/flowledger-web.png",
+        "/projects/flowledger-home.png",
+        "/projects/flowledger-transactions.png",
+        "/projects/flowledger-cards.png"
+      ],
+      "live_url": "",
+      "github_url": "https://github.com/rzranz",
+      "description": "Production-grade local-first personal financial tracking engine built with Go standard library net/http, Vue 3, and pure-Go SQLite WAL. Implements Pragmatic Clean Architecture with consumer-defined interfaces, deterministic integer IDR arithmetic, Idempotency-Key double-spend protection, errgroup concurrent monthly analytics, and memory-safe streaming CSV export shipped in a single embedded binary.",
+      "stack": ["Go", "Vue 3", "SQLite", "Tailwind CSS", "Clean Architecture", "net/http", "Vite"],
+      "tags": ["Go 1.22", "Vue 3", "Clean Architecture", "SQLite WAL", "errgroup Concurrency", "Idempotency"],
+      "highlights": [
+        "Strict Deterministic Integer Math: Custom AmountIDR int64 representation preventing floating-point rounding errors across SQLite, domain entities, and API payloads",
+        "Clean Architecture & Standard Library: Pure Go 1.22 net/http routing, consumer-defined repository interfaces, and WithTx closure transaction boundaries",
+        "Idempotency & Double-Posting Protection: Idempotency-Key middleware caching request hashes to prevent duplicate transaction entries on network retry",
+        "Concurrent Monthly Analytics: Parallel multi-query execution via errgroup delivering sub-50ms financial aggregations and budget status calculations",
+        "SQLite Concurrency Tuning: Configured WAL journal mode, busy timeout, and strict foreign keys preventing database lock contention",
+        "Single-Binary Asset Embedding: Vue 3 Vite build embedded directly into Go binary via go:embed for zero-dependency self-contained deployment"
+      ],
+      "metrics": "Deterministic Integer Math · <50ms Concurrency · Single Binary (embed.FS)"
     },
     {
       "id": "pdam-tegal",
@@ -122,48 +195,6 @@
         "Multi-Platform Push Alerts: Sistem notifikasi otomatis langsung ke smartphone saat kapasitas air menyentuh batas kritis"
       ],
       "metrics": "Real-time Telemetry · Smart Pump Interlock · Multi-Bak IoT"
-    },
-    {
-      "id": "golang",
-      "title": "SIGAP JABAR — WebGIS Forest Conservation Platform",
-      "company": "Dinas Kehutanan Jawa Barat",
-      "period": "May 2026 - Sept 2026",
-      "year": "2026",
-      "category": "Backend & Cloud",
-      "featured": true,
-      "image": "/projects/sigap-jabar.png",
-      "live_url": "https://dishut.public.unikom.my.id/",
-      "github_url": "https://github.com/rzranz",
-      "description": "Designed robust backend architecture and relational database flow for a GIS-based forest conservation and land monitoring platform (SIGAP JABAR). Collaborated with cross-functional teams to ensure seamless data integration and accurate spatial mapping endpoints.",
-      "stack": ["Go", "PostgreSQL", "Laravel", "Docker", "CI/CD", "REST API", "WebGIS"],
-      "tags": ["WebGIS", "Government", "Microservice", "Live Production"],
-      "highlights": [
-        "Designed relational database flow and high-throughput backend architecture for GIS-based land monitoring",
-        "Collaborated with cross-functional teams to ensure seamless spatial mapping data integration",
-        "Automated deployment pipelines with Docker and CI/CD, guaranteeing sub-50ms endpoint queries"
-      ],
-      "metrics": "<50ms Latency · WebGIS Integrated · Live Production"
-    },
-    {
-      "id": "spp",
-      "title": "SPP Darul Fikri — Payment Gateway & WhatsApp Automation",
-      "company": "RA Darul Fikri (Client Project & Thesis)",
-      "period": "Jan 2026 - Aug 2026",
-      "year": "2026",
-      "category": "Fullstack",
-      "featured": true,
-      "image": "/projects/darul-fikri.png",
-      "live_url": "https://ra.darulfikri.sch.id/",
-      "github_url": "https://github.com/rzranz",
-      "description": "Engineered an automated school fee (SPP) payment application using Laravel and Vue.js to digitize administrative workflows, replacing manual school records. Integrated Pakasir payment gateway for secure, trackable transactions, and Fonnte WhatsApp API to deliver real-time payment notifications to parents.",
-      "stack": ["Laravel", "Vue.js", "Pakasir Payment Gateway", "Fonnte WhatsApp API", "MySQL", "Tailwind CSS"],
-      "tags": ["Client Project", "Thesis (Tugas Akhir)", "Fintech", "Live Production"],
-      "highlights": [
-        "Built complete end-to-end digital tuition billing system, replacing manual pen-and-paper tracking",
-        "Integrated Pakasir payment gateway for secure, centralized, and traceable financial transactions",
-        "Embedded Fonnte WhatsApp API for instant real-time receipts and billing reminders to parents"
-      ],
-      "metrics": "100% Automated · Live at ra.darulfikri.sch.id"
     },
     {
       "id": "hmif",
@@ -267,7 +298,7 @@
       "highlights": [
         "Recipe ingredient breakdown auto-deducted per order placed",
         "Real-time daily cashier shift reconciliation reports",
-        "Seamless offline-tolerant order cart queue"
+        "Offline-tolerant order cart queue"
       ],
       "metrics": "Recipe Auto-Deduct · QRIS Live"
     }

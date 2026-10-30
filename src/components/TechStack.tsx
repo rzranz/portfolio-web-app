@@ -17,6 +17,7 @@ const techIcons: Record<string, string> = {
   'Go-Lang': 'devicon-go-original-wordmark',
   'PostgreSQL': 'devicon-postgresql-plain',
   'MySQL': 'devicon-mysql-original',
+  'SQLite': 'devicon-sqlite-plain',
   'Unity': 'devicon-unity-plain',
   'Three.js': 'devicon-threejs-original',
 }

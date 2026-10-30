@@ -25,6 +25,7 @@ export interface ProjectData {
   tags: string[]
   highlights?: string[]
   metrics?: string
+  device?: 'desktop' | 'mobile'
 }
 
 export default function RecentWorks() {
@@ -112,19 +113,72 @@ export default function RecentWorks() {
                 className="group flex flex-col justify-between cursor-pointer border-b border-[var(--color-border-subtle)] pb-8 md:pb-10 transition-colors"
               >
                 <div>
-                  {/* Clean Image Preview Container (No floating badges, pure modern presentation) */}
+                  {/* Clean Image Preview Container (Optimized for desktop & mobile apps) */}
                   {exp.image && (
                     <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden mb-5 border border-[var(--color-border-subtle)]/60 bg-[var(--color-surface)]">
-                      <img
-                        src={exp.image}
-                        alt={exp.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      {exp.device === 'mobile' ? (
+                        /* Mobile Showcase: 3 overlapping phone mockups with fanning effect on hover */
+                        <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-b from-[var(--color-surface)] via-black/30 to-black/70 px-4 py-3 overflow-hidden select-none">
+                          {/* Subtle grid pattern background */}
+                          <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+
+                          {/* Left Screen (Peek) */}
+                          {exp.gallery && exp.gallery[2] && (
+                            <div className="absolute left-1/2 -translate-x-[115%] w-[33%] max-w-[130px] sm:max-w-[150px] aspect-[9/18.5] rounded-[16px] border border-neutral-700/60 shadow-xl overflow-hidden bg-neutral-950 -rotate-8 translate-y-3 opacity-60 transition-all duration-500 ease-out group-hover:opacity-85 group-hover:-rotate-12 group-hover:-translate-x-[125%] group-hover:translate-y-2">
+                              <img
+                                src={exp.gallery[2]}
+                                alt={`${exp.title} overview`}
+                                loading="lazy"
+                                className="w-full h-full object-cover object-top"
+                              />
+                            </div>
+                          )}
+
+                          {/* Right Screen (Peek) */}
+                          {exp.gallery && exp.gallery[1] && (
+                            <div className="absolute left-1/2 translate-x-[15%] w-[33%] max-w-[130px] sm:max-w-[150px] aspect-[9/18.5] rounded-[16px] border border-neutral-700/60 shadow-xl overflow-hidden bg-neutral-950 rotate-8 translate-y-3 opacity-60 transition-all duration-500 ease-out group-hover:opacity-85 group-hover:rotate-12 group-hover:translate-x-[25%] group-hover:translate-y-2">
+                              <img
+                                src={exp.gallery[1]}
+                                alt={`${exp.title} transactions`}
+                                loading="lazy"
+                                className="w-full h-full object-cover object-top"
+                              />
+                            </div>
+                          )}
+
+                          {/* Center Screen (Primary Active) */}
+                          <div className="relative z-10 w-[38%] max-w-[150px] sm:max-w-[175px] aspect-[9/18.5] rounded-[20px] sm:rounded-[22px] border-[2.5px] border-neutral-600/90 shadow-[0_16px_40px_rgba(0,0,0,0.7)] overflow-hidden bg-neutral-950 transition-transform duration-500 ease-out group-hover:scale-[1.05] group-hover:-translate-y-1">
+                            {/* Phone notch */}
+                            <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-10 sm:w-12 h-2.5 bg-neutral-900 rounded-full z-20 flex items-center justify-center">
+                              <div className="w-1.5 h-1.5 rounded-full bg-neutral-800" />
+                            </div>
+                            <img
+                              src={exp.image}
+                              alt={exp.title}
+                              loading="lazy"
+                              className="w-full h-full object-cover object-top"
+                            />
+                          </div>
+
+                          {/* Mobile device indicator badge */}
+                          <div className="absolute bottom-2.5 left-3 z-20 font-mono text-[9px] uppercase tracking-wider text-neutral-300 bg-black/70 backdrop-blur-sm px-2 py-0.5 rounded border border-neutral-700/50">
+                            Mobile App
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <img
+                            src={exp.image}
+                            alt={exp.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        </>
+                      )}
                       
                       {exp.live_url && (
-                        <div className="absolute top-3 right-3 font-mono text-[10px] text-emerald-400 font-semibold uppercase tracking-wider flex items-center gap-1.5 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded border border-emerald-500/30">
+                        <div className="absolute top-3 right-3 font-mono text-[10px] text-emerald-400 font-semibold uppercase tracking-wider flex items-center gap-1.5 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded border border-emerald-500/30 z-20">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           <span>Live</span>
                         </div>
