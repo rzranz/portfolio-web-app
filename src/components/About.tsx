@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import { useLanguage } from '../lib/i18n'
 import { ArrowUpRight } from 'lucide-react'
 import data from '../data/cv.json'
@@ -79,12 +80,15 @@ export default function About() {
             {t('about.p2')}
           </p>
 
-          {/* Metric Stats Grid */}
+          {/* Metric Stats Grid with Touch/Hover Feedback */}
           <div className="pt-1 grid grid-cols-2 gap-2.5">
             {data.profile.stats.map((stat, idx) => (
-              <div 
+              <motion.div 
                 key={idx}
-                className="p-3 sm:p-3.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-subtle)] hover:border-[var(--color-primary)]/50 transition-colors group"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="p-3 sm:p-3.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-subtle)] hover:border-[var(--color-primary)]/50 transition-colors group cursor-default select-none"
               >
                 <div className="font-display font-bold text-xl sm:text-2xl text-[var(--color-text-main)] group-hover:scale-105 transition-transform origin-left">
                   {stat.value}
@@ -92,7 +96,7 @@ export default function About() {
                 <div className="font-mono text-[10px] uppercase tracking-wider text-[var(--color-text-muted)] mt-0.5">
                   {stat.label}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 

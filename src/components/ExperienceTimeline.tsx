@@ -84,63 +84,99 @@ export default function ExperienceTimeline() {
   const [activeStep, setActiveStep] = useState(1)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     const isDesktop = window.matchMedia('(min-width: 768px)').matches
-    if (!isDesktop || !sectionRef.current || !trackRef.current) return
 
-    const ctx = gsap.context(() => {
-      const track = trackRef.current!
-      const totalMilestones = MILESTONES.length
-      const scrollDistance = () => Math.max(0, track.scrollWidth - window.innerWidth + 180)
-      const scrubDistance = Math.max(1200, track.scrollWidth - window.innerWidth + 300)
-      const holdDistance = 400 // Comfortable pause to view Milestone 06 before Contact rises
-      const exitDistance = window.innerHeight // Extra pin duration so Contact slides up over it
-      const totalDistance = scrubDistance + holdDistance + exitDistance
+    if (isDesktop) {
+      if (!sectionRef.current || !trackRef.current) return
 
-      // Timeline scrub pinned to section - buttery smooth, zero-jump scrub with anticipatePin
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: () => `+=${totalDistance}`,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const milestoneRatio = scrubDistance / totalDistance
-            const milestoneProgress = Math.min(1, self.progress / milestoneRatio)
-            const step = Math.min(
-              totalMilestones,
-              Math.max(1, Math.floor(milestoneProgress * totalMilestones) + 1)
-            )
-            setActiveStep((prev) => (prev !== step ? step : prev))
+      const ctx = gsap.context(() => {
+        const track = trackRef.current!
+        const totalMilestones = MILESTONES.length
+        const scrollDistance = () => Math.max(0, track.scrollWidth - window.innerWidth + 180)
+        const scrubDistance = Math.max(1200, track.scrollWidth - window.innerWidth + 300)
+        const holdDistance = 400 // Comfortable pause to view Milestone 06 before Contact rises
+        const exitDistance = window.innerHeight // Extra pin duration so Contact slides up over it
+        const totalDistance = scrubDistance + holdDistance + exitDistance
+
+        // Timeline scrub pinned to section - buttery smooth, zero-jump scrub with anticipatePin
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: () => `+=${totalDistance}`,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const milestoneRatio = scrubDistance / totalDistance
+              const milestoneProgress = Math.min(1, self.progress / milestoneRatio)
+              const step = Math.min(
+                totalMilestones,
+                Math.max(1, Math.floor(milestoneProgress * totalMilestones) + 1)
+              )
+              setActiveStep((prev) => (prev !== step ? step : prev))
+            }
           }
-        }
-      })
+        })
 
-      // 1. Horizontal track movement: completed across scrubDistance
-      tl.to(track, {
-        x: () => -scrollDistance(),
-        ease: 'none',
-        duration: scrubDistance
-      }, 0)
-
-      // 2. Active line progress fill: completed across scrubDistance
-      if (activeLineRef.current) {
-        tl.to(activeLineRef.current, {
-          scaleX: 1,
+        // 1. Horizontal track movement: completed across scrubDistance
+        tl.to(track, {
+          x: () => -scrollDistance(),
           ease: 'none',
           duration: scrubDistance
         }, 0)
-      }
 
-      // 3. Stationary hold phase: Experience stays pinned while Contact card slides up over it
-      tl.to({}, { duration: holdDistance + exitDistance }, scrubDistance)
+        // 2. Active line progress fill: completed across scrubDistance
+        if (activeLineRef.current) {
+          tl.to(activeLineRef.current, {
+            scaleX: 1,
+            ease: 'none',
+            duration: scrubDistance
+          }, 0)
+        }
 
-    }, sectionRef)
+        // 3. Stationary hold phase: Experience stays pinned while Contact card slides up over it
+        tl.to({}, { duration: holdDistance + exitDistance }, scrubDistance)
 
-    return () => ctx.revert()
+      }, sectionRef)
+
+      return () => ctx.revert()
+    } else {
+      // Mobile vertical timeline: animate nodes and sync activeStep on scroll
+      const ctx = gsap.context(() => {
+        MILESTONES.forEach((item, idx) => {
+          const stepNum = idx + 1
+          ScrollTrigger.create({
+            trigger: `#mobile-milestone-${item.index}`,
+            start: 'top 65%',
+            end: 'bottom 35%',
+            onEnter: () => setActiveStep(stepNum),
+            onEnterBack: () => setActiveStep(stepNum),
+          })
+
+          gsap.fromTo(
+            `#mobile-milestone-${item.index}`,
+            { opacity: 0.45, x: -14 },
+            {
+              opacity: 1,
+              x: 0,
+              duration: 0.55,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: `#mobile-milestone-${item.index}`,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+              }
+            }
+          )
+        })
+      }, sectionRef)
+
+      return () => ctx.revert()
+    }
   }, [])
 
   return (
@@ -277,40 +313,55 @@ export default function ExperienceTimeline() {
           ======================================================== */}
       <div className="md:hidden px-6 sm:px-10 pb-20 pt-4 space-y-8">
         <div className="relative border-l-2 border-[var(--color-primary)]/40 pl-6 sm:pl-8 ml-3 space-y-10">
-          {MILESTONES.map((item) => (
-            <div key={item.index} className="relative space-y-2">
-              {/* Dot on vertical line */}
-              <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-3.5 h-3.5 rounded-full bg-[var(--color-canvas)] border-2 border-[var(--color-primary)] shadow-[0_0_10px_var(--color-primary)]" />
+          {MILESTONES.map((item, idx) => {
+            const isCurrentActive = activeStep === idx + 1
+            return (
+              <div 
+                key={item.index} 
+                id={`mobile-milestone-${item.index}`}
+                className={`relative space-y-2.5 transition-all duration-300 p-4 -ml-4 rounded-xl ${
+                  isCurrentActive 
+                    ? 'bg-[var(--color-surface)]/70 border border-[var(--color-primary)]/50 shadow-[0_4px_20px_var(--color-border-glow)]' 
+                    : 'border border-transparent'
+                }`}
+              >
+                {/* Dot on vertical line */}
+                <div className={`absolute -left-[19px] sm:-left-[27px] top-6 w-3.5 h-3.5 rounded-full transition-all duration-300 ${
+                  isCurrentActive
+                    ? 'bg-[var(--color-primary)] border-2 border-[var(--color-canvas)] scale-125 shadow-[0_0_12px_var(--color-primary)] ring-4 ring-[var(--color-primary)]/20'
+                    : 'bg-[var(--color-canvas)] border-2 border-[var(--color-primary)] shadow-[0_0_6px_var(--color-primary)]'
+                }`} />
 
-              <div className="flex items-center gap-2 font-mono text-[10px] uppercase font-bold text-[var(--color-primary)] tracking-wider">
-                <span>{item.index}</span>
-                <span>·</span>
-                <span>{t(item.categoryKey)}</span>
-                <span className="text-[var(--color-text-muted)]">({item.period})</span>
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase font-bold text-[var(--color-primary)] tracking-wider">
+                  <span className={isCurrentActive ? "text-[var(--color-primary)] font-extrabold" : ""}>{item.index}</span>
+                  <span>·</span>
+                  <span>{t(item.categoryKey)}</span>
+                  <span className="text-[var(--color-text-muted)]">({item.period})</span>
+                </div>
+
+                <h3 className="font-display font-bold text-xl text-[var(--color-text-main)] flex items-center gap-1.5">
+                  <span>{item.entity}</span>
+                  {item.entityUrl && (
+                    <a href={item.entityUrl} target="_blank" rel="noreferrer" className="text-[var(--color-primary)] hover:opacity-80">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  )}
+                </h3>
+
+                <p className="font-mono text-xs font-semibold text-[var(--color-text-muted)]">
+                  {item.role}
+                </p>
+
+                <p className="font-sans text-xs text-[var(--color-text-muted)] leading-relaxed">
+                  {t(item.descKey)}
+                </p>
+
+                <p className="font-mono text-[10px] text-[var(--color-primary)]/90 border-l border-[var(--color-primary)]/40 pl-2">
+                  {item.tag}
+                </p>
               </div>
-
-              <h3 className="font-display font-bold text-xl text-[var(--color-text-main)] flex items-center gap-1">
-                {item.entity}
-                {item.entityUrl && (
-                  <a href={item.entityUrl} target="_blank" rel="noreferrer" className="text-[var(--color-primary)]">
-                    <ArrowUpRight className="w-4 h-4" />
-                  </a>
-                )}
-              </h3>
-
-              <p className="font-mono text-xs text-[var(--color-text-muted)]">
-                {item.role}
-              </p>
-
-              <p className="font-sans text-xs text-[var(--color-text-muted)] leading-relaxed">
-                {t(item.descKey)}
-              </p>
-
-              <p className="font-mono text-[10px] text-[var(--color-primary)]/80 border-l border-[var(--color-primary)]/40 pl-2">
-                {item.tag}
-              </p>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 

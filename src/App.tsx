@@ -40,6 +40,7 @@ function App() {
       const scrollY = window.scrollY || document.documentElement.scrollTop
       const nextScrolled = scrollY > 24
       setIsScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev))
+      ScrollTrigger.update()
     }
 
     window.addEventListener('resize', handleResize, { passive: true })

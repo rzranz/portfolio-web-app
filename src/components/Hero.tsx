@@ -30,17 +30,18 @@ export default function Hero() {
   }, [roles.length])
 
   useEffect(() => {
-    if (typeof window === 'undefined' || window.innerWidth < 768) return
+    if (typeof window === 'undefined') return
+    const isMobile = window.innerWidth < 768
 
     const ctx = gsap.context(() => {
       gsap.to('.hero-content-wrapper', {
-        y: 50,
+        y: isMobile ? 24 : 50,
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
           end: '+=80%',
-          scrub: 1.2,
+          scrub: isMobile ? 0.8 : 1.2,
         }
       })
     }, sectionRef)

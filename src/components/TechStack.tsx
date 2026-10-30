@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef, useState, useEffect } from 'react'
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion"
 import { cn } from "../lib/utils"
 import data from '../data/cv.json'
 import { useLanguage } from '../lib/i18n'
@@ -22,9 +22,6 @@ const techIcons: Record<string, string> = {
   'Three.js': 'devicon-threejs-original',
 }
 
-// Detect mobile once at module level — stable, no per-render check
-const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth < 768
-
 const Bracket = ({ className }: { className: string }) => {
   return (
     <svg
@@ -41,32 +38,87 @@ const Bracket = ({ className }: { className: string }) => {
   )
 }
 
-// Static mobile grid — no animation, no framer-motion subscriptions
-function MobileTechGrid({ techList }: { techList: string[] }) {
+interface TechItemProps {
+  tech: string
+  index: number
+  centerIndex: number
+  isMobile: boolean
+  scrollYProgress: MotionValue<number>
+  activeTech: string | null
+  onSelect: (tech: string) => void
+}
+
+function TechItem({
+  tech,
+  index,
+  centerIndex,
+  isMobile,
+  scrollYProgress,
+  activeTech,
+  onSelect
+}: TechItemProps) {
+  const iconClass = techIcons[tech] || 'devicon-devicon-plain'
+  const distanceFromCenter = index - centerIndex
+
+  // Calibrated transforms: tighter amplitude on mobile to stay within viewport bounds
+  const xMultiplier = isMobile ? 12 : 50
+  const yMultiplier = isMobile ? 10 : 35
+  const startScale = isMobile ? 0.75 : 0.55
+
+  const x = useTransform(scrollYProgress, [0, 1], [distanceFromCenter * xMultiplier, 0])
+  const y = useTransform(scrollYProgress, [0, 1], [Math.abs(distanceFromCenter) * yMultiplier, 0])
+  const scale = useTransform(scrollYProgress, [0, 1], [startScale, 1])
+  const opacity = useTransform(scrollYProgress, [0, 0.75], [0.2, 1])
+
+  const isActive = activeTech === tech
+
   return (
-    <div className="flex flex-wrap items-center justify-center max-w-sm mx-auto gap-3">
-      {techList.map((tech) => {
-        const iconClass = techIcons[tech] || 'devicon-devicon-plain'
-        return (
-          <div
-            key={tech}
-            title={tech}
-            className="inline-flex flex-col items-center justify-center p-2.5"
-          >
-            <i className={cn(iconClass, "text-3xl text-[var(--color-text-muted)]")} />
-            <span className="font-sans text-[9px] mt-1 text-[var(--color-text-muted)]">
-              {tech}
-            </span>
-          </div>
-        )
-      })}
-    </div>
+    <motion.div
+      title={tech}
+      onClick={() => onSelect(tech)}
+      className="inline-flex flex-col items-center justify-center p-2.5 sm:p-3 md:p-4 cursor-pointer group relative touch-manipulation select-none"
+      style={{ x, scale, y, opacity, transformOrigin: "center", willChange: "transform, opacity" }}
+      whileHover={{ scale: 1.15 }}
+      whileTap={{ scale: 0.9 }}
+      transition={{ type: "spring", stiffness: 350, damping: 22 }}
+    >
+      <i className={cn(
+        iconClass,
+        "text-3xl sm:text-4xl md:text-5xl transition-colors duration-300",
+        isActive 
+          ? "text-[var(--color-primary)]" 
+          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)]"
+      )} />
+
+      <span className={cn(
+        "font-mono text-[9px] sm:text-[10px] mt-1.5 transition-all duration-200 whitespace-nowrap",
+        isActive
+          ? "opacity-100 text-[var(--color-primary)] font-bold"
+          : "opacity-80 sm:opacity-0 sm:group-hover:opacity-100 text-[var(--color-text-main)]"
+      )}>
+        {tech}
+      </span>
+    </motion.div>
   )
 }
 
-// Desktop version — only mounts on desktop, so Framer hooks are safe
-function DesktopTechGrid({ techList, sectionRef }: { techList: string[]; sectionRef: React.RefObject<HTMLElement | null> }) {
+function ResponsiveTechGrid({
+  techList,
+  sectionRef
+}: {
+  techList: string[]
+  sectionRef: React.RefObject<HTMLElement | null>
+}) {
+  const [isMobile, setIsMobile] = useState(false)
+  const [activeTech, setActiveTech] = useState<string | null>(null)
   const centerIndex = Math.floor(techList.length / 2)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile, { passive: true })
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -74,33 +126,19 @@ function DesktopTechGrid({ techList, sectionRef }: { techList: string[]; section
   })
 
   return (
-    <div className="flex flex-wrap items-center justify-center max-w-4xl mx-auto gap-4 relative">
-      {techList.map((tech, index) => {
-        const iconClass = techIcons[tech] || 'devicon-devicon-plain'
-        const distanceFromCenter = index - centerIndex
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const x = useTransform(scrollYProgress, [0, 1], [distanceFromCenter * 50, 0])
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const scale = useTransform(scrollYProgress, [0, 1], [0.5, 1])
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const y = useTransform(scrollYProgress, [0, 1], [Math.abs(distanceFromCenter) * 40, 0])
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const opacity = useTransform(scrollYProgress, [0, 0.8], [0, 1])
-
-        return (
-          <motion.div
-            key={tech}
-            title={tech}
-            className="inline-flex flex-col items-center justify-center p-2 md:p-4 hover:scale-110 transition-transform cursor-default group"
-            style={{ x, scale, y, opacity, transformOrigin: "center", willChange: "transform, opacity" }}
-          >
-            <i className={cn(iconClass, "text-4xl md:text-5xl text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] transition-colors duration-300")} />
-            <span className="font-sans text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4 whitespace-nowrap text-[var(--color-text-main)]">
-              {tech}
-            </span>
-          </motion.div>
-        )
-      })}
+    <div className="flex flex-wrap items-center justify-center max-w-sm sm:max-w-xl md:max-w-4xl mx-auto gap-2.5 sm:gap-4 relative px-2">
+      {techList.map((tech, index) => (
+        <TechItem
+          key={tech}
+          tech={tech}
+          index={index}
+          centerIndex={centerIndex}
+          isMobile={isMobile}
+          scrollYProgress={scrollYProgress}
+          activeTech={activeTech}
+          onSelect={(t) => setActiveTech((prev) => prev === t ? null : t)}
+        />
+      ))}
     </div>
   )
 }
@@ -126,11 +164,8 @@ export default function TechStack() {
           </p>
         </div>
 
-        {/* Render static grid on mobile, animated on desktop */}
-        {IS_MOBILE
-          ? <MobileTechGrid techList={techList} />
-          : <DesktopTechGrid techList={techList} sectionRef={sectionRef} />
-        }
+        {/* Unified Responsive Animated Grid for both Mobile and Desktop */}
+        <ResponsiveTechGrid techList={techList} sectionRef={sectionRef} />
 
         {/* Domain Categorization */}
         {data.tech_categories && (

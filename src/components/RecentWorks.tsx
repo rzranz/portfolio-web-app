@@ -107,8 +107,12 @@ export default function RecentWorks() {
             const yearDisplay = exp.year || exp.period
 
             return (
-              <article
+              <motion.article
                 key={exp.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
                 onClick={() => setModalProject(exp)}
                 className="group flex flex-col justify-between cursor-pointer border-b border-[var(--color-border-subtle)] pb-8 md:pb-10 transition-colors"
               >
@@ -122,9 +126,9 @@ export default function RecentWorks() {
                           {/* Subtle grid pattern background */}
                           <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
 
-                          {/* Left Screen (Peek) */}
+                          {/* Left Screen (Peek - straight, upright layout) */}
                           {exp.gallery && exp.gallery[2] && (
-                            <div className="absolute left-1/2 -translate-x-[115%] w-[33%] max-w-[130px] sm:max-w-[150px] aspect-[9/18.5] rounded-[16px] border border-neutral-700/60 shadow-xl overflow-hidden bg-neutral-950 -rotate-8 translate-y-3 opacity-60 transition-all duration-500 ease-out group-hover:opacity-85 group-hover:-rotate-12 group-hover:-translate-x-[125%] group-hover:translate-y-2">
+                            <div className="absolute left-1/2 -translate-x-[112%] w-[33%] max-w-[130px] sm:max-w-[150px] aspect-[9/18.5] rounded-[16px] border border-neutral-700/60 shadow-xl overflow-hidden bg-neutral-950 translate-y-3 opacity-65 transition-all duration-500 ease-out group-hover:opacity-90 group-hover:-translate-x-[120%] group-hover:translate-y-2">
                               <img
                                 src={exp.gallery[2]}
                                 alt={`${exp.title} overview`}
@@ -134,9 +138,9 @@ export default function RecentWorks() {
                             </div>
                           )}
 
-                          {/* Right Screen (Peek) */}
+                          {/* Right Screen (Peek - straight, upright layout) */}
                           {exp.gallery && exp.gallery[1] && (
-                            <div className="absolute left-1/2 translate-x-[15%] w-[33%] max-w-[130px] sm:max-w-[150px] aspect-[9/18.5] rounded-[16px] border border-neutral-700/60 shadow-xl overflow-hidden bg-neutral-950 rotate-8 translate-y-3 opacity-60 transition-all duration-500 ease-out group-hover:opacity-85 group-hover:rotate-12 group-hover:translate-x-[25%] group-hover:translate-y-2">
+                            <div className="absolute left-1/2 translate-x-[12%] w-[33%] max-w-[130px] sm:max-w-[150px] aspect-[9/18.5] rounded-[16px] border border-neutral-700/60 shadow-xl overflow-hidden bg-neutral-950 translate-y-3 opacity-65 transition-all duration-500 ease-out group-hover:opacity-90 group-hover:translate-x-[20%] group-hover:translate-y-2">
                               <img
                                 src={exp.gallery[1]}
                                 alt={`${exp.title} transactions`}
@@ -263,7 +267,7 @@ export default function RecentWorks() {
                     )}
                   </div>
                 </div>
-              </article>
+              </motion.article>
             )
           })}
         </div>

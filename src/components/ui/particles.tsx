@@ -16,52 +16,56 @@ export function Particles({ id, className, variant = "default", color = "#9333ea
   const autoId = useId();
   const particleId = id || `particles-${autoId.replace(/:/g, '')}`;
 
-  const options = useMemo(() => ({
-    fullScreen: { enable: false },
-    background: {
-      color: { value: "transparent" },
-    },
-    fpsLimit: 45,
-    interactivity: {
-      events: {
-        onClick: { enable: false },
-        onHover: { enable: false },
-      },
-    },
-    particles: {
-      color: { value: color },
-      links: {
-        color: color,
-        distance: 140,
-        enable: true,
-        opacity: 0.25,
-        width: 1,
-      },
-      move: {
-        direction: "none" as const,
-        enable: true,
-        outModes: { default: "bounce" as const },
-        random: true,
-        speed: 0.4,
-        straight: false,
-      },
-      number: {
-        density: { enable: true, width: 800, height: 800 },
-        value: variant === "dense" ? 60 : 35,
-      },
-      opacity: {
-        value: { min: 0.1, max: 0.45 },
-      },
-      shape: { type: "circle" as const },
-      size: { value: { min: 1, max: 2 } },
-    },
-    detectRetina: false, // disable retina to halve canvas resolution
-  }), [variant, color]);
+  const options = useMemo(() => {
+    // Adapted particle parameters: lightweight on mobile to preserve 60fps, rich on desktop
+    const particleCount = IS_MOBILE 
+      ? (variant === "dense" ? 20 : 12) 
+      : (variant === "dense" ? 60 : 35);
+    const linkDistance = IS_MOBILE ? 85 : 140;
+    const fpsLimit = IS_MOBILE ? 30 : 45;
 
-  // Skip rendering particles component on mobile for performance
-  if (IS_MOBILE) {
-    return null;
-  }
+    return {
+      fullScreen: { enable: false },
+      background: {
+        color: { value: "transparent" },
+      },
+      fpsLimit,
+      interactivity: {
+        events: {
+          onClick: { enable: false },
+          onHover: { enable: false },
+        },
+      },
+      particles: {
+        color: { value: color },
+        links: {
+          color: color,
+          distance: linkDistance,
+          enable: true,
+          opacity: IS_MOBILE ? 0.2 : 0.25,
+          width: 1,
+        },
+        move: {
+          direction: "none" as const,
+          enable: true,
+          outModes: { default: "bounce" as const },
+          random: true,
+          speed: IS_MOBILE ? 0.3 : 0.4,
+          straight: false,
+        },
+        number: {
+          density: { enable: true, width: 800, height: 800 },
+          value: particleCount,
+        },
+        opacity: {
+          value: { min: 0.1, max: 0.45 },
+        },
+        shape: { type: "circle" as const },
+        size: { value: { min: 1, max: 2 } },
+      },
+      detectRetina: false, // disable retina to halve canvas resolution
+    };
+  }, [variant, color]);
 
   return (
     <ParticlesComponent
