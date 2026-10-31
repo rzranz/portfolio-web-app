@@ -219,24 +219,47 @@
     },
     {
       "id": "hrms",
-      "title": "HRMS — Enterprise Human Resource Management System",
-      "company": "PT. YukMari Project",
+      "title": "TalentHub & HRMS — PT. YukMari Project Indonesia",
+      "company": "PT. YukMari Project Indonesia",
       "period": "Oct 2025 - Nov 2025",
       "year": "2025",
       "category": "Fullstack",
       "featured": false,
-      "image": "/projects/hrms.jpg",
+      "image": "/projects/hrms-dashboard.png",
+      "gallery": [
+        "/projects/hrms-dashboard.png",
+        "/projects/hrms-talenthub.png",
+        "/projects/hrms-talent-profile.png",
+        "/projects/hrms-hire-requests.png"
+      ],
       "live_url": "",
       "github_url": "https://github.com/rzranz",
-      "description": "Fullstack Developer Intern project building a comprehensive Human Resource Management System (HRMS) to digitize HR processes. Streamlined employee data management, attendance tracking, and administrative workflows, significantly reducing manual processing time.",
-      "stack": ["Vue.js", "Tailwind CSS", "Laravel", "MySQL"],
-      "tags": ["Fullstack Intern", "Enterprise", "HRMS", "Attendance Tracking"],
-      "highlights": [
-        "Digitized HR administrative workflows, slashing manual record processing time",
-        "Automated employee attendance tracking and centralized staff profile records",
-        "Structured role-based access control (RBAC) ensuring enterprise employee privacy"
+      "description": "Fullstack Talent Hub & Human Resource Management System (HRMS) engineered for PT. YukMari Project Indonesia. Features an end-to-end recruitment lifecycle platform including a public verified talent curation directory, comprehensive candidate portfolio showcase with hire request workflows, super admin analytics dashboard, skill distribution metrics, and role-based access control (RBAC).",
+      "stack": [
+        "Laravel",
+        "Tailwind CSS",
+        "Vue.js",
+        "Alpine.js",
+        "MySQL",
+        "REST API",
+        "Blade"
       ],
-      "metrics": "Automated Workflows · Zero Data Redundancy"
+      "tags": [
+        "Talent Hub",
+        "HRMS Super Admin",
+        "Recruitment Lifecycle",
+        "Hire Requests",
+        "RBAC",
+        "Internship"
+      ],
+      "highlights": [
+        "Super Admin HRMS Dashboard: Built centralized administrative monitoring tracking verified talents, skill categorization, active recruitment requests, and division distribution metrics",
+        "Public Talent Hub Directory: Engineered searchable talent directory with category filtering (Backend, Fullstack, Intern, Mahasiswa) and verified profile cards",
+        "Professional Portfolio & Profile Showcase: Designed comprehensive candidate portfolio view integrating work history, project links, educational background, and BNSP/CCNA certifications",
+        "Hire Requests Management System: Developed full-cycle recruitment pipeline with approval/rejection workflows, duration tracking, and applicant contract management",
+        "Role-Based Access Control (RBAC): Implemented multi-tier authentication separating public visitors, candidates, and Super Administrator privileges with custom dark/light theme engine"
+      ],
+      "metrics": "Full Recruitment Lifecycle · RBAC · 4 Integrated Portals"
     },
     {
       "id": "innoventure",
