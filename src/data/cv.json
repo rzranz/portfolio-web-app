@@ -281,6 +281,53 @@
       "metrics": "60 FPS · 3D Hand Tracking"
     },
     {
+      "id": "meteopulse",
+      "title": "MeteoPulse — Interactive Weather Forecast & DSP Digital Filter Lab",
+      "company": "Academic DSP Project & Open Source",
+      "company_url": "https://github.com/rzranz/WeatherApps",
+      "period": "2024",
+      "year": "2024",
+      "category": "Fullstack",
+      "featured": false,
+      "image": "/projects/meteopulse-dashboard.png",
+      "gallery": [
+        "/projects/meteopulse-dashboard.png",
+        "/projects/meteopulse-comparison.png",
+        "/projects/meteopulse-dsp-lab.png",
+        "/projects/meteopulse-audit-csv.png"
+      ],
+      "live_url": "",
+      "github_url": "https://github.com/rzranz/WeatherApps",
+      "description": "Interactive meteorological web application and Digital Signal Processing (DSP) laboratory built with Node.js/Express 5 and Modern Vanilla ES6+. Treats satellite temperature time-series as discrete-time signals x[n] and applies FIR Low-Pass Simple Moving Average (SMA) and IIR Exponential Moving Average (EMA) filters to reduce micro-climate transient noise by up to 70%, featuring OpenLayers GIS spatial radar maps, dynamic multi-city trend comparisons, and raw data CSV export.",
+      "stack": [
+        "Node.js",
+        "Express.js",
+        "Vanilla JS",
+        "Tailwind CSS",
+        "Chart.js",
+        "OpenLayers",
+        "OpenWeatherMap API"
+      ],
+      "tags": [
+        "DSP Digital Filter",
+        "FIR Low-Pass SMA",
+        "IIR EMA",
+        "OpenLayers GIS",
+        "Express 5",
+        "Chart.js",
+        "Bento Grid"
+      ],
+      "highlights": [
+        "DSP Digital Filter Pipeline: Implemented discrete-time FIR Simple Moving Average (SMA) and IIR Exponential Moving Average (EMA) low-pass filters to suppress satellite temperature noise with dynamic window sizing (M = 3 to 6)",
+        "Noise Reduction Variance Metric: Formulated real-time first-difference absolute variation metric quantifying up to 70% transient fluctuation damping across diurnal cycles",
+        "Interactive OpenLayers GIS Integration: Integrated OpenStreetMap radar canvas featuring pulsating coordinate pins, instant weather popups, and click-to-geolocate reverse geocoding",
+        "Multi-City Comparative Analytics: Engineered multi-parameter trend comparisons across 5 cities simultaneously using Chart.js with dynamic metric toggling (Max, Min, Mean, Wind, Rain)",
+        "3-Tier Bento Grid UI Architecture: Built lightweight glassmorphism interface in Modern Vanilla ES6+ and Tailwind CSS achieving sub-800ms load times with zero framework runtime overhead",
+        "Raw Data Audit & CSV Export: Provided tabular numerical inspection with parameter filters and one-click RFC 4180 CSV analytical export for climate researchers"
+      ],
+      "metrics": "Up to 70% Noise Reduction · <800ms Load Time · 3-Tier Bento Grid"
+    },
+    {
       "id": "pos",
       "title": "Coffeeshop POS & Realtime Stock System",
       "company": "Freelance Client",
