@@ -45,7 +45,7 @@
   "tech_categories": [
     {
       "category": "Backend & Cloud",
-      "skills": ["Laravel", "Spring Boot", "Go", "REST API Development", "Django", "Docker", "CI/CD"]
+      "skills": ["Laravel", "Spring Boot", "Go", "MySQL", "PostgreSQL", "REST API Development", "Django", "Docker", "CI/CD"]
     },
     {
       "category": "Frontend & Interactive",
@@ -56,14 +56,15 @@
       "skills": ["Git", "Docker", "Postman", "PostgreSQL", "MySQL", "SQLite", "VS Code"]
     },
     {
-      "category": "AI, AR & Game Tech",
-      "skills": ["Unity 3D", "MediaPipe AI", "AI Mentor Engine"]
+      "category": "IoT, AI, AR & Interactive Tech",
+      "skills": ["IoT Telemetry & Sensors", "Arduino", "Unity 3D", "MediaPipe AI", "AI Mentor Engine"]
     }
   ],
   "tech_stack": [
     "Laravel", "Springboot", "Go-Lang", "Django",
     "Vue JS", "React", "Next JS", "Tailwind",
-    "PostgreSQL", "MySQL", "SQLite", "Docker", "Git", "Unity", "Three.js"
+    "MySQL", "PostgreSQL", "SQLite", "Docker", "Git",
+    "IoT / Arduino", "Unity", "Three.js"
   ],
   "categories": [
     "All",

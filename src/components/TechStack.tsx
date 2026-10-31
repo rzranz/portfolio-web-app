@@ -14,12 +14,17 @@ const techIcons: Record<string, string> = {
   'Springboot': 'devicon-spring-original',
   'React': 'devicon-react-original',
   'Git': 'devicon-git-plain',
+  'Docker': 'devicon-docker-plain',
   'Go-Lang': 'devicon-go-original-wordmark',
   'PostgreSQL': 'devicon-postgresql-plain',
   'MySQL': 'devicon-mysql-original',
   'SQLite': 'devicon-sqlite-plain',
   'Unity': 'devicon-unity-plain',
   'Three.js': 'devicon-threejs-original',
+  'IoT / Arduino': 'devicon-arduino-plain',
+  'Arduino (IoT)': 'devicon-arduino-plain',
+  'IoT': 'devicon-arduino-plain',
+  'Arduino': 'devicon-arduino-plain',
 }
 
 const Bracket = ({ className }: { className: string }) => {
@@ -59,36 +64,32 @@ function TechItem({
       type="button"
       title={tech}
       onClick={() => onSelect(tech)}
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.45), ease: "easeOut" }}
-      className={cn(
-        "group relative flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl",
-        "w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 max-w-[112px] max-h-[112px]",
-        "border transition-all duration-200 cursor-pointer select-none touch-manipulation",
-        "hover:scale-105 active:scale-95 will-change-transform",
-        isActive 
-          ? "bg-[var(--color-surface)] border-[var(--color-primary)] shadow-[0_0_20px_var(--color-border-glow)]" 
-          : "bg-[var(--color-surface)]/60 border-[var(--color-border-subtle)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-surface)]"
-      )}
+      viewport={{ once: true, margin: "-20px" }}
+      transition={{ duration: 0.3, delay: Math.min(index * 0.025, 0.35), ease: "easeOut" }}
+      className="group relative inline-flex flex-col items-center justify-center p-2.5 sm:p-3.5 md:p-4 cursor-pointer select-none touch-manipulation bg-transparent border-0 outline-none transition-transform duration-200 hover:scale-110 active:scale-95 will-change-transform"
     >
       <i className={cn(
         iconClass,
-        "text-3xl sm:text-4xl md:text-5xl transition-colors duration-200",
+        "text-3xl sm:text-4xl md:text-5xl transition-all duration-200",
         isActive 
-          ? "text-[var(--color-primary)]" 
-          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)]"
+          ? "text-[var(--color-primary)] drop-shadow-[0_0_14px_rgba(168,85,247,0.7)]" 
+          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]"
       )} />
 
       <span className={cn(
-        "font-mono text-[9px] sm:text-[10px] mt-2 transition-colors duration-200 truncate max-w-full px-1",
+        "font-mono text-[9px] sm:text-[10px] mt-2 transition-all duration-200 whitespace-nowrap select-none",
         isActive
-          ? "text-[var(--color-primary)] font-bold opacity-100"
-          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] opacity-80"
+          ? "opacity-100 text-[var(--color-primary)] font-bold drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]"
+          : "opacity-75 group-hover:opacity-100 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)]"
       )}>
         {tech}
       </span>
+
+      {isActive && (
+        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] shadow-[0_0_8px_var(--color-primary)] mt-1 animate-pulse" />
+      )}
     </motion.button>
   )
 }
@@ -97,7 +98,7 @@ function ResponsiveTechGrid({ techList }: { techList: string[] }) {
   const [activeTech, setActiveTech] = useState<string | null>(null)
 
   return (
-    <div className="flex flex-wrap items-center justify-center max-w-sm sm:max-w-2xl md:max-w-4xl mx-auto gap-2.5 sm:gap-3.5 md:gap-4 relative px-2">
+    <div className="flex flex-wrap items-center justify-center max-w-sm sm:max-w-3xl md:max-w-5xl mx-auto gap-3 sm:gap-5 md:gap-7 relative px-2">
       {techList.map((tech, index) => (
         <TechItem
           key={tech}
