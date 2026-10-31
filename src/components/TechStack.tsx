@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion"
+import { useState } from 'react'
+import { motion } from "framer-motion"
 import { cn } from "../lib/utils"
 import data from '../data/cv.json'
 import { useLanguage } from '../lib/i18n'
@@ -41,9 +41,6 @@ const Bracket = ({ className }: { className: string }) => {
 interface TechItemProps {
   tech: string
   index: number
-  centerIndex: number
-  isMobile: boolean
-  scrollYProgress: MotionValue<number>
   activeTech: string | null
   onSelect: (tech: string) => void
 }
@@ -51,90 +48,61 @@ interface TechItemProps {
 function TechItem({
   tech,
   index,
-  centerIndex,
-  isMobile,
-  scrollYProgress,
   activeTech,
   onSelect
 }: TechItemProps) {
   const iconClass = techIcons[tech] || 'devicon-devicon-plain'
-  const distanceFromCenter = index - centerIndex
-
-  // Calibrated transforms: tighter amplitude on mobile to stay within viewport bounds
-  const xMultiplier = isMobile ? 12 : 50
-  const yMultiplier = isMobile ? 10 : 35
-  const startScale = isMobile ? 0.75 : 0.55
-
-  const x = useTransform(scrollYProgress, [0, 1], [distanceFromCenter * xMultiplier, 0])
-  const y = useTransform(scrollYProgress, [0, 1], [Math.abs(distanceFromCenter) * yMultiplier, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], [startScale, 1])
-  const opacity = useTransform(scrollYProgress, [0, 0.75], [0.2, 1])
-
   const isActive = activeTech === tech
 
   return (
-    <motion.div
+    <motion.button
+      type="button"
       title={tech}
       onClick={() => onSelect(tech)}
-      className="inline-flex flex-col items-center justify-center p-2.5 sm:p-3 md:p-4 cursor-pointer group relative touch-manipulation select-none"
-      style={{ x, scale, y, opacity, transformOrigin: "center", willChange: "transform, opacity" }}
-      whileHover={{ scale: 1.15 }}
-      whileTap={{ scale: 0.9 }}
-      transition={{ type: "spring", stiffness: 350, damping: 22 }}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.45), ease: "easeOut" }}
+      className={cn(
+        "group relative flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl",
+        "w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 max-w-[112px] max-h-[112px]",
+        "border transition-all duration-200 cursor-pointer select-none touch-manipulation",
+        "hover:scale-105 active:scale-95 will-change-transform",
+        isActive 
+          ? "bg-[var(--color-surface)] border-[var(--color-primary)] shadow-[0_0_20px_var(--color-border-glow)]" 
+          : "bg-[var(--color-surface)]/60 border-[var(--color-border-subtle)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-surface)]"
+      )}
     >
       <i className={cn(
         iconClass,
-        "text-3xl sm:text-4xl md:text-5xl transition-colors duration-300",
+        "text-3xl sm:text-4xl md:text-5xl transition-colors duration-200",
         isActive 
           ? "text-[var(--color-primary)]" 
           : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)]"
       )} />
 
       <span className={cn(
-        "font-mono text-[9px] sm:text-[10px] mt-1.5 transition-all duration-200 whitespace-nowrap",
+        "font-mono text-[9px] sm:text-[10px] mt-2 transition-colors duration-200 truncate max-w-full px-1",
         isActive
-          ? "opacity-100 text-[var(--color-primary)] font-bold"
-          : "opacity-80 sm:opacity-0 sm:group-hover:opacity-100 text-[var(--color-text-main)]"
+          ? "text-[var(--color-primary)] font-bold opacity-100"
+          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] opacity-80"
       )}>
         {tech}
       </span>
-    </motion.div>
+    </motion.button>
   )
 }
 
-function ResponsiveTechGrid({
-  techList,
-  sectionRef
-}: {
-  techList: string[]
-  sectionRef: React.RefObject<HTMLElement | null>
-}) {
-  const [isMobile, setIsMobile] = useState(false)
+function ResponsiveTechGrid({ techList }: { techList: string[] }) {
   const [activeTech, setActiveTech] = useState<string | null>(null)
-  const centerIndex = Math.floor(techList.length / 2)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile, { passive: true })
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "center center"]
-  })
 
   return (
-    <div className="flex flex-wrap items-center justify-center max-w-sm sm:max-w-xl md:max-w-4xl mx-auto gap-2.5 sm:gap-4 relative px-2">
+    <div className="flex flex-wrap items-center justify-center max-w-sm sm:max-w-2xl md:max-w-4xl mx-auto gap-2.5 sm:gap-3.5 md:gap-4 relative px-2">
       {techList.map((tech, index) => (
         <TechItem
           key={tech}
           tech={tech}
           index={index}
-          centerIndex={centerIndex}
-          isMobile={isMobile}
-          scrollYProgress={scrollYProgress}
           activeTech={activeTech}
           onSelect={(t) => setActiveTech((prev) => prev === t ? null : t)}
         />
@@ -145,14 +113,12 @@ function ResponsiveTechGrid({
 
 export default function TechStack() {
   const { t } = useLanguage()
-  const sectionRef = useRef<HTMLElement>(null)
   const techList = data.tech_stack
 
   return (
     <section
       id="tech"
-      ref={sectionRef}
-      className="md:sticky md:top-0 md:h-screen md:overflow-hidden relative min-h-screen w-full z-30 flex flex-col justify-center bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] py-20 md:py-0"
+      className="relative w-full z-30 flex flex-col justify-center bg-[var(--color-canvas)] shadow-[0_-30px_60px_rgba(0,0,0,0.5)] py-20 sm:py-24 md:py-28"
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full flex flex-col items-center gap-8 lg:gap-10">
 
@@ -164,8 +130,8 @@ export default function TechStack() {
           </p>
         </div>
 
-        {/* Unified Responsive Animated Grid for both Mobile and Desktop */}
-        <ResponsiveTechGrid techList={techList} sectionRef={sectionRef} />
+        {/* Stable, High-Performance Interactive Tech Grid */}
+        <ResponsiveTechGrid techList={techList} />
 
         {/* Domain Categorization */}
         {data.tech_categories && (

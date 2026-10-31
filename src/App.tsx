@@ -141,9 +141,9 @@ function App() {
 
       {/* Fixed Header Navbar: Stays at the top on scroll, background follows page */}
       <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center justify-between ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-[padding,background-color,border-color,box-shadow,transform,opacity] duration-200 flex items-center justify-between ${
           isScrolled 
-            ? 'bg-[var(--color-canvas)]/85 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.15)] border-b border-[var(--color-border-subtle)] py-3 sm:py-4 px-4 sm:px-6 md:px-8' 
+            ? 'bg-[var(--color-canvas)]/90 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.15)] border-b border-[var(--color-border-subtle)] py-3 sm:py-4 px-4 sm:px-6 md:px-8' 
             : 'bg-transparent border-b border-transparent py-4 sm:py-6 px-4 sm:px-6 md:px-8'
         } ${
           isMenuOpen ? 'opacity-0 pointer-events-none -translate-y-2' : 'opacity-100 translate-y-0'

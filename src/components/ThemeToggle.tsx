@@ -52,8 +52,9 @@ export default function ThemeToggle() {
 
   return (
     <button 
+      type="button"
       onClick={toggleTheme}
-      className="pointer-events-auto flex items-center gap-3 group h-full focus:outline-none"
+      className="pointer-events-auto flex items-center gap-3 group h-full focus:outline-none touch-manipulation select-none cursor-pointer"
       aria-label="Toggle theme"
     >
       <span className="font-mono text-[10px] tracking-widest text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] transition-colors w-[42px] text-right">

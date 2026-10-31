@@ -18,21 +18,13 @@
 }
 
 @layer base {
-  :root {
-    /* Light Mode: Soft Crisp Slate & Royal Purple */
-    --color-canvas: #f8fafc;
-    --color-surface: #ffffff;
-    --color-surface-hover: #f1f5f9;
-    --color-primary: #7c3aed; /* Vibrant Royal Purple */
-    --color-accent: #4b0082; /* Deep Indigo / Purple */
-    --color-border-subtle: rgba(0, 0, 0, 0.08);
-    --color-border-glow: rgba(124, 58, 237, 0.25);
-    --color-text-main: #0f172a;
-    --color-text-muted: #64748b;
+  html {
+    background-color: #0a0a0a;
+    color-scheme: dark;
   }
 
-  /* Dark Mode: Pure Obsidian & Electric Purple */
-  .dark {
+  :root {
+    /* Default Mode: Pure Obsidian & Electric Purple (Dark) */
     --color-canvas: #0a0a0a;
     --color-surface: #121212;
     --color-surface-hover: #1a1625;
@@ -42,12 +34,41 @@
     --color-border-glow: rgba(168, 85, 247, 0.35);
     --color-text-main: #f3f4f6;
     --color-text-muted: #888888;
+    color-scheme: dark;
+  }
+
+  /* Explicit Light Mode */
+  html:not(.dark),
+  .light {
+    --color-canvas: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f1f5f9;
+    --color-primary: #7c3aed; /* Vibrant Royal Purple */
+    --color-accent: #4b0082; /* Deep Indigo / Purple */
+    --color-border-subtle: rgba(0, 0, 0, 0.08);
+    --color-border-glow: rgba(124, 58, 237, 0.25);
+    --color-text-main: #0f172a;
+    --color-text-muted: #64748b;
+    color-scheme: light;
+  }
+
+  /* Dark Mode Class */
+  .dark {
+    --color-canvas: #0a0a0a;
+    --color-surface: #121212;
+    --color-surface-hover: #1a1625;
+    --color-primary: #a855f7;
+    --color-accent: #c084fc;
+    --color-border-subtle: rgba(255, 255, 255, 0.08);
+    --color-border-glow: rgba(168, 85, 247, 0.35);
+    --color-text-main: #f3f4f6;
+    --color-text-muted: #888888;
+    color-scheme: dark;
   }
 
   body {
     @apply bg-[var(--color-canvas)] text-[var(--color-text-main)] antialiased font-sans overflow-x-clip;
-    /* Scope transition to just colors — not all properties */
-    transition: background-color 0.25s ease, color 0.25s ease;
+    background-color: var(--color-canvas);
     ::selection {
       @apply bg-[var(--color-primary)] text-[#08090b];
     }
