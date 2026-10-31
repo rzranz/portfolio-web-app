@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink, Layers } from 'lucide-react'
 import { Github } from './icons/BrandIcons'
+import { PhoneMockup } from './ui/PhoneMockup'
 
 import { useLanguage } from '../lib/i18n'
 
@@ -138,34 +139,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           {selectedImage ? (
             <div className="mt-6 space-y-3">
               {isCurrentMobile ? (
-                /* High-End Smartphone Mockup with User's Asset */
-                <div className="flex flex-col items-center justify-center py-6 px-4 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-canvas)]/60">
-                  <div className="relative w-full max-w-[270px] sm:max-w-[300px] aspect-[500/940] select-none filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]">
-                    {/* Screen Viewport positioned behind the realistic frame */}
-                    <div
-                      className="absolute overflow-hidden bg-black"
-                      style={{
-                        left: '11.8%',
-                        top: '2.98%',
-                        width: '77.2%',
-                        height: '89.04%',
-                        borderRadius: '28px',
-                      }}
-                    >
-                      <img
-                        src={selectedImage}
-                        alt={project.title}
-                        className="w-full h-full object-cover object-top"
-                      />
-                    </div>
-
-                    {/* Realistic iPhone Purple Frame with Dynamic Island & Metallic Bezels */}
-                    <img
-                      src="/projects/phone-mockup-frame.png"
-                      alt="Smartphone device frame"
-                      className="relative z-10 w-full h-full pointer-events-none object-contain"
-                    />
-                  </div>
+                /* High-End Pure CSS Smartphone Mockup */
+                <div className="flex flex-col items-center justify-center py-4 px-2 sm:px-4 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-canvas)]/60">
+                  <PhoneMockup
+                    src={selectedImage}
+                    alt={project.title}
+                  />
                 </div>
               ) : (
                 /* Desktop Web Preview */
