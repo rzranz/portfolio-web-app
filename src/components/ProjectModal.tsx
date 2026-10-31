@@ -138,21 +138,33 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           {selectedImage ? (
             <div className="mt-6 space-y-3">
               {isCurrentMobile ? (
-                /* Mobile App Phone Mockup Presentation */
+                /* High-End Smartphone Mockup with User's Asset */
                 <div className="flex flex-col items-center justify-center py-6 px-4 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-canvas)]/60">
-                  <div className="relative w-full max-w-[260px] sm:max-w-[290px] rounded-[34px] p-2.5 bg-neutral-950 border-[2.5px] border-neutral-700/80 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
-                    {/* Speaker notch / dynamic island */}
-                    <div className="w-16 h-3.5 bg-neutral-900 rounded-full mx-auto mb-2 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-neutral-800" />
-                    </div>
-                    {/* Screen Viewport */}
-                    <div className="rounded-[22px] overflow-hidden bg-black aspect-[9/18.5] max-h-[460px]">
+                  <div className="relative w-full max-w-[270px] sm:max-w-[300px] aspect-[500/940] select-none filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]">
+                    {/* Screen Viewport positioned behind the realistic frame */}
+                    <div
+                      className="absolute overflow-hidden bg-black"
+                      style={{
+                        left: '11.8%',
+                        top: '2.98%',
+                        width: '77.2%',
+                        height: '89.04%',
+                        borderRadius: '28px',
+                      }}
+                    >
                       <img
                         src={selectedImage}
                         alt={project.title}
-                        className="w-full h-full object-contain object-top"
+                        className="w-full h-full object-cover object-top"
                       />
                     </div>
+
+                    {/* Realistic iPhone Purple Frame with Dynamic Island & Metallic Bezels */}
+                    <img
+                      src="/projects/phone-mockup-frame.png"
+                      alt="Smartphone device frame"
+                      className="relative z-10 w-full h-full pointer-events-none object-contain"
+                    />
                   </div>
                 </div>
               ) : (
