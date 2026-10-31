@@ -225,10 +225,10 @@
       "year": "2025",
       "category": "Fullstack",
       "featured": false,
-      "image": "/projects/hrms-dashboard.png",
+      "image": "/projects/hrms-talenthub.png",
       "gallery": [
-        "/projects/hrms-dashboard.png",
         "/projects/hrms-talenthub.png",
+        "/projects/hrms-dashboard.png",
         "/projects/hrms-talent-profile.png",
         "/projects/hrms-hire-requests.png"
       ],
