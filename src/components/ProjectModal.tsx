@@ -72,6 +72,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
       img.includes('flowledger-home') ||
       img.includes('flowledger-transactions') ||
       img.includes('flowledger-cards') ||
+      img.includes('cinemax') ||
       img.includes('-mobile') ||
       img.includes('mobile')
     )

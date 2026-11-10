@@ -352,6 +352,58 @@
       "metrics": "Up to 70% Noise Reduction · <800ms Load Time · 3-Tier Bento Grid"
     },
     {
+      "id": "cinemax",
+      "title": "CineMax TIX — Enterprise Cinema Ticketing & Concession Platform",
+      "company": "Academic Project & Architectural Re-engineering",
+      "company_url": "https://github.com/rzranz/TiketBioskop",
+      "period": "Early 2024 (Re-engineered 2026)",
+      "year": "2024-2026",
+      "category": "Fullstack",
+      "featured": true,
+      "device": "mobile",
+      "image": "/projects/cinemax-home.jpg",
+      "gallery": [
+        "/projects/cinemax-home.jpg",
+        "/projects/cinemax-showtimes.jpg",
+        "/projects/cinemax-seatmap.jpg",
+        "/projects/cinemax-checkout.jpg",
+        "/projects/cinemax-ticket.png"
+      ],
+      "live_url": "",
+      "github_url": "https://github.com/rzranz/TiketBioskop",
+      "description": "Enterprise-grade cinema ticketing and food & beverage (F&B) platform engineered with Spring Boot 4 (Java 25) and Modular Vanilla ES6+ JavaScript. Re-engineered from a legacy semester 3 monolithic application into a high-concurrency architecture implementing clean code design patterns, 300-second Time-To-Live (TTL) seat reservation holding, database-level Pessimistic Write Locking (PESSIMISTIC_WRITE) to prevent race conditions during ticket rush, Strategy Pattern payment processing (QRIS & Cash), integrated concession upselling, and physical self-service kiosk thermal printing simulation.",
+      "stack": [
+        "Java 25",
+        "Spring Boot 4",
+        "Spring Data JPA",
+        "Hibernate",
+        "Pessimistic Locking",
+        "Modular JavaScript",
+        "Tailwind CSS",
+        "H2 Database",
+        "JUnit 5",
+        "REST API"
+      ],
+      "tags": [
+        "Java 25",
+        "Spring Boot 4",
+        "Pessimistic Locking",
+        "TTL Hold (300s)",
+        "Strategy Pattern",
+        "Clean Code Patterns",
+        "Concession F&B",
+        "Kiosk Simulator"
+      ],
+      "highlights": [
+        "High-Concurrency Seat Locking with TTL Hold: Implemented 5-minute Time-To-Live (300s) seat reservation holding and database-level Pessimistic Write Locking (PESSIMISTIC_WRITE) preventing race conditions and double-booking during ticket rush",
+        "Strategy Pattern Payment Engine: Decoupled transaction settlement via PaymentStrategyFactory supporting dynamic QRIS online verification and cash payment computation adhering to Open/Closed Principle",
+        "Interactive Tiered Seat Map & Concessions: Engineered responsive visual cinema seating layout (Satine Suite, Sweet Box, Regular) with integrated F&B upselling cart and instant subtotal calculation",
+        "Self-Service Kiosk Simulator & Dynamic Barcode: Built end-to-end digital ticketing flow generating unique claim codes, dynamic 1D barcodes, and physical kiosk thermal print animation",
+        "Architectural Re-engineering & SRP: Refactored legacy monolithic application into modular Spring Boot services with standardized ApiResponse<T> envelope, global exception handling (@ControllerAdvice), and 100% JUnit 5 test pass rate"
+      ],
+      "metrics": "Pessimistic Locking · 300s TTL Hold · Strategy Pattern · 100% JUnit Pass"
+    },
+    {
       "id": "pos",
       "title": "Coffeeshop POS & Realtime Stock System",
       "company": "Freelance Client",
