@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from "framer-motion"
+import { motion, type Variants } from "framer-motion"
 import { cn } from "../lib/utils"
 import data from '../data/cv.json'
 import { useLanguage } from '../lib/i18n'
@@ -45,14 +45,35 @@ const Bracket = ({ className }: { className: string }) => {
 
 interface TechItemProps {
   tech: string
-  index: number
   activeTech: string | null
   onSelect: (tech: string) => void
 }
 
+const gridContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.03,
+      delayChildren: 0.05,
+    },
+  },
+}
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.35,
+      ease: "easeOut",
+    },
+  },
+}
+
 function TechItem({
   tech,
-  index,
   activeTech,
   onSelect
 }: TechItemProps) {
@@ -64,22 +85,22 @@ function TechItem({
       type="button"
       title={tech}
       onClick={() => onSelect(tech)}
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2, margin: "-20px" }}
-      transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3), ease: "easeOut" }}
-      className="group relative inline-flex flex-col items-center justify-center p-2.5 sm:p-3.5 md:p-4 cursor-pointer select-none touch-manipulation bg-transparent border-0 outline-none transition-transform duration-200 hover:scale-115 active:scale-90 will-change-transform"
+      variants={itemVariants}
+      whileHover={{ y: -3, scale: 1.08 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 450, damping: 25 }}
+      className="group relative inline-flex flex-col items-center justify-center p-2.5 sm:p-3.5 md:p-4 pb-3.5 sm:pb-4 cursor-pointer select-none touch-manipulation bg-transparent border-0 outline-none"
     >
       <i className={cn(
         iconClass,
-        "text-3xl sm:text-4xl md:text-5xl transition-all duration-200",
+        "text-3xl sm:text-4xl md:text-5xl transition-colors duration-200",
         isActive 
-          ? "text-[var(--color-primary)] drop-shadow-[0_0_16px_rgba(168,85,247,0.7)] scale-110" 
-          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.45)]"
+          ? "text-[var(--color-primary)] drop-shadow-[0_0_16px_rgba(168,85,247,0.7)]" 
+          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]"
       )} />
 
       <span className={cn(
-        "font-mono text-[9px] sm:text-[10px] mt-2 transition-all duration-200 whitespace-nowrap select-none",
+        "font-mono text-[9px] sm:text-[10px] mt-2 transition-colors duration-200 whitespace-nowrap select-none",
         isActive
           ? "opacity-100 text-[var(--color-primary)] font-bold drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]"
           : "opacity-75 group-hover:opacity-100 text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)]"
@@ -87,9 +108,14 @@ function TechItem({
         {tech}
       </span>
 
-      {isActive && (
-        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] shadow-[0_0_8px_var(--color-primary)] mt-1 animate-pulse" />
-      )}
+      {/* Zero CLS Active Indicator Dot */}
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] shadow-[0_0_8px_var(--color-primary)] transition-all duration-200",
+          isActive ? "opacity-100 scale-100" : "opacity-0 scale-50 pointer-events-none"
+        )}
+      />
     </motion.button>
   )
 }
@@ -98,17 +124,22 @@ function ResponsiveTechGrid({ techList }: { techList: string[] }) {
   const [activeTech, setActiveTech] = useState<string | null>(null)
 
   return (
-    <div className="flex flex-wrap items-center justify-center max-w-sm sm:max-w-3xl md:max-w-5xl mx-auto gap-3 sm:gap-5 md:gap-7 relative px-2">
-      {techList.map((tech, index) => (
+    <motion.div
+      variants={gridContainerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      className="flex flex-wrap items-center justify-center max-w-sm sm:max-w-3xl md:max-w-5xl mx-auto gap-3 sm:gap-5 md:gap-7 relative px-2"
+    >
+      {techList.map((tech) => (
         <TechItem
           key={tech}
           tech={tech}
-          index={index}
           activeTech={activeTech}
           onSelect={(t) => setActiveTech((prev) => prev === t ? null : t)}
         />
       ))}
-    </div>
+    </motion.div>
   )
 }
 
@@ -123,13 +154,19 @@ export default function TechStack() {
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full flex flex-col items-center gap-8 lg:gap-10">
 
-        <div className="text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="text-center"
+        >
           <p className="font-display flex flex-wrap items-center justify-center gap-3 text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-[var(--color-text-main)]">
             <Bracket className="h-8 sm:h-12 text-[var(--color-text-muted)] opacity-50" />
             <span>{t('tech.title')}</span>
             <Bracket className="h-8 sm:h-12 scale-x-[-1] text-[var(--color-text-muted)] opacity-50" />
           </p>
-        </div>
+        </motion.div>
 
         {/* Stable, High-Performance Interactive Tech Grid */}
         <ResponsiveTechGrid techList={techList} />
@@ -140,14 +177,14 @@ export default function TechStack() {
             {data.tech_categories.map((cat, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 0.35, delay: idx * 0.08, ease: "easeOut" }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.35, delay: idx * 0.06, ease: "easeOut" }}
                 className="group py-4 px-4 -mx-4 rounded-xl hover:bg-[var(--color-surface)]/60 border-l-2 border-transparent hover:border-[var(--color-primary)] flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-6 transition-all duration-200 cursor-default select-none"
               >
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-xs text-[var(--color-primary)] font-bold group-hover:scale-110 group-hover:text-[var(--color-accent)] transition-all duration-200 inline-block">
+                  <span className="font-mono text-xs text-[var(--color-primary)] font-bold group-hover:text-[var(--color-accent)] transition-colors duration-200 inline-block">
                     0{idx + 1}
                   </span>
                   <h4 className="font-display font-bold text-sm sm:text-base text-[var(--color-text-main)] group-hover:text-[var(--color-primary)] tracking-tight transition-colors duration-200">
