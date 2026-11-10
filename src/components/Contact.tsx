@@ -25,9 +25,9 @@ export default function Contact() {
           ease: 'power3.out',
           stagger: 0.1,
           scrollTrigger: {
-            trigger: '.contact-reveal',
-            start: 'top 88%',
-            once: true,
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play reverse play reverse',
           }
         }
       )
@@ -51,37 +51,37 @@ export default function Contact() {
             {t('contact.heading')}
           </h2>
 
-          {/* Clean Contact Action Buttons */}
+          {/* Clean Contact Action Buttons with Tactile Micro-Interactions */}
           <div className="contact-reveal flex flex-wrap items-center justify-center gap-4 pt-2">
             <a
               href="mailto:randizakariaputra22@gmail.com"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[var(--color-text-main)] text-[var(--color-canvas)] font-display font-semibold text-sm hover:opacity-85 transition-opacity"
+              className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[var(--color-text-main)] text-[var(--color-canvas)] font-display font-semibold text-sm hover:opacity-95 hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(255,255,255,0.35)] transition-all duration-200 select-none"
             >
               <Mail className="w-4 h-4" />
               <span>Send Email</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
 
             <a
               href="https://www.linkedin.com/in/randizakariaputra"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-main)] font-mono text-xs font-semibold hover:border-[var(--color-text-main)] transition-colors"
+              className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-main)] font-mono text-xs font-semibold hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] hover:shadow-[0_0_24px_rgba(168,85,247,0.25)] hover:scale-105 active:scale-95 transition-all duration-200 select-none"
             >
               <Linkedin className="w-4 h-4" />
               <span>LinkedIn</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
 
             <a
               href="https://github.com/rzranz"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-main)] font-mono text-xs font-semibold hover:border-[var(--color-text-main)] transition-colors"
+              className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-main)] font-mono text-xs font-semibold hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] hover:shadow-[0_0_24px_rgba(168,85,247,0.25)] hover:scale-105 active:scale-95 transition-all duration-200 select-none"
             >
               <Github className="w-4 h-4" />
               <span>GitHub</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </div>
 

@@ -24,18 +24,18 @@ export default function Footer() {
           {/* Links Column 1: Navigation */}
           <div className="flex flex-col gap-4">
             <h4 className="font-sans font-semibold text-[var(--color-text-main)] text-sm mb-2">{t('footer.nav')}</h4>
-            <a href="#hero" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.home')}</a>
-            <a href="#about" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.about')}</a>
-            <a href="#works" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.works')}</a>
-            <a href="#experience" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">{t('footer.experience')}</a>
+            <a href="#hero" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:translate-x-1 active:scale-95 transition-all text-sm w-fit inline-block">{t('footer.home')}</a>
+            <a href="#about" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:translate-x-1 active:scale-95 transition-all text-sm w-fit inline-block">{t('footer.about')}</a>
+            <a href="#works" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:translate-x-1 active:scale-95 transition-all text-sm w-fit inline-block">{t('footer.works')}</a>
+            <a href="#experience" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:translate-x-1 active:scale-95 transition-all text-sm w-fit inline-block">{t('footer.experience')}</a>
           </div>
 
           {/* Links Column 2: Connect */}
           <div className="flex flex-col gap-4">
             <h4 className="font-sans font-semibold text-[var(--color-text-main)] text-sm mb-2">{t('footer.connect')}</h4>
-            <a href="https://randizp.my.id" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors text-sm w-fit font-mono">randizp.my.id</a>
-            <a href="https://www.linkedin.com/in/randizakariaputra" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">LinkedIn</a>
-            <a href="https://github.com/rzranz" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors text-sm w-fit">GitHub</a>
+            <a href="https://randizp.my.id" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:translate-x-1 active:scale-95 transition-all text-sm w-fit font-mono inline-block">randizp.my.id</a>
+            <a href="https://www.linkedin.com/in/randizakariaputra" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:translate-x-1 active:scale-95 transition-all text-sm w-fit inline-block">LinkedIn</a>
+            <a href="https://github.com/rzranz" target="_blank" rel="noreferrer" className="font-sans text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:translate-x-1 active:scale-95 transition-all text-sm w-fit inline-block">GitHub</a>
           </div>
 
           {/* Right Column: Newsletter / Contact CTA */}
@@ -51,12 +51,13 @@ export default function Footer() {
               <input 
                 type="email" 
                 placeholder={t('footer.enterEmail')}
-                className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-md px-4 py-2.5 text-sm font-sans text-[var(--color-text-main)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-text-main)] transition-colors"
+                className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-md px-4 py-2.5 text-sm font-sans text-[var(--color-text-main)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary)] transition-colors"
                 required
               />
               <button 
                 type="submit" 
-                className="bg-[var(--color-text-main)] text-[var(--color-canvas)] h-[42px] w-[42px] rounded-md flex items-center justify-center hover:opacity-80 transition-opacity"
+                className="bg-[var(--color-text-main)] text-[var(--color-canvas)] h-[42px] w-[42px] rounded-md flex items-center justify-center hover:opacity-90 hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] transition-all cursor-pointer"
+                title="Send"
               >
                 <ArrowRight size={18} />
               </button>
@@ -72,7 +73,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-6">
             <span className="font-mono text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors cursor-pointer">Bandung, ID</span>
-            <a href="#hero" className="font-mono text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors">{t('footer.backTop')}</a>
+            <a href="#hero" className="font-mono text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:-translate-y-0.5 active:scale-95 transition-all inline-block">{t('footer.backTop')}</a>
           </div>
         </div>
       </div>

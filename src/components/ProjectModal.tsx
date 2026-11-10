@@ -129,7 +129,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
             <button
               onClick={onClose}
-              className="rounded-full p-2 text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-surface-hover)] transition-colors"
+              className="rounded-full p-2 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 hover:rotate-90 active:scale-90 transition-all duration-200 cursor-pointer"
               aria-label={t('works.modalClose')}
             >
               <X className="w-5 h-5" />
@@ -169,12 +169,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                         onClick={() => {
                           setSelectedImage(img)
                         }}
-                        className={`relative rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer ${
+                        className={`relative rounded-lg overflow-hidden border-2 transition-all duration-200 flex-shrink-0 cursor-pointer hover:scale-105 active:scale-95 ${
                           isMob ? 'h-14 w-8' : 'h-14 w-24'
                         } ${
                           selectedImage === img
-                            ? 'border-[var(--color-primary)] ring-2 ring-[var(--color-primary)]/30 scale-105'
-                            : 'border-[var(--color-border-subtle)] opacity-60 hover:opacity-100'
+                            ? 'border-[var(--color-primary)] ring-2 ring-[var(--color-primary)]/40 scale-105 shadow-[0_0_12px_var(--color-border-glow)]'
+                            : 'border-[var(--color-border-subtle)] opacity-60 hover:opacity-100 hover:border-[var(--color-primary)]/60'
                         }`}
                         title={isMob ? 'Mobile View' : 'Web View'}
                       >
@@ -244,7 +244,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               {project.stack.map((item, idx) => (
                 <span
                   key={idx}
-                  className="font-mono text-xs px-3 py-1 rounded-md bg-[var(--color-surface-hover)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)]"
+                  className="font-mono text-xs px-3 py-1 rounded-md bg-[var(--color-surface-hover)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] hover:border-[var(--color-primary)]/50 hover:text-[var(--color-primary)] transition-colors cursor-default select-none"
                 >
                   {item}
                 </span>
@@ -260,7 +260,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   href={project.live_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-primary)] text-white font-display font-semibold text-sm hover:brightness-110 transition-all shadow-[0_0_15px_var(--color-border-glow)]"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-primary)] text-white font-display font-semibold text-sm hover:brightness-110 hover:scale-105 active:scale-95 transition-all duration-200 shadow-[0_0_15px_var(--color-border-glow)] select-none"
                 >
                   <ExternalLink className="w-4 h-4" />
                   {t('works.livedemo')}
@@ -271,7 +271,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   href={project.github_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[var(--color-border-subtle)] text-[var(--color-text-main)] hover:bg-[var(--color-surface-hover)] font-mono text-xs font-medium transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[var(--color-border-subtle)] text-[var(--color-text-main)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-surface-hover)] hover:scale-105 active:scale-95 font-mono text-xs font-medium transition-all duration-200 select-none"
                 >
                   <Github className="w-4 h-4" />
                   {t('works.source')}
@@ -281,7 +281,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
             <button
               onClick={onClose}
-              className="font-mono text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors px-3 py-1.5"
+              className="font-mono text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] hover:underline active:scale-95 transition-all px-3 py-1.5 cursor-pointer"
             >
               {t('works.modalClose')} (ESC)
             </button>

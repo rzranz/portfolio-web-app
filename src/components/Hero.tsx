@@ -92,15 +92,16 @@ export default function Hero() {
           <BlurReveal delay={(roleWords.length * 0.1) + 0.1} className="flex flex-row items-center justify-between w-full mt-4">
             <a 
               href="#about" 
-              className="rounded-[2rem] border border-[var(--color-border-subtle)] px-8 py-3 text-sm md:text-base font-semibold tracking-wider hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] transition-all uppercase"
+              className="rounded-[2rem] border border-[var(--color-border-subtle)] px-8 py-3 text-sm md:text-base font-semibold tracking-wider hover:bg-[var(--color-text-main)] hover:text-[var(--color-canvas)] hover:border-[var(--color-text-main)] hover:shadow-[0_0_24px_rgba(255,255,255,0.2)] active:scale-95 transition-all duration-200 uppercase inline-flex items-center justify-center select-none"
             >
               {t('hero.about')}
             </a>
             <a 
               href="#works" 
-              className="flex items-center gap-2 text-sm md:text-base font-semibold tracking-wider border-b border-[var(--color-text-main)] pb-1 hover:opacity-70 transition-opacity uppercase"
+              className="group flex items-center gap-2 text-sm md:text-base font-semibold tracking-wider border-b border-[var(--color-text-main)] pb-1 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] active:scale-95 transition-all duration-200 uppercase select-none"
             >
-              {t('hero.recent')} <span className="text-xl leading-none">→</span>
+              <span>{t('hero.recent')}</span>
+              <span className="text-xl leading-none inline-block transition-transform duration-200 group-hover:translate-x-1.5">→</span>
             </a>
           </BlurReveal>
         </div>

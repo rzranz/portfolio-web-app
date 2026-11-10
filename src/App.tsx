@@ -156,12 +156,12 @@ function App() {
               e.preventDefault()
               scrollToSection('#hero')
             }}
-            className="flex items-center gap-2.5 hover:opacity-85 transition-opacity group cursor-pointer"
+            className="flex items-center gap-2.5 hover:opacity-90 active:scale-95 transition-all group cursor-pointer select-none"
           >
             <img 
               src="/RLogo.svg" 
               alt="RLogo" 
-              className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform" 
+              className="w-7 h-7 rounded-lg group-hover:scale-105 group-hover:shadow-[0_0_12px_var(--color-border-glow)] transition-all" 
             />
             <span className="font-display font-bold text-lg md:text-xl tracking-wider text-[var(--color-text-main)]">
               RANN<span className="text-[var(--color-primary)]">.</span>
@@ -171,7 +171,7 @@ function App() {
           {/* Language Switch */}
           <button 
             onClick={toggleLanguage} 
-            className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] transition-colors px-2 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 uppercase tracking-wider cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-mono font-semibold hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/50 active:scale-95 transition-all px-2.5 py-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]/80 uppercase tracking-wider cursor-pointer select-none"
             title="Toggle Language"
           >
             <Globe className="w-3.5 h-3.5" /> 
@@ -185,7 +185,7 @@ function App() {
           {/* Menu Trigger on Canvas Header */}
           <button 
             onClick={openMenu} 
-            className="text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase transition-all duration-300 cursor-pointer py-1 px-1.5 group select-none text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100"
+            className="text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase active:scale-95 transition-all duration-200 cursor-pointer py-1 px-1.5 group select-none text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100"
             aria-expanded={isMenuOpen}
             aria-label={t('nav.menu')}
           >

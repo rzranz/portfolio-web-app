@@ -54,16 +54,16 @@ export default function ThemeToggle() {
     <button 
       type="button"
       onClick={toggleTheme}
-      className="pointer-events-auto flex items-center gap-3 group h-full focus:outline-none touch-manipulation select-none cursor-pointer"
+      className="pointer-events-auto flex items-center gap-3 group h-full focus:outline-none touch-manipulation select-none cursor-pointer active:scale-95 transition-transform duration-150"
       aria-label="Toggle theme"
     >
       <span className="font-mono text-[10px] tracking-widest text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] transition-colors w-[42px] text-right">
         {isDark ? 'DARK' : 'LIGHT'}
       </span>
-      <div className="w-9 h-4 rounded-full border border-[var(--color-border-subtle)] p-[2px] relative flex items-center bg-[var(--color-canvas)] transition-colors">
+      <div className="w-9 h-4 rounded-full border border-[var(--color-border-subtle)] group-hover:border-[var(--color-primary)]/60 p-[2px] relative flex items-center bg-[var(--color-canvas)] transition-colors">
         <div 
           ref={dotRef}
-          className="w-2.5 h-2.5 rounded-full bg-[var(--color-text-main)] relative z-10"
+          className="w-2.5 h-2.5 rounded-full bg-[var(--color-text-main)] group-hover:bg-[var(--color-primary)] transition-colors relative z-10"
         />
       </div>
     </button>

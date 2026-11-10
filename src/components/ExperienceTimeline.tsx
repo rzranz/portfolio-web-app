@@ -278,10 +278,10 @@ export default function ExperienceTimeline() {
                         href={item.entityUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-[var(--color-primary)] hover:opacity-80 transition-opacity inline-flex"
+                        className="group text-[var(--color-primary)] hover:text-[var(--color-accent)] active:scale-90 transition-all inline-flex"
                         title="Visit Link"
                       >
-                        <ArrowUpRight className="w-4 h-4" />
+                        <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </a>
                     )}
                   </h3>

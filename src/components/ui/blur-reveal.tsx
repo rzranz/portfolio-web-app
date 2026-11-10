@@ -7,6 +7,7 @@ interface BlurRevealProps {
   className?: string;
   delay?: number;
   duration?: number;
+  once?: boolean;
 }
 
 // Detect mobile once - skip blur filter on mobile (it's GPU-intensive)
@@ -17,9 +18,10 @@ export function BlurReveal({
   className,
   delay = 0,
   duration = 0.7,
+  once = false,
 }: BlurRevealProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-10px" });
+  const isInView = useInView(ref, { once, margin: "-15px", amount: 0.1 });
 
   // On mobile: skip blur entirely, just do a simple fade-up
   const initialState = IS_MOBILE

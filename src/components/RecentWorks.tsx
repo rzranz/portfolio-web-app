@@ -74,7 +74,7 @@ export default function RecentWorks() {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`cursor-pointer transition-colors relative py-1 shrink-0 ${
+                    className={`cursor-pointer transition-all duration-150 relative py-1 shrink-0 active:scale-95 hover:scale-105 ${
                       selectedCategory === cat 
                         ? 'text-[var(--color-text-main)] font-bold' 
                         : 'hover:text-[var(--color-text-main)]'
@@ -109,9 +109,9 @@ export default function RecentWorks() {
             return (
               <motion.article
                 key={exp.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-30px" }}
+                viewport={{ once: false, amount: 0.15, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
                 onClick={() => setModalProject(exp)}
                 className="group flex flex-col justify-between cursor-pointer border-b border-[var(--color-border-subtle)] pb-8 md:pb-10 transition-colors"
@@ -119,7 +119,7 @@ export default function RecentWorks() {
                 <div>
                   {/* Clean Image Preview Container (Optimized for desktop & mobile apps) */}
                   {exp.image && (
-                    <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden mb-5 border border-[var(--color-border-subtle)]/60 bg-[var(--color-surface)]">
+                    <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden mb-5 border border-[var(--color-border-subtle)]/60 bg-[var(--color-surface)] group-hover:border-[var(--color-primary)]/50 group-hover:shadow-[0_12px_40px_rgba(168,85,247,0.14)] transition-all duration-300">
                       {exp.device === 'mobile' ? (
                         /* Mobile Showcase: 3 overlapping phone mockups with fanning effect on hover */
                         <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-b from-[var(--color-surface)] via-black/30 to-black/70 px-4 py-3 overflow-hidden select-none">

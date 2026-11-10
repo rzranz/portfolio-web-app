@@ -66,23 +66,23 @@ function TechItem({
       onClick={() => onSelect(tech)}
       initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-20px" }}
-      transition={{ duration: 0.3, delay: Math.min(index * 0.025, 0.35), ease: "easeOut" }}
-      className="group relative inline-flex flex-col items-center justify-center p-2.5 sm:p-3.5 md:p-4 cursor-pointer select-none touch-manipulation bg-transparent border-0 outline-none transition-transform duration-200 hover:scale-110 active:scale-95 will-change-transform"
+      viewport={{ once: false, amount: 0.2, margin: "-20px" }}
+      transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3), ease: "easeOut" }}
+      className="group relative inline-flex flex-col items-center justify-center p-2.5 sm:p-3.5 md:p-4 cursor-pointer select-none touch-manipulation bg-transparent border-0 outline-none transition-transform duration-200 hover:scale-115 active:scale-90 will-change-transform"
     >
       <i className={cn(
         iconClass,
         "text-3xl sm:text-4xl md:text-5xl transition-all duration-200",
         isActive 
-          ? "text-[var(--color-primary)] drop-shadow-[0_0_14px_rgba(168,85,247,0.7)]" 
-          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]"
+          ? "text-[var(--color-primary)] drop-shadow-[0_0_16px_rgba(168,85,247,0.7)] scale-110" 
+          : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.45)]"
       )} />
 
       <span className={cn(
         "font-mono text-[9px] sm:text-[10px] mt-2 transition-all duration-200 whitespace-nowrap select-none",
         isActive
           ? "opacity-100 text-[var(--color-primary)] font-bold drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]"
-          : "opacity-75 group-hover:opacity-100 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)]"
+          : "opacity-75 group-hover:opacity-100 text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)]"
       )}>
         {tech}
       </span>
@@ -134,26 +134,37 @@ export default function TechStack() {
         {/* Stable, High-Performance Interactive Tech Grid */}
         <ResponsiveTechGrid techList={techList} />
 
-        {/* Domain Categorization */}
+        {/* Domain Categorization with Staggered Entry & Micro-Interactions */}
         {data.tech_categories && (
           <div className="w-full max-w-4xl border-t border-[var(--color-border-subtle)] divide-y divide-[var(--color-border-subtle)] mt-4">
             {data.tech_categories.map((cat, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="py-3.5 sm:py-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-6"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.35, delay: idx * 0.08, ease: "easeOut" }}
+                className="group py-4 px-4 -mx-4 rounded-xl hover:bg-[var(--color-surface)]/60 border-l-2 border-transparent hover:border-[var(--color-primary)] flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-6 transition-all duration-200 cursor-default select-none"
               >
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-xs text-[var(--color-primary)] font-bold">
+                  <span className="font-mono text-xs text-[var(--color-primary)] font-bold group-hover:scale-110 group-hover:text-[var(--color-accent)] transition-all duration-200 inline-block">
                     0{idx + 1}
                   </span>
-                  <h4 className="font-display font-bold text-sm sm:text-base text-[var(--color-text-main)] tracking-tight">
+                  <h4 className="font-display font-bold text-sm sm:text-base text-[var(--color-text-main)] group-hover:text-[var(--color-primary)] tracking-tight transition-colors duration-200">
                     {cat.category}
                   </h4>
                 </div>
-                <p className="font-mono text-[11px] sm:text-xs text-[var(--color-text-muted)] tracking-wide sm:text-right">
-                  {cat.skills.join('  ·  ')}
-                </p>
-              </div>
+                <div className="font-mono text-[11px] sm:text-xs tracking-wide sm:text-right flex flex-wrap gap-x-2 gap-y-1 sm:justify-end">
+                  {cat.skills.map((skill, sIdx) => (
+                    <span 
+                      key={sIdx}
+                      className="text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)] hover:!text-[var(--color-primary)] transition-colors duration-150"
+                    >
+                      {skill}{sIdx < cat.skills.length - 1 && <span className="opacity-40 ml-2">·</span>}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
             ))}
           </div>
         )}
