@@ -155,7 +155,7 @@
         "/projects/flowledger-transactions.png"
       ],
       "live_url": "",
-      "github_url": "https://github.com/rzranz",
+      "github_url": "https://github.com/rzranz/flowledger",
       "description": "Production-grade local-first personal financial tracking engine built with Go standard library net/http, Vue 3, and pure-Go SQLite WAL. Implements Pragmatic Clean Architecture with consumer-defined interfaces, deterministic integer IDR arithmetic, Idempotency-Key double-spend protection, errgroup concurrent monthly analytics, and memory-safe streaming CSV export shipped in a single embedded binary.",
       "stack": ["Go", "Vue 3", "SQLite", "Tailwind CSS", "Clean Architecture", "net/http", "Vite"],
       "tags": ["Go 1.22", "Vue 3", "Clean Architecture", "SQLite WAL", "errgroup Concurrency", "Idempotency"],
