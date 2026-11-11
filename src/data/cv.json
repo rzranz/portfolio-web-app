@@ -404,6 +404,53 @@
       "metrics": "Pessimistic Locking · 300s TTL Hold · Strategy Pattern · 100% JUnit Pass"
     },
     {
+      "id": "letsmove",
+      "title": "Let's Move — Fitness, Calorie Tracker & Nutritional Management System",
+      "company": "Academic Project (Semester 2) & HealthTech",
+      "company_url": "https://github.com/rzranz",
+      "period": "2023 (Semester 2)",
+      "year": "2023",
+      "category": "Fullstack",
+      "featured": true,
+      "image": "/projects/letsmove-dashboard.png",
+      "gallery": [
+        "/projects/letsmove-dashboard.png",
+        "/projects/letsmove-onboarding.png"
+      ],
+      "live_url": "",
+      "github_url": "https://github.com/rzranz",
+      "description": "Personalized nutrition, calorie tracking, and workout logging web application built with PHP, PDO, and Modern ES6+ JavaScript. Integrates CalorieNinjas REST API for real-time nutritional nutrient lookup, implements the Mifflin-St Jeor formula for precise Basal Metabolic Rate (BMR) and Total Daily Energy Expenditure (TDEE) calculation, provides 3 tailored fitness programs (Diet & Fat Loss, Workout & Maintenance, Hypertrophy & Bulking), dual-database support (MySQL & SQLite) with automatic migrations and seeding, interactive bodyweight & BMI progress tracking charts, and an automated QA test suite with 53/53 tests passing.",
+      "stack": [
+        "PHP",
+        "JavaScript",
+        "CalorieNinjas API",
+        "MySQL",
+        "SQLite",
+        "PDO",
+        "Chart.js",
+        "REST API",
+        "Modern CSS"
+      ],
+      "tags": [
+        "Calorie Tracker",
+        "CalorieNinjas API",
+        "Mifflin-St Jeor",
+        "TDEE & BMR",
+        "Dual DB (MySQL/SQLite)",
+        "Chart.js",
+        "HealthTech",
+        "Clean Architecture"
+      ],
+      "highlights": [
+        "CalorieNinjas API Nutrition Engine: Integrated third-party CalorieNinjas REST API endpoints to fetch comprehensive nutritional data (calories, proteins, carbohydrates, fats) with instant portion scaling and custom manual food logging",
+        "Mifflin-St Jeor Biometric Algorithm: Formulated automated BMI, Basal Metabolic Rate (BMR), and Total Daily Energy Expenditure (TDEE) scoring engine with tailored caloric budgets for 3 fitness tracks (Diet, Maintenance, Bulking)",
+        "Dual-Engine Database & Schema Migrations: Architected resilient database abstraction layer via PDO supporting seamless runtime switching between MySQL and SQLite with automatic schema migration and sample seeding",
+        "Interactive Workout & Weight Progress Telemetry: Built responsive exercise calorie burn calculators and dynamic Chart.js time-series charts visualizing weight loss and BMI progression over time",
+        "Automated QA Test Suite: Engineered comprehensive end-to-end testing script (qa_test.php) executing 53 validation assertions with 100% pass rate across auth, API endpoints, and business logic"
+      ],
+      "metrics": "CalorieNinjas API · Mifflin-St Jeor · Dual DB (MySQL/SQLite) · 53/53 QA Tests Passed"
+    },
+    {
       "id": "pos",
       "title": "Coffeeshop POS & Realtime Stock System",
       "company": "Freelance Client",
