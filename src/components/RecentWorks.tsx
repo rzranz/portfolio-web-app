@@ -117,10 +117,10 @@ export default function RecentWorks() {
                 className="group flex flex-col justify-between cursor-pointer border-b border-[var(--color-border-subtle)] pb-8 md:pb-10 transition-colors"
               >
                 <div>
-                  {/* Clean Image Preview Container (Optimized for desktop & mobile apps) */}
-                  {exp.image && (
-                    <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden mb-5 border border-[var(--color-border-subtle)]/60 bg-[var(--color-surface)] group-hover:border-[var(--color-primary)]/50 group-hover:shadow-[0_12px_40px_rgba(168,85,247,0.14)] transition-all duration-300">
-                      {exp.device === 'mobile' ? (
+                  {/* Clean Image Preview Container (Optimized for desktop, mobile apps, & typographic fallback) */}
+                  <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden mb-5 border border-[var(--color-border-subtle)]/60 bg-[var(--color-surface)] group-hover:border-[var(--color-primary)]/50 group-hover:shadow-[0_12px_40px_rgba(168,85,247,0.14)] transition-all duration-300">
+                    {exp.image ? (
+                      exp.device === 'mobile' ? (
                         /* Mobile Showcase: 3 overlapping phone mockups with fanning effect on hover */
                         <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-b from-[var(--color-surface)] via-black/30 to-black/70 px-4 py-3 overflow-hidden select-none">
                           {/* Subtle grid pattern background */}
@@ -179,16 +179,37 @@ export default function RecentWorks() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </>
-                      )}
-                      
-                      {exp.live_url && (
-                        <div className="absolute top-3 right-3 font-mono text-[10px] text-emerald-400 font-semibold uppercase tracking-wider flex items-center gap-1.5 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded border border-emerald-500/30 z-20">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>Live</span>
+                      )
+                    ) : (
+                      /* Clean Editorial Typographic Cover when no screenshot is attached yet */
+                      <div className="relative w-full h-full flex flex-col justify-between p-6 sm:p-8 bg-gradient-to-br from-[var(--color-surface)] via-[var(--color-canvas)] to-[var(--color-surface-hover)] select-none">
+                        <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:18px_18px] pointer-events-none" />
+                        <div className="relative z-10 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
+                          <span>{exp.stack.slice(0, 3).join(' · ')}</span>
                         </div>
-                      )}
-                    </div>
-                  )}
+                        <div className="relative z-10 my-auto">
+                          <span className="font-display font-black text-3xl sm:text-4xl tracking-tight text-[var(--color-text-main)] group-hover:text-[var(--color-primary)] transition-colors block">
+                            {exp.title.split('—')[0].trim()}
+                          </span>
+                          {exp.title.includes('—') && (
+                            <span className="font-mono text-xs text-[var(--color-text-muted)] mt-1 block">
+                              {exp.title.split('—')[1].trim()}
+                            </span>
+                          )}
+                        </div>
+                        <div className="relative z-10 font-mono text-[10px] uppercase tracking-wider text-[var(--color-primary)]/80">
+                          {exp.metrics || exp.company}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {exp.live_url && (
+                      <div className="absolute top-3 right-3 font-mono text-[10px] text-emerald-400 font-semibold uppercase tracking-wider flex items-center gap-1.5 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded border border-emerald-500/30 z-20">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Live</span>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Clean Metadata: Index, Year, Category & Company */}
                   <div className="flex items-center justify-between font-mono text-xs text-[var(--color-text-muted)] mb-2">
