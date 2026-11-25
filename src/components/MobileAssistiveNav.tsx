@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 import { Home, User, Cpu, Briefcase, Award, Mail, X } from 'lucide-react'
 import { useLanguage } from '../lib/i18n'
 import { scrollToSection } from '../lib/scroll'
@@ -23,25 +22,26 @@ const NAV_BUBBLES: NavBubble[] = [
 
 const ORB_SIZE = 54
 const EDGE_MARGIN = 16
-const BUBBLE_SIZE = 46
+const BUBBLE_SIZE = 44
 const BUBBLE_GAP = 10
+
+function getInitialPos() {
+  if (typeof window === 'undefined') return { x: 300, y: 520 }
+  return {
+    x: Math.max(EDGE_MARGIN, window.innerWidth - ORB_SIZE - EDGE_MARGIN),
+    y: Math.round(window.innerHeight * 0.62),
+  }
+}
 
 export default function MobileAssistiveNav() {
   const { language } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
+  const [pos, setPos] = useState<{ x: number; y: number }>(getInitialPos)
   const [snapping, setSnapping] = useState(false)
 
-  // Default position: right edge, lower-middle of screen (thumb-friendly)
-  const [pos, setPos] = useState<{ x: number; y: number }>(() => {
-    if (typeof window === 'undefined') return { x: 300, y: 520 }
-    return {
-      x: Math.max(EDGE_MARGIN, window.innerWidth - ORB_SIZE - EDGE_MARGIN),
-      y: Math.round(window.innerHeight * 0.62),
-    }
-  })
-
-  const dragStateRef = useRef({
+  const containerRef = useRef<HTMLDivElement>(null)
+  const posRef = useRef(pos)
+  const dragRef = useRef({
     active: false,
     pointerId: -1,
     startPointerX: 0,
@@ -54,15 +54,18 @@ export default function MobileAssistiveNav() {
   // Keep orb inside viewport on resize / orientation change
   useEffect(() => {
     const handleResize = () => {
-      setPos((prev) => {
-        const maxX = Math.max(EDGE_MARGIN, window.innerWidth - ORB_SIZE - EDGE_MARGIN)
-        const maxY = Math.max(EDGE_MARGIN + 64, window.innerHeight - ORB_SIZE - EDGE_MARGIN)
-        const snapLeft = prev.x + ORB_SIZE / 2 < window.innerWidth / 2
-        return {
-          x: snapLeft ? EDGE_MARGIN : maxX,
-          y: Math.min(Math.max(EDGE_MARGIN + 64, prev.y), maxY),
-        }
-      })
+      const maxX = Math.max(EDGE_MARGIN, window.innerWidth - ORB_SIZE - EDGE_MARGIN)
+      const maxY = Math.max(EDGE_MARGIN + 64, window.innerHeight - ORB_SIZE - EDGE_MARGIN)
+      const snapLeft = posRef.current.x + ORB_SIZE / 2 < window.innerWidth / 2
+      const next = {
+        x: snapLeft ? EDGE_MARGIN : maxX,
+        y: Math.min(Math.max(EDGE_MARGIN + 64, posRef.current.y), maxY),
+      }
+      posRef.current = next
+      setPos(next)
+      if (containerRef.current) {
+        containerRef.current.style.transform = `translate3d(${next.x}px, ${next.y}px, 0)`
+      }
     }
     window.addEventListener('resize', handleResize, { passive: true })
     return () => window.removeEventListener('resize', handleResize)
@@ -71,19 +74,19 @@ export default function MobileAssistiveNav() {
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId)
     setSnapping(false)
-    dragStateRef.current = {
+    dragRef.current = {
       active: true,
       pointerId: e.pointerId,
       startPointerX: e.clientX,
       startPointerY: e.clientY,
-      startOrbX: pos.x,
-      startOrbY: pos.y,
+      startOrbX: posRef.current.x,
+      startOrbY: posRef.current.y,
       moved: false,
     }
   }
 
   const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const drag = dragStateRef.current
+    const drag = dragRef.current
     if (!drag.active || drag.pointerId !== e.pointerId) return
 
     const dx = e.clientX - drag.startPointerX
@@ -91,7 +94,6 @@ export default function MobileAssistiveNav() {
 
     if (!drag.moved && Math.hypot(dx, dy) > 6) {
       drag.moved = true
-      setIsDragging(true)
       if (isOpen) setIsOpen(false)
     }
 
@@ -100,12 +102,17 @@ export default function MobileAssistiveNav() {
       const maxY = Math.max(EDGE_MARGIN + 64, window.innerHeight - ORB_SIZE - EDGE_MARGIN)
       const nextX = Math.min(Math.max(EDGE_MARGIN, drag.startOrbX + dx), maxX)
       const nextY = Math.min(Math.max(EDGE_MARGIN + 64, drag.startOrbY + dy), maxY)
-      setPos({ x: nextX, y: nextY })
+      posRef.current = { x: nextX, y: nextY }
+      // Direct GPU transform mutation — zero React re-renders during drag
+      if (containerRef.current) {
+        containerRef.current.style.transition = 'none'
+        containerRef.current.style.transform = `translate3d(${nextX}px, ${nextY}px, 0)`
+      }
     }
   }
 
   const handlePointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const drag = dragStateRef.current
+    const drag = dragRef.current
     if (!drag.active || drag.pointerId !== e.pointerId) return
     drag.active = false
 
@@ -114,15 +121,15 @@ export default function MobileAssistiveNav() {
     }
 
     if (drag.moved) {
-      setIsDragging(false)
-      // Magnetic snap to nearest left or right edge like iPhone AssistiveTouch
-      setSnapping(true)
       const maxX = Math.max(EDGE_MARGIN, window.innerWidth - ORB_SIZE - EDGE_MARGIN)
-      const snapToLeft = pos.x + ORB_SIZE / 2 < window.innerWidth / 2
-      setPos((prev) => ({
-        x: snapToLeft ? EDGE_MARGIN : maxX,
-        y: prev.y,
-      }))
+      const snapLeft = posRef.current.x + ORB_SIZE / 2 < window.innerWidth / 2
+      const snapped = {
+        x: snapLeft ? EDGE_MARGIN : maxX,
+        y: posRef.current.y,
+      }
+      posRef.current = snapped
+      setSnapping(true)
+      setPos(snapped)
     } else {
       setIsOpen((prev) => !prev)
     }
@@ -130,17 +137,14 @@ export default function MobileAssistiveNav() {
 
   const handleSelectSection = (href: string) => {
     setIsOpen(false)
-    setTimeout(() => {
-      scrollToSection(href, 0.9)
-    }, 80)
+    scrollToSection(href, 0.85)
   }
 
-  // Determine smart layout for bubbles so they never overflow top/bottom/sides
+  // Smart vertical distribution so bubbles never clip off top/bottom of viewport
   const viewportW = typeof window !== 'undefined' ? window.innerWidth : 390
   const viewportH = typeof window !== 'undefined' ? window.innerHeight : 844
   const isOnRightHalf = pos.x + ORB_SIZE / 2 >= viewportW / 2
 
-  // Split bubbles above and below the center orb (matching reference image), clamped to viewport
   const step = BUBBLE_SIZE + BUBBLE_GAP
   const spaceAbove = pos.y - (EDGE_MARGIN + 56)
   const spaceBelow = viewportH - (pos.y + ORB_SIZE) - EDGE_MARGIN
@@ -163,110 +167,108 @@ export default function MobileAssistiveNav() {
 
   return (
     <div className="md:hidden">
-      {/* Tap-outside backdrop when expanded */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            onClick={() => setIsOpen(false)}
-            className="fixed inset-0 z-[64] bg-black/35"
-            aria-hidden="true"
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Draggable AssistiveTouch Container */}
+      {/* Lightweight tap-outside backdrop (CSS opacity only, zero mount/unmount jank) */}
       <div
+        onClick={() => setIsOpen(false)}
+        aria-hidden="true"
+        className={`fixed inset-0 z-[64] bg-black/30 transition-opacity duration-150 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      {/* Draggable Floating Logo Orb Container */}
+      <div
+        ref={containerRef}
         style={{
           transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
-          transition: snapping ? 'transform 320ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
+          transition: snapping ? 'transform 260ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
+          willChange: 'transform',
         }}
         className="fixed top-0 left-0 z-[65] select-none"
       >
-        {/* Bubbles radiating ABOVE the center orb */}
-        <AnimatePresence>
-          {isOpen &&
-            aboveBubbles.map((item, idx) => {
-              const Icon = item.icon
-              const orderFromCenter = aboveBubbles.length - idx
-              const offsetY = -(orderFromCenter * step)
-              const label = language === 'id' ? item.labelId : item.labelEn
+        {/* Bubbles radiating ABOVE the center button — pure GPU CSS transforms */}
+        {aboveBubbles.map((item, idx) => {
+          const Icon = item.icon
+          const orderFromCenter = aboveBubbles.length - idx
+          const offsetY = -(orderFromCenter * step)
+          const label = language === 'id' ? item.labelId : item.labelEn
+          const delayMs = isOpen ? (orderFromCenter - 1) * 22 : 0
 
-              return (
-                <motion.button
-                  key={item.id}
-                  type="button"
-                  initial={{ opacity: 0, scale: 0.35, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: offsetY }}
-                  exit={{ opacity: 0, scale: 0.35, y: 0 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 420,
-                    damping: 26,
-                    delay: (orderFromCenter - 1) * 0.035,
-                  }}
-                  onClick={() => handleSelectSection(item.href)}
-                  style={{ width: BUBBLE_SIZE, height: BUBBLE_SIZE }}
-                  className="absolute top-1 left-1 rounded-full bg-[var(--color-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] shadow-[0_6px_20px_rgba(0,0,0,0.45)] flex items-center justify-center active:scale-90 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors cursor-pointer"
-                  aria-label={label}
-                >
-                  <Icon className="w-[18px] h-[18px]" />
-                  <span
-                    className={`pointer-events-none absolute top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-[var(--color-surface)] border border-[var(--color-border-subtle)] font-mono text-[10px] font-semibold tracking-wider uppercase text-[var(--color-text-main)] whitespace-nowrap shadow-sm ${
-                      isOnRightHalf ? 'right-[54px]' : 'left-[54px]'
-                    }`}
-                  >
-                    {label}
-                  </span>
-                </motion.button>
-              )
-            })}
-        </AnimatePresence>
+          return (
+            <button
+              key={item.id}
+              type="button"
+              tabIndex={isOpen ? 0 : -1}
+              onClick={() => handleSelectSection(item.href)}
+              style={{
+                width: BUBBLE_SIZE,
+                height: BUBBLE_SIZE,
+                transform: isOpen
+                  ? `translate3d(0, ${offsetY}px, 0) scale(1)`
+                  : 'translate3d(0, 0, 0) scale(0.5)',
+                opacity: isOpen ? 1 : 0,
+                transition: `transform 210ms cubic-bezier(0.22, 1, 0.36, 1) ${delayMs}ms, opacity 160ms ease ${delayMs}ms`,
+                willChange: 'transform, opacity',
+              }}
+              className={`absolute top-[5px] left-[5px] rounded-full bg-[var(--color-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] flex items-center justify-center active:scale-90 cursor-pointer ${
+                isOpen ? 'pointer-events-auto' : 'pointer-events-none'
+              }`}
+              aria-label={label}
+            >
+              <Icon className="w-[18px] h-[18px]" />
+              <span
+                className={`pointer-events-none absolute top-1/2 -translate-y-1/2 px-2 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border-subtle)] font-mono text-[10px] font-semibold tracking-wider uppercase text-[var(--color-text-main)] whitespace-nowrap ${
+                  isOnRightHalf ? 'right-[52px]' : 'left-[52px]'
+                }`}
+              >
+                {label}
+              </span>
+            </button>
+          )
+        })}
 
-        {/* Bubbles radiating BELOW the center orb */}
-        <AnimatePresence>
-          {isOpen &&
-            belowBubbles.map((item, idx) => {
-              const Icon = item.icon
-              const orderFromCenter = idx + 1
-              const offsetY = orderFromCenter * step + 8
-              const label = language === 'id' ? item.labelId : item.labelEn
+        {/* Bubbles radiating BELOW the center button — pure GPU CSS transforms */}
+        {belowBubbles.map((item, idx) => {
+          const Icon = item.icon
+          const orderFromCenter = idx + 1
+          const offsetY = orderFromCenter * step + 10
+          const label = language === 'id' ? item.labelId : item.labelEn
+          const delayMs = isOpen ? idx * 22 : 0
 
-              return (
-                <motion.button
-                  key={item.id}
-                  type="button"
-                  initial={{ opacity: 0, scale: 0.35, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: offsetY }}
-                  exit={{ opacity: 0, scale: 0.35, y: 0 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 420,
-                    damping: 26,
-                    delay: idx * 0.035,
-                  }}
-                  onClick={() => handleSelectSection(item.href)}
-                  style={{ width: BUBBLE_SIZE, height: BUBBLE_SIZE }}
-                  className="absolute top-1 left-1 rounded-full bg-[var(--color-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] shadow-[0_6px_20px_rgba(0,0,0,0.45)] flex items-center justify-center active:scale-90 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors cursor-pointer"
-                  aria-label={label}
-                >
-                  <Icon className="w-[18px] h-[18px]" />
-                  <span
-                    className={`pointer-events-none absolute top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-[var(--color-surface)] border border-[var(--color-border-subtle)] font-mono text-[10px] font-semibold tracking-wider uppercase text-[var(--color-text-main)] whitespace-nowrap shadow-sm ${
-                      isOnRightHalf ? 'right-[54px]' : 'left-[54px]'
-                    }`}
-                  >
-                    {label}
-                  </span>
-                </motion.button>
-              )
-            })}
-        </AnimatePresence>
+          return (
+            <button
+              key={item.id}
+              type="button"
+              tabIndex={isOpen ? 0 : -1}
+              onClick={() => handleSelectSection(item.href)}
+              style={{
+                width: BUBBLE_SIZE,
+                height: BUBBLE_SIZE,
+                transform: isOpen
+                  ? `translate3d(0, ${offsetY}px, 0) scale(1)`
+                  : 'translate3d(0, 0, 0) scale(0.5)',
+                opacity: isOpen ? 1 : 0,
+                transition: `transform 210ms cubic-bezier(0.22, 1, 0.36, 1) ${delayMs}ms, opacity 160ms ease ${delayMs}ms`,
+                willChange: 'transform, opacity',
+              }}
+              className={`absolute top-[5px] left-[5px] rounded-full bg-[var(--color-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] flex items-center justify-center active:scale-90 cursor-pointer ${
+                isOpen ? 'pointer-events-auto' : 'pointer-events-none'
+              }`}
+              aria-label={label}
+            >
+              <Icon className="w-[18px] h-[18px]" />
+              <span
+                className={`pointer-events-none absolute top-1/2 -translate-y-1/2 px-2 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border-subtle)] font-mono text-[10px] font-semibold tracking-wider uppercase text-[var(--color-text-main)] whitespace-nowrap ${
+                  isOnRightHalf ? 'right-[52px]' : 'left-[52px]'
+                }`}
+              >
+                {label}
+              </span>
+            </button>
+          )
+        })}
 
-        {/* Center Draggable iPhone AssistiveTouch Orb */}
+        {/* Center Draggable Floating Orb with User's Brand Logo (/RLogo.svg) */}
         <button
           type="button"
           onPointerDown={handlePointerDown}
@@ -276,23 +278,21 @@ export default function MobileAssistiveNav() {
           style={{ width: ORB_SIZE, height: ORB_SIZE, touchAction: 'none' }}
           aria-expanded={isOpen}
           aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
-          className={`relative z-10 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing transition-all duration-200 ${
+          className={`relative z-10 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing transition-colors duration-150 ${
             isOpen
-              ? 'bg-[var(--color-surface)] border-2 border-[var(--color-primary)] text-[var(--color-text-main)] shadow-[0_8px_24px_rgba(0,0,0,0.55)] opacity-100 scale-105'
-              : isDragging
-              ? 'bg-[var(--color-surface)]/95 border border-[var(--color-primary)]/80 shadow-[0_10px_28px_rgba(0,0,0,0.6)] opacity-100 scale-105'
-              : 'bg-[var(--color-surface)]/85 border border-[var(--color-border-subtle)] shadow-[0_6px_20px_rgba(0,0,0,0.45)] opacity-80 active:opacity-100'
+              ? 'bg-[var(--color-surface)] border-2 border-[var(--color-primary)] text-[var(--color-text-main)]'
+              : 'bg-[var(--color-surface)] border border-[var(--color-border-subtle)]'
           }`}
         >
           {isOpen ? (
             <X className="w-5 h-5 text-[var(--color-text-main)]" />
           ) : (
-            /* iPhone AssistiveTouch concentric rings */
-            <span className="w-9 h-9 rounded-full border border-[var(--color-text-muted)]/35 flex items-center justify-center">
-              <span className="w-6 h-6 rounded-full border border-[var(--color-text-muted)]/50 flex items-center justify-center">
-                <span className="w-3.5 h-3.5 rounded-full bg-[var(--color-text-main)]" />
-              </span>
-            </span>
+            <img
+              src="/RLogo.svg"
+              alt="RANN"
+              draggable={false}
+              className="w-8 h-8 rounded-full object-contain pointer-events-none select-none"
+            />
           )}
         </button>
       </div>
