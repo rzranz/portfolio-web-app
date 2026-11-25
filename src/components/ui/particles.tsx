@@ -9,6 +9,9 @@ interface ParticlesProps {
   color?: string;
 }
 
+// Feature toggle: disable particles for now without removing implementation
+const ENABLE_PARTICLES = false
+
 // Detect mobile once at module level - stable, no re-runs on resize
 const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth < 768;
 
@@ -66,6 +69,8 @@ export function Particles({ id, className, variant = "default", color = "#9333ea
       detectRetina: false, // disable retina to halve canvas resolution
     };
   }, [variant, color]);
+
+  if (!ENABLE_PARTICLES) return null;
 
   return (
     <ParticlesComponent
