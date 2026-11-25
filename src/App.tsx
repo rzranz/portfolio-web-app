@@ -25,16 +25,23 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [originY, setOriginY] = useState(0)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobile, setIsMobile] = useState(() => 
-    typeof window !== 'undefined' ? window.innerWidth < 768 : false
-  )
+  const [viewportMode, setViewportMode] = useState<'mobile' | 'tablet' | 'desktop'>(() => {
+    if (typeof window === 'undefined') return 'desktop'
+    if (window.innerWidth < 768) return 'mobile'
+    if (window.innerWidth < 1024) return 'tablet'
+    return 'desktop'
+  })
 
-  // Track responsive mobile viewport & scroll position
+  // Track responsive viewport breakpoint & scroll position
   useEffect(() => {
     let resizeTimer: ReturnType<typeof setTimeout>
     const handleResize = () => {
       clearTimeout(resizeTimer)
-      resizeTimer = setTimeout(() => setIsMobile(window.innerWidth < 768), 100)
+      resizeTimer = setTimeout(() => {
+        if (window.innerWidth < 768) setViewportMode('mobile')
+        else if (window.innerWidth < 1024) setViewportMode('tablet')
+        else setViewportMode('desktop')
+      }, 100)
     }
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop
@@ -86,14 +93,18 @@ function App() {
     }
   }, [])
 
-  // Pause Lenis scrolling while menu overlay is active
+  // Pause Lenis and lock body scroll while menu overlay is active
   useEffect(() => {
     const lenis = (window as unknown as { lenis?: Lenis }).lenis
-    if (!lenis) return
     if (isMenuOpen) {
-      lenis.stop()
+      if (lenis) lenis.stop()
+      document.body.style.overflow = 'hidden'
     } else {
-      lenis.start()
+      if (lenis) lenis.start()
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
     }
   }, [isMenuOpen])
 
@@ -197,32 +208,36 @@ function App() {
         </div>
       </header>
 
-      {/* Front Page Canvas Surface with Calibrated 3D Pullback ("aga miring") Effect */}
+      {/* Front Page Canvas Surface with Half-Open Book 3D Perspective Hinge (Pure Y-axis, zero Z-tilt) */}
       <div
         id="main-page-canvas"
         className={`relative z-10 w-full min-h-screen bg-[var(--color-canvas)] canvas-perspective-layer ${
           isMenuOpen
-            ? 'canvas-active-3d rounded-2xl md:rounded-3xl shadow-[-25px_25px_80px_rgba(0,0,0,0.85)] border border-[var(--color-border-subtle)] select-none cursor-pointer'
+            ? 'canvas-active-3d rounded-2xl md:rounded-3xl shadow-[20px_0_70px_rgba(0,0,0,0.65)] border border-[var(--color-border-subtle)] select-none cursor-pointer'
             : 'rounded-none shadow-none border-transparent ring-0'
         }`}
         style={
           isMenuOpen
             ? {
-                transform: isMobile
-                  ? 'translateX(-80%) scale(0.92)'
-                  : 'perspective(1200px) scale(0.74) translateX(-30%) rotateY(12deg) rotateZ(-9.5deg)',
-                transformOrigin: isMobile
-                  ? 'left center'
-                  : `left ${originY || window.innerHeight / 2}px`,
+                transform:
+                  viewportMode === 'mobile'
+                    ? 'perspective(1000px) translateX(-70%) scale(0.88) rotateY(16deg)'
+                    : viewportMode === 'tablet'
+                    ? 'perspective(1200px) translateX(-34%) scale(0.82) rotateY(22deg)'
+                    : 'perspective(1500px) translateX(-22%) scale(0.78) rotateY(26deg)',
+                transformOrigin:
+                  viewportMode === 'mobile'
+                    ? 'left center'
+                    : `left ${originY || window.innerHeight / 2}px`,
               }
             : undefined
         }
         onClick={isMenuOpen ? closeMenu : undefined}
       >
-        {/* Subtle click overlay when menu is open so clicking anywhere on the tilted canvas closes it */}
+        {/* Subtle click overlay + book-spine depth vignette when menu is open */}
         {isMenuOpen && (
           <div 
-            className="absolute inset-0 z-50 bg-black/25 rounded-2xl md:rounded-3xl cursor-pointer hover:bg-black/15 transition-colors"
+            className="absolute inset-0 z-50 bg-gradient-to-r from-black/10 via-black/20 to-black/50 rounded-2xl md:rounded-3xl cursor-pointer hover:from-black/5 hover:to-black/35 transition-colors"
             title="Click to close menu"
           />
         )}

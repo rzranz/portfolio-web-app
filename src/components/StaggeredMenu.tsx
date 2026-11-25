@@ -10,6 +10,7 @@ export interface MenuItem {
 }
 
 export interface SocialItem {
+  number: string
   label: string
   link: string
 }
@@ -31,9 +32,9 @@ export const DEFAULT_MENU_ITEMS: MenuItem[] = [
 ]
 
 const DEFAULT_SOCIALS: SocialItem[] = [
-  { label: 'GitHub', link: 'https://github.com/rzranz' },
-  { label: 'LinkedIn', link: 'https://www.linkedin.com/in/randizakariaputra' },
-  { label: 'Email', link: 'mailto:randizakariaputra22@gmail.com' }
+  { number: '01', label: 'GitHub', link: 'https://github.com/rzranz' },
+  { number: '02', label: 'LinkedIn', link: 'https://www.linkedin.com/in/randizakariaputra' },
+  { number: '03', label: 'Email', link: 'mailto:randizakariaputra22@gmail.com' },
 ]
 
 export default function StaggeredMenu({
@@ -46,9 +47,15 @@ export default function StaggeredMenu({
   const { t } = useLanguage()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const menuContainerRef = useRef<HTMLDivElement>(null)
-  const [themeMode, setThemeMode] = useState<'light' | 'dark' | 'system'>('dark')
+  const [themeMode, setThemeMode] = useState<'light' | 'dark' | 'system'>(() => {
+    if (typeof window === 'undefined') return 'dark'
+    const saved = localStorage.getItem('theme')
+    if (saved === 'light') return 'light'
+    if (saved === 'dark') return 'dark'
+    return 'system'
+  })
 
-  // Sync theme mode on mount
+  // Sync theme mode with DOM class changes
   useEffect(() => {
     const updateFromDOM = () => {
       const saved = localStorage.getItem('theme')
@@ -60,7 +67,6 @@ export default function StaggeredMenu({
         setThemeMode('system')
       }
     }
-    updateFromDOM()
 
     const observer = new MutationObserver(updateFromDOM)
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
@@ -86,51 +92,47 @@ export default function StaggeredMenu({
     }
   }
 
-  // Fast, hardware-accelerated staggered entrance animation
+  // Hardware-accelerated staggered entrance on inner wrapper (never conflicts with CSS 3D rotateY)
   useEffect(() => {
     if (!menuContainerRef.current) return
 
-    const items = menuContainerRef.current.querySelectorAll('.staggered-menu-item')
+    const items = menuContainerRef.current.querySelectorAll('.book-menu-entrance')
     const bottomEls = menuContainerRef.current.querySelectorAll('.staggered-footer-item')
     const headerEl = menuContainerRef.current.querySelector('.staggered-header-item')
 
     if (isOpen) {
-      setHoveredIndex(null)
       gsap.killTweensOf([items, bottomEls, headerEl])
 
-      // 1. Header entrance
       if (headerEl) {
-        gsap.fromTo(headerEl,
-          { opacity: 0, y: -16 },
-          { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+        gsap.fromTo(
+          headerEl,
+          { opacity: 0, y: -14 },
+          { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }
         )
       }
 
-      // 2. Menu items entrance: cascade in smoothly (00 -> 04)
-      gsap.fromTo(items,
-        { 
-          opacity: 0, 
-          x: position === 'right' ? 40 : -40,
-          y: 10
+      gsap.fromTo(
+        items,
+        {
+          opacity: 0,
+          x: position === 'right' ? 56 : -56,
         },
-        { 
-          opacity: 1, 
-          x: 0, 
-          y: 0, 
-          duration: 0.4, 
-          stagger: 0.05, 
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.52,
+          stagger: 0.055,
           ease: 'power3.out',
-          delay: 0.05 
+          delay: 0.06,
         }
       )
 
-      // 3. Footer entrance
-      gsap.fromTo(bottomEls,
+      gsap.fromTo(
+        bottomEls,
         { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.35, stagger: 0.04, ease: 'power2.out', delay: 0.15 }
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out', delay: 0.16 }
       )
     } else {
-      setHoveredIndex(null)
       gsap.killTweensOf([items, bottomEls, headerEl])
     }
   }, [isOpen, position])
@@ -147,32 +149,38 @@ export default function StaggeredMenu({
   }, [isOpen, onClose])
 
   return (
-    <div 
+    <div
       ref={menuContainerRef}
       className={`fixed inset-0 z-[60] transition-opacity duration-300 overflow-hidden flex flex-col justify-between pointer-events-none ${
-        isOpen 
-          ? 'opacity-100 visible' 
-          : 'opacity-0 invisible'
+        isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
       }`}
       aria-hidden={!isOpen}
     >
-      {/* Top Header of the Menu Layer: Center dot indicator and Top-Right TUTUP button */}
-      <div className="staggered-header-item w-full pt-6 sm:pt-8 px-6 sm:px-10 lg:px-16 relative z-10 flex items-center justify-between pointer-events-none">
-        {/* Left spacer so center and right elements align cleanly */}
-        <div className="w-24" />
+      {/* Top Header of the Menu Layer */}
+      <div className="staggered-header-item w-full pt-5 sm:pt-7 md:pt-8 px-5 sm:px-8 lg:px-14 relative z-20 flex items-center justify-between pointer-events-none">
+        {/* Left brand mark visible on mobile/tablet or when open */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <span className="font-display font-black text-base sm:text-lg tracking-wider text-[var(--color-text-main)]">
+            RANN<span className="text-[var(--color-primary)]">.</span>
+          </span>
+        </div>
 
-        {/* Center circle indicator matching reference image */}
-        <div className="flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full border border-white/20 dark:border-white/25 flex items-center justify-center">
-            <span className="w-1.5 h-1.5 rounded-full bg-white" />
+        {/* Center spine indicator dot */}
+        <div className="hidden sm:flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full border border-[var(--color-border-subtle)] flex items-center justify-center">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]" />
           </div>
         </div>
 
-        {/* Top Right: TUTUP / CLOSE button (Pure typography matching reference image) */}
-        <div className="flex items-center justify-end w-24 pointer-events-auto">
+        {/* Top Right: CLOSE / TUTUP button */}
+        <div className="flex items-center justify-end pointer-events-auto">
           <button
-            onClick={onClose}
-            className="font-mono text-xs md:text-sm font-extrabold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] transition-colors cursor-pointer py-1 select-none"
+            type="button"
+            onClick={() => {
+              setHoveredIndex(null)
+              onClose()
+            }}
+            className="font-mono text-xs md:text-sm font-extrabold tracking-[0.25em] uppercase text-[var(--color-text-main)] hover:text-[var(--color-primary)] active:scale-95 transition-all duration-150 cursor-pointer py-1 px-2 select-none"
             aria-label={t('nav.close')}
           >
             {t('nav.close')}
@@ -180,104 +188,157 @@ export default function StaggeredMenu({
         </div>
       </div>
 
-      {/* Center Nav Items: Staggered Massive Editorial Typography aligned to the right */}
-      <div className="w-full flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-4 my-auto relative z-10 pointer-events-none">
-        <div className="w-full max-w-2xl ml-auto flex flex-col space-y-2 sm:space-y-3 pointer-events-auto text-right">
+      {/* Center Nav Stage: 3D Half-Open Book Perspective Typography (Right-Hinged) */}
+      <nav
+        aria-label="Primary Navigation"
+        className="book-menu-stage w-full flex-1 flex flex-col justify-center px-5 sm:px-8 lg:px-14 py-2 my-auto relative z-10 pointer-events-none"
+      >
+        <div className="w-full max-w-3xl ml-auto flex flex-col items-end space-y-1 sm:space-y-1.5 md:space-y-2 pointer-events-auto">
           {DEFAULT_MENU_ITEMS.map((item, idx) => {
             const isHovered = hoveredIndex === idx
             const isAnyHovered = hoveredIndex !== null
             const label = t(item.labelKey)
 
             return (
-              <div 
-                key={item.labelKey}
-                className="staggered-menu-item relative flex items-center justify-end group cursor-pointer py-1 sm:py-1.5 select-none"
-                onMouseEnter={() => setHoveredIndex(idx)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onClick={() => onNavigate(item.href)}
-              >
-                {/* Main Giant Staggered Label matching reference image */}
-                <h3 className={`font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] tracking-tight uppercase transition-all duration-200 ${
-                  isHovered
-                    ? 'text-white translate-x-[-8px]'
-                    : isAnyHovered 
-                      ? 'text-[#52525b]/40' 
-                      : 'text-[#8e8e93] dark:text-[#a1a1aa] hover:text-white'
-                }`}>
-                  {label}
-                </h3>
+              <div key={item.labelKey} className="book-menu-entrance w-full flex justify-end">
+                <button
+                  type="button"
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  onFocus={() => setHoveredIndex(idx)}
+                  onBlur={() => setHoveredIndex(null)}
+                  onClick={() => {
+                    setHoveredIndex(null)
+                    onNavigate(item.href)
+                  }}
+                  className={`book-menu-item group relative inline-flex items-baseline justify-end gap-2 sm:gap-3 md:gap-4 cursor-pointer py-0.5 sm:py-1 select-none bg-transparent border-0 outline-none text-right ${
+                    isHovered
+                      ? 'is-hovered opacity-100'
+                      : isAnyHovered
+                      ? 'opacity-35'
+                      : 'opacity-100'
+                  }`}
+                >
+                  {/* Editorial Index Number + Diagonal Hairline Slash (Van Holtz reference) */}
+                  <span
+                    className={`inline-flex items-center gap-1.5 sm:gap-2 font-mono text-[10px] sm:text-xs font-bold tracking-widest transition-colors duration-200 ${
+                      isHovered
+                        ? 'text-[var(--color-primary)]'
+                        : 'text-[var(--color-text-muted)]'
+                    }`}
+                  >
+                    <span>{item.number}</span>
+                    <span
+                      aria-hidden="true"
+                      className={`inline-block w-[1px] h-5 sm:h-7 md:h-9 rotate-[22deg] transition-colors duration-200 ${
+                        isHovered
+                          ? 'bg-[var(--color-primary)]'
+                          : 'bg-[var(--color-text-muted)]/50'
+                      }`}
+                    />
+                  </span>
+
+                  {/* Giant 3D Perspective Display Typography — Solid at rest, Hollow Outline on hover */}
+                  <span
+                    className={`book-menu-text font-display font-black uppercase leading-[0.94] tracking-[-0.04em] whitespace-nowrap text-[clamp(2.15rem,9vw,3.1rem)] sm:text-[clamp(3.1rem,7.2vw,4.5rem)] lg:text-[clamp(3.9rem,6.2vw,5.75rem)] ${
+                      isHovered ? 'is-outlined' : ''
+                    }`}
+                  >
+                    {label}
+                  </span>
+                </button>
               </div>
             )
           })}
         </div>
-      </div>
+      </nav>
 
-      {/* Bottom Footer Controls: Theme Switch (Vertical stacked) & Download ATS CV */}
-      <div className="w-full px-6 sm:px-10 lg:px-16 pb-8 sm:pb-10 relative z-10 pointer-events-none">
-        <div className="w-full max-w-2xl ml-auto flex flex-col sm:flex-row items-end sm:items-end justify-between gap-6 pointer-events-auto">
-          
-          {/* Social Links on bottom-left of footer area */}
-          <div className="staggered-footer-item flex flex-wrap items-center gap-4 sm:gap-6 order-2 sm:order-1">
-            {socialItems.map((s, idx) => (
-              <a
-                key={idx}
-                href={s.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-[11px] sm:text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-1"
-              >
-                <span>{s.label}</span>
-                <ArrowUpRight className="w-3 h-3 opacity-60" />
-              </a>
-            ))}
+      {/* Bottom Footer Controls: Editorial Info, Numbered Socials, Theme Selector & ATS CV */}
+      <div className="w-full px-5 sm:px-8 lg:px-14 pb-6 sm:pb-8 md:pb-10 relative z-20 pointer-events-none">
+        <div className="w-full max-w-3xl ml-auto flex flex-col sm:flex-row items-end sm:items-end justify-between gap-5 sm:gap-6 pointer-events-auto border-t border-[var(--color-border-subtle)]/70 pt-4 sm:pt-5">
+          {/* Left side of footer: Role metadata & Numbered Social Links */}
+          <div className="staggered-footer-item flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-8 order-2 sm:order-1 w-full sm:w-auto justify-between sm:justify-start">
+            <div className="hidden md:flex flex-col font-mono text-[11px] text-[var(--color-text-muted)] leading-relaxed">
+              <span className="text-[var(--color-text-main)] font-semibold">Fullstack Software Engineer</span>
+              <span>Bandung, Indonesia</span>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-end sm:justify-start gap-x-4 gap-y-2">
+              {socialItems.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group font-mono text-[11px] sm:text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors inline-flex items-center gap-1.5"
+                >
+                  <span className="text-[10px] opacity-55">{s.number}</span>
+                  <span className="font-semibold text-[var(--color-text-main)] group-hover:text-[var(--color-primary)] transition-colors">
+                    {s.label}
+                  </span>
+                  <ArrowUpRight className="w-3 h-3 opacity-60 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Right side: Vertical Theme Selector & Download CV ATS matching reference image */}
-          <div className="staggered-footer-item flex flex-col items-end gap-5 order-1 sm:order-2 text-right">
-            
-            {/* Theme Mode Selector: Stacked Vertically with active indicator block */}
-            <div className="flex flex-col items-end gap-1 font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--color-text-muted)] select-none">
-              <button 
+          {/* Right side: Vertical Theme Selector & Download ATS CV */}
+          <div className="staggered-footer-item flex flex-col items-end gap-3.5 sm:gap-4 order-1 sm:order-2 text-right">
+            <div className="flex flex-row sm:flex-col items-center sm:items-end gap-3 sm:gap-1 font-mono text-[10px] sm:text-[11px] font-bold tracking-[0.2em] text-[var(--color-text-muted)] select-none">
+              <button
+                type="button"
                 onClick={() => handleThemeChange('light')}
-                className={`cursor-pointer uppercase hover:text-white transition-colors flex items-center gap-1.5 ${
-                  themeMode === 'light' ? 'text-white font-black' : 'text-[#71717a]'
+                className={`cursor-pointer uppercase hover:text-[var(--color-text-main)] transition-colors flex items-center gap-1.5 ${
+                  themeMode === 'light'
+                    ? 'text-[var(--color-text-main)] font-black'
+                    : 'text-[var(--color-text-muted)]'
                 }`}
               >
                 <span>{t('menu.light')}</span>
-                {themeMode === 'light' && <span className="inline-block w-2 h-2 bg-white" />}
+                {themeMode === 'light' && (
+                  <span className="inline-block w-1.5 h-1.5 bg-[var(--color-primary)]" />
+                )}
               </button>
-              
-              <button 
+
+              <button
+                type="button"
                 onClick={() => handleThemeChange('dark')}
-                className={`cursor-pointer uppercase hover:text-white transition-colors flex items-center gap-1.5 ${
-                  themeMode === 'dark' ? 'text-white font-black' : 'text-[#71717a]'
+                className={`cursor-pointer uppercase hover:text-[var(--color-text-main)] transition-colors flex items-center gap-1.5 ${
+                  themeMode === 'dark'
+                    ? 'text-[var(--color-text-main)] font-black'
+                    : 'text-[var(--color-text-muted)]'
                 }`}
               >
                 <span>{t('menu.dark')}</span>
-                {themeMode === 'dark' && <span className="inline-block w-2 h-2 bg-white" />}
+                {themeMode === 'dark' && (
+                  <span className="inline-block w-1.5 h-1.5 bg-[var(--color-primary)]" />
+                )}
               </button>
-              
-              <button 
+
+              <button
+                type="button"
                 onClick={() => handleThemeChange('system')}
-                className={`cursor-pointer uppercase hover:text-white transition-colors flex items-center gap-1.5 ${
-                  themeMode === 'system' ? 'text-white font-black' : 'text-[#71717a]'
+                className={`cursor-pointer uppercase hover:text-[var(--color-text-main)] transition-colors flex items-center gap-1.5 ${
+                  themeMode === 'system'
+                    ? 'text-[var(--color-text-main)] font-black'
+                    : 'text-[var(--color-text-muted)]'
                 }`}
               >
                 <span>{t('menu.system')}</span>
-                {themeMode === 'system' && <span className="inline-block w-2 h-2 bg-white" />}
+                {themeMode === 'system' && (
+                  <span className="inline-block w-1.5 h-1.5 bg-[var(--color-primary)]" />
+                )}
               </button>
             </div>
 
-            {/* DOWNLOAD CV (ATS) */}
             <a
               href="mailto:randizakariaputra22@gmail.com?subject=Request%20CV%20ATS%20-%20Randi%20Zakaria%20Putra"
-              className="font-mono text-xs font-bold text-[var(--color-text-main)] hover:text-[var(--color-primary)] tracking-[0.2em] uppercase transition-colors inline-flex items-center gap-1"
+              className="group font-mono text-[11px] sm:text-xs font-bold text-[var(--color-text-main)] hover:text-[var(--color-primary)] tracking-[0.2em] uppercase transition-colors inline-flex items-center gap-1"
             >
               <span>{t('menu.cv')}</span>
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
-
           </div>
-
         </div>
       </div>
     </div>
