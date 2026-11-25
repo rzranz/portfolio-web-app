@@ -178,10 +178,15 @@
       "year": "2026",
       "category": "Fullstack",
       "featured": true,
-      "image": "",
+      "image": "/projects/finvault-web.jpg",
+      "gallery": [
+        "/projects/finvault-web.jpg",
+        "/projects/finvault-home-mobile.jpg",
+        "/projects/finvault-wallets-mobile.jpg"
+      ],
       "live_url": "https://financialtracker-orcin-six.vercel.app/login",
       "github_url": "https://github.com/rzranz",
-      "description": "Fullstack real-time cash flow and investment portfolio ledger built with Nuxt (Vue 3 & Nitro server engine). Provides authenticated personal finance tracking, real-time cash and investment asset monitoring, structured transaction ledgers, and responsive cloud deployment on Vercel.",
+      "description": "Fullstack real-time cash flow and investment portfolio ledger built with Nuxt (Vue 3 & Nitro server engine). Engineered with zero-bias accounting that cleanly separates Real Spendable Balance from Locked Principal investment contracts, displaying Projected Net Worth, interactive stacked multi-bank wallet cards (BCA Debit, BNI Taplus, E-Wallet Link), and instant transaction mutation tracking deployed live on Vercel.",
       "stack": [
         "Nuxt",
         "Vue 3",
@@ -194,17 +199,17 @@
       "tags": [
         "Fullstack Nuxt",
         "FinTech",
-        "Cash & Investment Ledger",
+        "Zero-Bias Ledger",
         "Real-Time",
         "Live Production"
       ],
       "highlights": [
-        "Fullstack Nuxt Architecture: Unified frontend and server-side API routes powered by Nuxt and Nitro engine for fast, type-safe fullstack execution",
-        "Real-Time Cash & Investment Ledger: Tracks liquid cash balances alongside investment portfolios in a consolidated financial dashboard",
-        "Authenticated Account Access: Protected user workspace with dedicated login authentication flow and persistent session handling",
-        "Cloud Production Deployment: Deployed live on Vercel with optimized SSR/hybrid rendering and responsive multi-device UI"
+        "Zero-Bias Cash vs. Investment Separation: Strictly separates Real Spendable Balance from Locked Principal contracts while computing live Projected Net Worth",
+        "Interactive Multi-Account Wallet Stack: Mobile-banking-grade card switcher supporting BCA Debit, BNI Taplus, E-Wallet Link, and consolidated mutation summaries",
+        "Fullstack Nuxt & Nitro Architecture: Unified SSR/hybrid Vue 3 client and server-side API endpoints with authenticated user login & session persistence",
+        "Cloud Production Deployment: Shipped live on Vercel with responsive desktop and mobile-first banking interfaces"
       ],
-      "metrics": "Fullstack Nuxt · Real-Time Ledger · Live on Vercel"
+      "metrics": "Fullstack Nuxt · Zero-Bias Ledger · Live on Vercel"
     },
     {
       "id": "pdam-tegal",
