@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Globe } from 'lucide-react'
 
 import Hero from './components/Hero'
+import HeroBook from './components/HeroBook'
 import About from './components/About'
 import TechStack from './components/TechStack'
 import RecentWorks from './components/RecentWorks'
@@ -19,6 +20,10 @@ import { useLanguage } from './lib/i18n'
 import { scrollToSection } from './lib/scroll'
 
 gsap.registerPlugin(ScrollTrigger)
+
+// Feature toggles: keep legacy Hero & Sidebar Menu intact but disabled
+const USE_BOOK_HERO = true
+const ENABLE_SIDEBAR_MENU = false
 
 function App() {
   const { language, toggleLanguage, t } = useLanguage()
@@ -138,12 +143,14 @@ function App() {
         <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
       </div>
 
-      {/* Menu Interaction Layer */}
-      <StaggeredMenu 
-        isOpen={isMenuOpen} 
-        onClose={closeMenu} 
-        onNavigate={handleNavigate} 
-      />
+      {/* Menu Interaction Layer (preserved, disabled when ENABLE_SIDEBAR_MENU is false) */}
+      {ENABLE_SIDEBAR_MENU && (
+        <StaggeredMenu 
+          isOpen={isMenuOpen} 
+          onClose={closeMenu} 
+          onNavigate={handleNavigate} 
+        />
+      )}
 
       {/* Section Index on right edge (hidden during menu open) */}
       <div className={`transition-opacity duration-300 ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
@@ -193,18 +200,20 @@ function App() {
         <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
           <ThemeToggle />
           
-          {/* Menu Trigger on Canvas Header */}
-          <button 
-            onClick={openMenu} 
-            className="text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase active:scale-95 transition-all duration-200 cursor-pointer py-1 px-1.5 group select-none text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100"
-            aria-expanded={isMenuOpen}
-            aria-label={t('nav.menu')}
-          >
-            <span className="relative inline-block">
-              {t('nav.menu')}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
-            </span>
-          </button>
+          {/* Menu Trigger on Canvas Header (disabled when ENABLE_SIDEBAR_MENU is false) */}
+          {ENABLE_SIDEBAR_MENU && (
+            <button 
+              onClick={openMenu} 
+              className="text-xs md:text-sm font-mono font-bold tracking-[0.22em] uppercase active:scale-95 transition-all duration-200 cursor-pointer py-1 px-1.5 group select-none text-[var(--color-text-main)] hover:text-[var(--color-primary)] opacity-100"
+              aria-expanded={isMenuOpen}
+              aria-label={t('nav.menu')}
+            >
+              <span className="relative inline-block">
+                {t('nav.menu')}
+                <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
+              </span>
+            </button>
+          )}
         </div>
       </header>
 
@@ -243,8 +252,8 @@ function App() {
         )}
 
         <main className="relative z-10">
-          {/* 00: Hero (sticky top-0 z-10) */}
-          <Hero />
+          {/* 00: Hero (3D Book Perspective Hero active; original Hero preserved behind toggle) */}
+          {USE_BOOK_HERO ? <HeroBook /> : <Hero />}
           
           {/* 01: About (sticky top-0 z-20) */}
           <About />
