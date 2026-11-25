@@ -104,15 +104,16 @@ export default function HeroBook() {
 
       {/* Main Content Container */}
       <div className="hero-book-parallax relative z-10 w-full max-w-[1440px] mx-auto flex-1 flex flex-col justify-between px-5 sm:px-8 lg:px-14 pt-24 sm:pt-28 pb-6 sm:pb-8 lg:pb-10">
-        {/* Top/Middle Stage: Left Brand Identity (desktop anchored bottom-left) + Right 3D Half-Open Book Navigation */}
-        <div className="flex-1 flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-6 my-auto py-4">
-          {/* Left Identity Block (Van Holtz stacked architectural brand mark) */}
-          <div className="hero-book-meta flex flex-col justify-end lg:pb-4 lg:max-w-[340px] shrink-0 z-20">
-            <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[var(--color-primary)] font-bold mb-2 sm:mb-3">
-              {t('hero.status')}
+        {/* Top/Middle Stage: Mobile Editorial Hero (< 768px) + Desktop/Tablet 3D Half-Open Book Stage (>= 768px) */}
+        <div className="flex-1 flex flex-col md:flex-row md:items-end justify-center md:justify-between gap-8 lg:gap-6 my-auto py-4">
+          {/* Left Identity Block (Full-focus Hero on Mobile; bottom-left stacked brand mark on Tablet/Desktop) */}
+          <div className="hero-book-meta flex flex-col justify-center md:justify-end md:pb-4 md:max-w-[300px] lg:max-w-[340px] shrink-0 z-20">
+            <span className="inline-flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.22em] text-[var(--color-primary)] font-bold mb-3 sm:mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] animate-pulse" />
+              <span>{t('hero.status')}</span>
             </span>
 
-            <h1 className="font-display font-black uppercase text-3xl sm:text-4xl lg:text-5xl leading-[0.92] tracking-[-0.04em] text-[var(--color-text-main)] select-none">
+            <h1 className="font-display font-black uppercase text-[12.5vw] sm:text-5xl md:text-4xl lg:text-5xl leading-[0.92] tracking-[-0.04em] text-[var(--color-text-main)] select-none">
               <span className="block">RANDI</span>
               <span className="block">ZAKARIA</span>
               <span className="block">
@@ -120,15 +121,39 @@ export default function HeroBook() {
               </span>
             </h1>
 
-            <p className="mt-3 sm:mt-4 font-sans text-xs sm:text-sm text-[var(--color-text-muted)] leading-relaxed max-w-[32ch]">
+            <p className="mt-3 sm:mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-main)]/80 font-semibold md:hidden">
+              Fullstack Software Engineer
+            </p>
+
+            <p className="mt-3 sm:mt-4 font-sans text-sm md:text-xs lg:text-sm text-[var(--color-text-muted)] leading-relaxed max-w-[36ch] md:max-w-[32ch]">
               {t('hero.desc')}
             </p>
+
+            {/* Mobile-only Primary CTA Buttons (since 3D menu is replaced by draggable AssistiveTouch orb on mobile) */}
+            <div className="mt-7 flex md:hidden flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => scrollToSection('#works', 0.9)}
+                className="px-6 py-3 rounded-lg bg-[var(--color-text-main)] text-[var(--color-canvas)] font-mono text-xs font-bold uppercase tracking-[0.18em] active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
+              >
+                <span>{t('hero.recent')}</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollToSection('#about', 0.9)}
+                className="px-5 py-3 rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-main)] font-mono text-xs font-semibold uppercase tracking-[0.18em] active:scale-95 transition-transform cursor-pointer"
+              >
+                {t('hero.about')}
+              </button>
+            </div>
           </div>
 
-          {/* Right Stage: Giant 3D Half-Open Book Perspective Navigation */}
+          {/* Right Stage: Giant 3D Half-Open Book Perspective Navigation (Tablet & Desktop only) */}
           <nav
             aria-label="Hero Section Navigation"
-            className="book-menu-stage flex-1 flex flex-col justify-center items-end w-full lg:pr-4 xl:pr-8"
+            className="book-menu-stage hidden md:flex flex-1 flex-col justify-center items-end w-full lg:pr-4 xl:pr-8"
           >
             <div className="w-full flex flex-col items-end space-y-1 sm:space-y-1.5 md:space-y-2">
               {HERO_NAV_ITEMS.map((item, idx) => {

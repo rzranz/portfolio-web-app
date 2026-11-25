@@ -16,6 +16,7 @@ import ThemeToggle from './components/ThemeToggle'
 import Footer from './components/Footer'
 import CustomCursor from './components/CustomCursor'
 import StaggeredMenu from './components/StaggeredMenu'
+import MobileAssistiveNav from './components/MobileAssistiveNav'
 import { useLanguage } from './lib/i18n'
 import { scrollToSection } from './lib/scroll'
 
@@ -151,6 +152,9 @@ function App() {
           onNavigate={handleNavigate} 
         />
       )}
+
+      {/* Mobile Draggable AssistiveTouch Navigation Orb (mobile only: md:hidden) */}
+      <MobileAssistiveNav />
 
       {/* Section Index on right edge (hidden during menu open) */}
       <div className={`transition-opacity duration-300 ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
