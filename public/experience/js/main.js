@@ -707,7 +707,19 @@ window.JB = sa;
         var t = W.filter(function (r) {
           return r.id === a || (a === "assist-ding" && r.dk);
         })[0];
-        t && scrollTo(0, t.sHold + (t.dk ? t.holdPx * 0.45 : 2));
+        if (t) {
+          var targetY = t.sHold + (t.dk ? t.holdPx * 0.45 : 2);
+          if (window.gsap && window.ScrollToPlugin) {
+            window.gsap.to(window, {
+              scrollTo: targetY,
+              duration: 1.15,
+              ease: "power3.inOut",
+              overwrite: "auto",
+            });
+          } else {
+            scrollTo(0, targetY);
+          }
+        }
       }
     }),
     !Oe)
@@ -1523,71 +1535,124 @@ window.JB = sa;
         d.classList.toggle("on", +d.dataset.s <= e + 2);
       }));
   }
-  var gt = performance.now(),
-    yt = null,
+  var yt = null,
     bt = null,
     xt = -1,
-    Le = !0;
-  function wt(e) {
-    var n = Math.min(0.05, (e - gt) / 1e3);
-    gt = e;
-    var a = scrollY,
-      i = a - K;
-    ((K += i * (1 - Math.exp(-n * 3.5))),
-      Math.abs(i) < 0.3 && (K = a));
-    var t = M((e - qt - 250) / 1700, 0, 1);
+    Le = !0,
+    gsapEngine = window.gsap,
+    ST = window.ScrollTrigger,
+    gsapScrollState = { progress: 0 },
+    gsapTimeline = null;
+
+  function setupGsap3DScroll() {
+    if (!gsapEngine || !ST) return;
+    if (window.ScrollToPlugin) {
+      gsapEngine.registerPlugin(ST, window.ScrollToPlugin);
+    } else {
+      gsapEngine.registerPlugin(ST);
+    }
+    if (gsapTimeline) {
+      if (gsapTimeline.scrollTrigger) gsapTimeline.scrollTrigger.kill();
+      gsapTimeline.kill();
+      gsapTimeline = null;
+    }
+    gsapScrollState.progress = de ? M(scrollY / de, 0, 1) : 0;
+    gsapTimeline = gsapEngine.timeline({
+      scrollTrigger: {
+        trigger: Bt,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.85,
+        invalidateOnRefresh: true,
+      },
+    });
+    gsapTimeline.to(gsapScrollState, { progress: 1, ease: "none", duration: 1 });
+    ST.refresh();
+  }
+
+  function renderFrame() {
+    var now = performance.now();
+    if (gsapEngine && ST && gsapTimeline) {
+      K = gsapScrollState.progress * de;
+    } else {
+      var a = scrollY;
+      K += (a - K) * 0.14;
+      if (Math.abs(a - K) < 0.3) K = a;
+    }
+    var t = M((now - qt - 250) / 1700, 0, 1);
     Ae = (Z ? 3 : 3.3) * p * E(t);
     var r = Ht(K);
-    ((r !== yt || K !== bt || Ae !== xt || Le || heroScalePending) &&
-      ((yt = r),
-      (bt = K),
-      (xt = Ae),
-      (Le = !1),
-      Gt(r),
-      It(r),
-      Rt(r),
-      Nt(K),
-      Ut(K)),
-      requestAnimationFrame(wt));
+    if (r !== yt || K !== bt || Ae !== xt || Le || heroScalePending) {
+      yt = r;
+      bt = K;
+      xt = Ae;
+      Le = !1;
+      Gt(r);
+      It(r);
+      Rt(r);
+      Nt(K);
+      Ut(K);
+    }
   }
+
   var Vt = matchMedia("(pointer: coarse)").matches,
     _t;
-  (addEventListener("resize", function () {
-    (Vt && innerWidth === lt) ||
-      (clearTimeout(_t),
-      (_t = setTimeout(function () {
-        ($e(), (Le = !0));
-      }, 150)));
-  }),
-    $e(),
-    scrollTo(0, 0),
-    requestAnimationFrame(wt),
-    (function () {
-      var n = Dt(),
-        e = new URLSearchParams(location.search);
-      if (e.has("project")) {
-        if (n < 0) {
-          je(-1);
-          return;
-        }
-        setTimeout(function () {
-          var a = v.querySelector('[data-proj="' + n + '"]');
-          if (a) {
-            var i = ve.filter(function (r) {
-              return r.el.contains(a);
-            })[0];
-            if (i) {
-              var t = i.st.sHold + 2;
-              (scrollTo(0, t), (K = t), (Le = !0));
-            }
-            Ne(n, a, !0);
-          }
-        }, 700);
+  addEventListener("resize", function () {
+    if (Vt && innerWidth === lt) return;
+    clearTimeout(_t);
+    _t = setTimeout(function () {
+      $e();
+      setupGsap3DScroll();
+      Le = !0;
+    }, 150);
+  });
+
+  $e();
+  scrollTo(0, 0);
+  setupGsap3DScroll();
+
+  if (gsapEngine) {
+    gsapEngine.ticker.add(renderFrame);
+    gsapEngine.ticker.lagSmoothing(0);
+  } else {
+    (function fallbackLoop() {
+      renderFrame();
+      requestAnimationFrame(fallbackLoop);
+    })();
+  }
+
+  (function () {
+    var n = Dt(),
+      e = new URLSearchParams(location.search);
+    if (e.has("project")) {
+      if (n < 0) {
+        je(-1);
+        return;
       }
-    })(),
-    v.fonts &&
-      v.fonts.ready &&
-      v.fonts.ready.then(function () {
-        ($e(), (Le = !0));
-      }));
+      setTimeout(function () {
+        var a = v.querySelector('[data-proj="' + n + '"]');
+        if (a) {
+          var i = ve.filter(function (r) {
+            return r.el.contains(a);
+          })[0];
+          if (i) {
+            var t = i.st.sHold + 2;
+            scrollTo(0, t);
+            K = t;
+            gsapScrollState.progress = de ? M(t / de, 0, 1) : 0;
+            Le = !0;
+          }
+          Ne(n, a, !0);
+        }
+      }, 700);
+    }
+  })();
+
+  if (v.fonts && v.fonts.ready) {
+    v.fonts.ready.then(function () {
+      $e();
+      setupGsap3DScroll();
+      Le = !0;
+    });
+  }
 })();
