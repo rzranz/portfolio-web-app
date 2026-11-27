@@ -1,0 +1,171 @@
+/* Randi Zakaria Putra — Featured Projects for 3D Experience Preview */
+window.PROJECTS = [
+  {
+    slug: "sigap-jabar",
+    title: "SIGAP JABAR",
+    category: "Backend & WebGIS",
+    projectType: "Dinas Kehutanan Jawa Barat",
+    description:
+      "Designed high-performance backend architecture and relational database flow for a GIS-based forest conservation and land monitoring platform (SIGAP JABAR). Built sub-50ms spatial mapping endpoints and automated Docker CI/CD deployment pipelines.",
+    services: ["Go", "Laravel", "PostgreSQL", "Docker", "WebGIS"],
+    images: ["/projects/sigap-jabar.png"],
+    imageAlts: ["SIGAP JABAR WebGIS Forest Conservation Platform interface"],
+    cardImage: "/projects/sigap-jabar.png",
+    summary: "WebGIS forest conservation & spatial land monitoring platform.",
+    lines: [
+      "Spatial polygons queried sub-50ms.",
+      "Go & Laravel backend pipeline.",
+      "Live for Dinas Kehutanan Jabar.",
+    ],
+    seoTitle: "SIGAP JABAR — WebGIS Forest Conservation Platform",
+    seoDescription:
+      "High-performance WebGIS backend and spatial monitoring platform for Dinas Kehutanan Jawa Barat.",
+    url: "https://dishut.public.unikom.my.id/",
+    cta: "Visit live platform",
+    diagram: ["SPATIAL DATA", "GO / LARAVEL API", "WEBGIS MAP"],
+  },
+  {
+    slug: "ic-gamez",
+    title: "IC Game-Z",
+    category: "EdTech & AI",
+    projectType: "iCraft DS · Live Production",
+    description:
+      "Gamified skill validation and interactive coding learning web application equipped with an adaptive AI Mentor, structured programming tracks, real-time code playground validation, and a competitive global leaderboard.",
+    services: ["Vue.js", "Vite", "Tailwind CSS", "AI Mentor Engine", "REST API"],
+    images: ["/projects/ic-gamez.png"],
+    imageAlts: ["IC Game-Z Gamified Learning and AI Mentor platform"],
+    cardImage: "/projects/ic-gamez.png",
+    summary: "Gamified coding platform with contextual AI Mentor guidance.",
+    lines: [
+      "Interactive coding tracks.",
+      "Contextual AI Mentor hints.",
+      "Live global leaderboard.",
+    ],
+    seoTitle: "IC Game-Z — Gamified Learning & AI Platform",
+    seoDescription:
+      "Gamified coding platform with AI Mentor guidance and real-time playground validation.",
+    url: "https://gamez.icraftds.id/",
+    cta: "Open live platform",
+    diagram: ["PLAYGROUND", "AI MENTOR", "LEADERBOARD"],
+  },
+  {
+    slug: "finvault",
+    title: "FinVault",
+    category: "Fullstack Nuxt",
+    projectType: "Live on Vercel",
+    description:
+      "Fullstack real-time cash flow and investment portfolio ledger built with Nuxt (Vue 3 & Nitro server engine). Implements zero-bias accounting separating Real Spendable Balance from Locked Principal contracts with multi-bank virtual cards.",
+    services: ["Nuxt", "Vue 3", "TypeScript", "Nitro Server", "Tailwind CSS"],
+    images: [
+      "/projects/finvault-web.jpg",
+      "/projects/finvault-home-mobile.jpg",
+      "/projects/finvault-wallets-mobile.jpg",
+    ],
+    imageAlts: [
+      "FinVault desktop login and virtual card preview",
+      "FinVault mobile spendable balance and locked principal dashboard",
+      "FinVault multi-account bank and e-wallet card switcher",
+    ],
+    cardImage: "/projects/finvault-web.jpg",
+    summary: "Zero-bias real-time cash & investment ledger built with Nuxt.",
+    lines: [
+      "Separates spendable cash & locked principal.",
+      "Multi-bank virtual wallet cards.",
+      "Live fullstack Nuxt on Vercel.",
+    ],
+    seoTitle: "FinVault — Real-Time Cash & Investment Ledger",
+    seoDescription:
+      "Zero-bias fullstack Nuxt personal cash flow and investment ledger deployed on Vercel.",
+    url: "https://financialtracker-orcin-six.vercel.app/login",
+    cta: "Open live app",
+    diagram: ["MULTI-WALLET", "NITRO LEDGER", "NET WORTH"],
+  },
+  {
+    slug: "spp-darul-fikri",
+    title: "SPP Darul Fikri",
+    category: "Fullstack FinTech",
+    projectType: "Client Project & Thesis",
+    description:
+      "Automated school fee (SPP) payment platform built with Laravel and Vue.js. Integrates Pakasir payment gateway for secure QRIS transactions and Fonnte WhatsApp API for instant real-time payment receipts to parents.",
+    services: ["Laravel", "Vue.js", "Pakasir Gateway", "WhatsApp API", "MySQL"],
+    images: ["/projects/darul-fikri.png"],
+    imageAlts: ["SPP Darul Fikri digital tuition payment portal"],
+    cardImage: "/projects/darul-fikri.png",
+    summary: "Automated QRIS tuition gateway & WhatsApp receipt system.",
+    lines: [
+      "Replaces manual tuition records.",
+      "Pakasir QRIS payment gateway.",
+      "Instant WhatsApp notifications.",
+    ],
+    seoTitle: "SPP Darul Fikri — Payment Gateway & WhatsApp Automation",
+    seoDescription:
+      "Automated school tuition billing with Pakasir QRIS and Fonnte WhatsApp receipts.",
+    url: "https://ra.darulfikri.sch.id/",
+    cta: "Visit live portal",
+    diagram: ["QRIS GATEWAY", "LARAVEL CORE", "WHATSAPP BOT"],
+  },
+  {
+    slug: "flowledger",
+    title: "FlowLedger",
+    category: "Go & Vue 3",
+    projectType: "Personal Engineering Project",
+    description:
+      "Local-first personal financial tracking engine built with Go standard library net/http, Vue 3, and pure-Go SQLite WAL. Implements deterministic integer IDR arithmetic, Idempotency-Key double-spend protection, and single-binary go:embed shipping.",
+    services: ["Go", "Vue 3", "SQLite WAL", "Clean Architecture", "net/http"],
+    images: [
+      "/projects/flowledger-web.png",
+      "/projects/flowledger-home.png",
+      "/projects/flowledger-transactions.png",
+    ],
+    imageAlts: [
+      "FlowLedger financial balance overview",
+      "FlowLedger mobile home interface",
+      "FlowLedger transaction ledger",
+    ],
+    cardImage: "/projects/flowledger-web.png",
+    summary: "Deterministic integer-math Go + Vue 3 ledger in a single binary.",
+    lines: [
+      "Strict int64 IDR arithmetic.",
+      "Idempotency-Key middleware.",
+      "Single embedded Go binary.",
+    ],
+    seoTitle: "FlowLedger — Personal Financial Tracker",
+    seoDescription:
+      "Clean Architecture Go + Vue 3 financial tracker with SQLite WAL and single-binary embedding.",
+    url: "https://github.com/rzranz/flowledger",
+    cta: "Inspect GitHub repo",
+    diagram: ["IDEMPOTENCY", "GO + SQLITE WAL", "SINGLE BINARY"],
+  },
+  {
+    slug: "pdam-tegal-iot",
+    title: "PDAM Tegal IoT",
+    category: "IoT & Telemetry",
+    projectType: "Perumda Tirta Bahari",
+    description:
+      "Smart IoT water level monitoring and automated pump interlock protection dashboard for PDAM Kota Tegal. Streams real-time ultrasonic telemetry, prevents dry-run pump damage, and delivers 24-hour analytics with critical push alerts.",
+    services: ["Laravel", "Vue.js", "IoT Telemetry", "Chart.js", "MySQL"],
+    images: [
+      "/projects/pdam-dashboard.png",
+      "/projects/pdam-landing.png",
+      "/projects/pdam-analytics.png",
+    ],
+    imageAlts: [
+      "PDAM Tegal IoT real-time reservoir dashboard",
+      "PDAM Tegal smart water system overview",
+      "PDAM Tegal 24-hour telemetry analytics",
+    ],
+    cardImage: "/projects/pdam-dashboard.png",
+    summary: "Real-time ultrasonic water telemetry & smart pump safety.",
+    lines: [
+      "Live ultrasonic reservoir telemetry.",
+      "Smart dry-run pump interlock.",
+      "24-hour anomaly analytics.",
+    ],
+    seoTitle: "PDAM Tegal — IoT Smart Water Monitoring System",
+    seoDescription:
+      "Real-time IoT water level monitoring and automated pump protection system for PDAM Kota Tegal.",
+    url: "https://github.com/rzranz",
+    cta: "View on GitHub",
+    diagram: ["ULTRASONIC IOT", "PUMP INTERLOCK", "LIVE DASHBOARD"],
+  },
+];

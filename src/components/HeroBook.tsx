@@ -13,13 +13,15 @@ interface HeroNavItem {
   labelKey: string
   fallbackLabel: string
   href: string
+  externalPage?: boolean
 }
 
 const HERO_NAV_ITEMS: HeroNavItem[] = [
+  { number: '00', labelKey: 'hero.experienceLab', fallbackLabel: 'Experience', href: '/experience/', externalPage: true },
   { number: '01', labelKey: 'menu.about', fallbackLabel: 'About', href: '#about' },
   { number: '02', labelKey: 'tech.nav', fallbackLabel: 'Stack', href: '#tech' },
   { number: '03', labelKey: 'menu.works', fallbackLabel: 'Works', href: '#works' },
-  { number: '04', labelKey: 'menu.experience', fallbackLabel: 'Experience', href: '#experience' },
+  { number: '04', labelKey: 'menu.experience', fallbackLabel: 'Journey', href: '#experience' },
   { number: '05', labelKey: 'menu.contact', fallbackLabel: 'Contact', href: '#contact' },
 ]
 
@@ -83,6 +85,9 @@ export default function HeroBook() {
   }, [])
 
   const getLabel = (item: HeroNavItem) => {
+    if (item.labelKey === 'hero.experienceLab') {
+      return 'Experience'
+    }
     if (item.labelKey === 'tech.nav') {
       return language === 'id' ? 'Teknologi' : 'Tech Stack'
     }
@@ -129,12 +134,20 @@ export default function HeroBook() {
               {t('hero.desc')}
             </p>
 
-            {/* Mobile-only Primary CTA Buttons (since 3D menu is replaced by draggable AssistiveTouch orb on mobile) */}
+            {/* Mobile-only Primary CTA Buttons (since 3D menu is replaced by draggable logo orb on mobile) */}
             <div className="mt-7 flex md:hidden flex-wrap items-center gap-3">
+              <a
+                href="/experience/"
+                className="px-6 py-3 rounded-lg bg-[var(--color-primary)] text-white font-mono text-xs font-bold uppercase tracking-[0.18em] active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
+              >
+                <span>Experience</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+
               <button
                 type="button"
                 onClick={() => scrollToSection('#works', 0.9)}
-                className="px-6 py-3 rounded-lg bg-[var(--color-text-main)] text-[var(--color-canvas)] font-mono text-xs font-bold uppercase tracking-[0.18em] active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
+                className="px-5 py-3 rounded-lg bg-[var(--color-text-main)] text-[var(--color-canvas)] font-mono text-xs font-bold uppercase tracking-[0.18em] active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
               >
                 <span>{t('hero.recent')}</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -169,7 +182,13 @@ export default function HeroBook() {
                       onMouseLeave={() => setHoveredIndex(null)}
                       onFocus={() => setHoveredIndex(idx)}
                       onBlur={() => setHoveredIndex(null)}
-                      onClick={() => scrollToSection(item.href, 1.1)}
+                      onClick={() => {
+                        if (item.externalPage) {
+                          window.location.href = item.href
+                        } else {
+                          scrollToSection(item.href, 1.1)
+                        }
+                      }}
                       className={`book-menu-item group relative inline-flex items-baseline justify-end gap-2 sm:gap-3 md:gap-4 cursor-pointer py-0.5 sm:py-1 select-none bg-transparent border-0 outline-none text-right ${
                         isHovered
                           ? 'is-hovered opacity-100'

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="is3d"
+  style="
+    --bg: rgb(15, 55, 43);
+    --ink: rgb(239, 231, 218);
+    --muted: rgb(204, 197, 183);
+    --hair: rgb(79, 105, 94);
+    --line: rgb(198, 47, 40);
+  "
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Randi Zakaria Putra · 3D Portfolio Experience</title>
+    <meta
+      name="description"
+      content="Randi Zakaria Putra — Fullstack Software Engineer. Interactive 3D web experience showcasing Laravel, Go, Spring Boot, Vue, Nuxt, WebGIS, and IoT systems."
+    />
+    <meta name="theme-color" content="#0F372B" />
+    <link rel="icon" type="image/svg+xml" href="/RLogo.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton:wght@400;700&family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap"
+    />
+
+    <script src="js/projects.js?v=1"></script>
+    <script type="module" crossorigin="" src="js/main.js?v=1"></script>
+    <link rel="stylesheet" crossorigin="" href="css/main.css?v=1" />
+  </head>
+  <body>
+    <noscript>
+      <div class="seo-text">
+        <h2>About Randi Zakaria Putra</h2>
+        <p>
+          Fullstack Software Engineer focused on Laravel, Go, Spring Boot, Vue,
+          Nuxt, WebGIS, IoT telemetry, and scalable REST APIs.
+        </p>
+        <p><a href="/">Back to main portfolio</a></p>
+      </div>
+    </noscript>
+
+    <header class="bar">
+      <div class="bar-left">
+        <button class="mark" data-go="hero" aria-label="Back to start">
+          Randi
+        </button>
+        <a href="/" class="back-pill" aria-label="Back to main portfolio">
+          &larr; Portfolio
+        </a>
+      </div>
+      <button
+        class="burger"
+        id="burger"
+        aria-expanded="false"
+        aria-controls="menu"
+      >
+        <span class="mono" style="color: inherit">Menu</span
+        ><i aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <nav id="menu" aria-label="Main">
+      <ol>
+        <li>
+          <a href="#about" data-go="about"
+            ><span class="mono">01</span><span class="d">About</span></a
+          >
+        </li>
+        <li>
+          <a href="#journey" data-go="journey"
+            ><span class="mono">02</span><span class="d">Journey</span></a
+          >
+        </li>
+        <li>
+          <a href="#services" data-go="services"
+            ><span class="mono">03</span><span class="d">What I do</span></a
+          >
+        </li>
+        <li>
+          <a href="#work" data-go="work"
+            ><span class="mono">04</span><span class="d">Work</span></a
+          >
+        </li>
+        <li>
+          <a href="#assist-ding" data-go="assist-ding"
+            ><span class="mono">05</span><span class="d">SIGAP JABAR</span></a
+          >
+        </li>
+        <li>
+          <a href="#contact" data-go="contact"
+            ><span class="mono">06</span><span class="d">Contact</span></a
+          >
+        </li>
+        <li>
+          <a href="/"
+            ><span class="mono">&larr;</span><span class="d">Main Portfolio</span></a
+          >
+        </li>
+      </ol>
+    </nav>
+
+    <canvas id="cv" aria-hidden="true" width="150" height="1057"></canvas>
+
+    <main id="world">
+      <h1 class="sr-only">Randi Zakaria Putra — Fullstack Software Engineer</h1>
+
+      <!-- STOP 01: HERO -->
+      <section
+        class="st"
+        id="hero"
+        data-label="Home"
+        data-gap="0"
+        data-hold=".45"
+        data-a="-0.5,0.0"
+        data-ma="-0.5,-0.04"
+      >
+        <div
+          class="el hero-scene"
+          data-p="0.02,-0.02"
+          data-mp="0,-0.06"
+          data-z="0"
+          data-f="0,0.05"
+        >
+          <p class="d bb h-name intro split" aria-hidden="true">
+            <span class="w"
+              ><span class="c" style="--i: 0">R</span
+              ><span class="c" style="--i: 1">A</span
+              ><span class="c" style="--i: 2">N</span
+              ><span class="c" style="--i: 3">D</span
+              ><span class="c" style="--i: 4">I</span></span
+            >
+          </p>
+          <div
+            class="garden-canvas-wrapper"
+            style="position: absolute; inset: 0; pointer-events: none"
+          >
+            <canvas
+              id="garden-canvas"
+              aria-hidden="true"
+              style="
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                display: block;
+              "
+            ></canvas>
+          </div>
+        </div>
+        <div
+          class="el hero-caption-scene"
+          data-p="-0.31,0.34"
+          data-mp="-0.02,0.24"
+          data-z="-.12"
+          data-f="-.1,.1"
+        >
+          <div class="h-cap">
+            <span class="mono">Fullstack Engineer · Laravel, Go &amp; Vue</span>
+            <p class="lede">
+              Driven by logic, adaptability, and the pursuit of clean code.
+              Bandung, Indonesia.
+            </p>
+          </div>
+        </div>
+        <div
+          class="el"
+          data-p="0.4,0.36"
+          data-mp="0.3,0.38"
+          data-z="-.2"
+          data-f="0,0"
+        >
+          <div class="h-cue"><i></i><span class="mono">Scroll</span></div>
+        </div>
+      </section>
+
+      <!-- STOP 02: ABOUT -->
+      <section
+        class="st"
+        id="about"
+        data-label="About"
+        data-gap="2.5"
+        data-hold=".85"
+        data-a="-0.06,-0.36"
+        data-ma="0.38,-0.36"
+      >
+        <div
+          class="el far"
+          data-p="-0.18,0.075"
+          data-mp="0,-0.22"
+          data-z=".35"
+          data-f="-.35,.05"
+          data-r="28"
+          style="visibility: hidden"
+        >
+          <div class="ab-monogram">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <img src="/RLogo.svg" alt="Randi Logo" class="ab-monogram-logo" />
+              <span class="mono">UNIKOM · 3.43</span>
+            </div>
+            <div class="ab-monogram-meta">
+              <span class="mono">Bandung, ID (UTC+7)</span>
+              <p class="ab-monogram-name">RANDI ZAKARIA PUTRA</p>
+              <div class="ab-badges">
+                <span>BNSP Web Dev</span>
+                <span>CCNA</span>
+                <span>TOEFL 457</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="el"
+          data-p="0.18,0.12"
+          data-mp="0,0.26"
+          data-z="-.08"
+          data-f=".3,0"
+          data-r="-22"
+          style="visibility: hidden"
+        >
+          <div class="ab-txt">
+            <span class="mono">About</span>
+            <p
+              class="d bb ab-big split"
+              aria-label="Fullstack Software Engineer"
+            >
+              Fullstack Software Engineer
+            </p>
+            <p class="lede">
+              Informatics Engineering graduate from UNIKOM (GPA 3.43) focused on
+              Fullstack and Backend Web Development. Experienced in designing
+              database architectures, high-throughput REST APIs (Laravel, Go,
+              Spring Boot, Nuxt), WebGIS platforms, IoT telemetry, and secure
+              payment gateways with real-time WhatsApp automation.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STOP 03: BY THE NUMBERS (DARK TRANSITION) -->
+      <section
+        class="st"
+        id="numbers"
+        data-dark="1"
+        data-label="By the numbers"
+        data-gap="3"
+        data-hold=".7"
+        data-a="0,0.36"
+        data-ma="-0.4,0.42"
+      >
+        <div
+          class="el far"
+          data-p="-0.3,-0.04"
+          data-mp="-0.12,-0.27"
+          data-z=".55"
+          data-f="-.2,-.1"
+          style="visibility: hidden"
+        >
+          <div class="num">
+            <span class="mono">Building since</span>
+            <p class="d t1">2022</p>
+          </div>
+        </div>
+        <div
+          class="el"
+          data-p="0.04,0.12"
+          data-mp="0.08,0.0"
+          data-z="0"
+          data-f="0,.15"
+          style="visibility: hidden"
+        >
+          <div class="num">
+            <span class="mono">Projects shipped</span>
+            <p class="d b7" aria-label="14+ projects">
+              <span id="count">0</span>+
+            </p>
+          </div>
+        </div>
+        <div
+          class="el"
+          data-p="0.33,-0.14"
+          data-mp="-0.12,0.27"
+          data-z="-.22"
+          data-f=".25,-.1"
+          style="visibility: hidden"
+        >
+          <div class="num num-worked">
+            <span class="mono num-worked-label"
+              ><span>GPA</span><span class="num-with">at</span></span
+            >
+            <p class="d t1">3.43</p>
+            <span class="mono num-company">UNIKOM</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- STOP 04: JOURNEY INTRO -->
+      <section
+        class="st"
+        id="journey"
+        data-label="Journey"
+        data-gap="3"
+        data-hold=".5"
+        data-a="0,0.3"
+        data-ma="-0.38,0.3"
+      >
+        <div
+          class="el"
+          data-p="0,-0.06"
+          data-mp="0,-0.08"
+          data-z="0"
+          data-f="0,.1"
+          style="visibility: hidden"
+        >
+          <p
+            class="d bb jr-h split"
+            style="position: relative"
+            aria-label="The journey"
+          >
+            <span class="runner run" aria-hidden="true"
+              ><svg viewBox="0 0 36 44">
+                <g class="rr">
+                  <path
+                    class="far"
+                    data-k="lb"
+                    stroke="currentColor"
+                    stroke-width="4.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                    d="M17 25.5l0.00 8.60l-1.83 8.61"
+                  ></path>
+                  <path
+                    class="far"
+                    data-k="ab"
+                    stroke="currentColor"
+                    stroke-width="4.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                    d="M19.6 14.2l0.45 6.38l5.55 0.78"
+                  ></path>
+                  <path
+                    data-k="tor"
+                    stroke="currentColor"
+                    stroke-width="4.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                    d="M17 25.5L20 13"
+                  ></path>
+                  <circle
+                    data-k="hd"
+                    r="4.6"
+                    fill="currentColor"
+                    cx="21.4"
+                    cy="6.40"
+                  ></circle>
+                  <path
+                    data-k="lf"
+                    stroke="currentColor"
+                    stroke-width="4.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                    d="M17 25.5l0.00 8.60l-8.72 -1.19"
+                  ></path>
+                  <path
+                    data-k="af"
+                    stroke="currentColor"
+                    stroke-width="4.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                    d="M19.6 14.2l0.45 6.38l5.55 0.78"
+                  ></path>
+                </g>
+                <g class="rj">
+                  <circle cx="20" cy="5.6" r="4.6" fill="currentColor"></circle>
+                  <path
+                    d="M19.2 11.6 17.6 24.4M18.8 14.6l6.4-3.4 2-6.2M18.8 14.6l-6.4-3 -1.6-6.4M17.6 24.4l7 2.4 1.6 7.6M17.6 24.4l-6.6 3.8 2.2 7.2"
+                    stroke="currentColor"
+                    stroke-width="4.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                  ></path>
+                </g></svg></span
+            >The journey
+          </p>
+        </div>
+        <div
+          class="el"
+          data-p="0.12,0.15"
+          data-mp="0.05,0.12"
+          data-z="-.15"
+          data-f=".1,0"
+          style="visibility: hidden"
+        >
+          <p class="d bb jr-sub">so far</p>
+        </div>
+      </section>
+
+      <!-- MILESTONE 1 -->
+      <section
+        class="st ms-st"
+        data-label="Journey"
+        data-gap="1.35"
+        data-hold=".32"
+        data-ease=".55"
+        data-a="0,0.3"
+        data-ma="-0.38,-0.03"
+      >
+        <div
+          class="el"
+          data-p="0,0.3"
+          data-mp="-0.38,-0.03"
+          data-z="0"
+          data-f="0,0"
+          style="visibility: hidden"
+        >
+          <i class="node" aria-hidden="true"></i>
+        </div>
+        <div
+          class="el far"
+          data-p="-0.2,-0.05"
+          data-mp="0.08,-0.12"
+          data-z=".25"
+          data-f="-0.25,0"
+          style="visibility: hidden"
+        >
+          <p class="d yr yr-range" aria-label="2024 to 2025">2024–2025</p>
+        </div>
+        <div
+          class="el"
+          data-p="0.2,0.04"
+          data-mp="0.08,0.165"
+          data-z="-.1"
+          data-f="0.2,0"
+          style="visibility: hidden"
+        >
+          <div class="ms">
+            <span class="mono">HMIF UNIKOM &amp; PT YukMari Project</span>
+            <p class="lede">
+              Led the Communication &amp; Information Division at HMIF UNIKOM
+              (hmif.unikom.my.id) while interning as Project Manager &amp;
+              Fullstack Developer at PT YukMari Project, shipping their
+              TalentHub &amp; HRMS recruitment platform.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MILESTONE 2 -->
+      <section
+        class="st ms-st"
+        data-label="Journey"
+        data-gap="1.35"
+        data-hold=".32"
+        data-ease=".55"
+        data-a="0,0.3"
+        data-ma="-0.38,-0.03"
+      >
+        <div
+          class="el"
+          data-p="0,0.3"
+          data-mp="-0.38,-0.03"
+          data-z="0"
+          data-f="0,0"
+          style="visibility: hidden"
+        >
+          <i class="node" aria-hidden="true"></i>
+        </div>
+        <div
+          class="el far"
+          data-p="-0.2,-0.05"
+          data-mp="0.08,-0.12"
+          data-z=".25"
+          data-f="-0.25,0"
+          style="visibility: hidden"
+        >
+          <p class="d yr yr-range" aria-label="2025 to 2026">2025–2026</p>
+        </div>
+        <div
+          class="el"
+          data-p="0.2,0.04"
+          data-mp="0.08,0.165"
+          data-z="-.1"
+          data-f="0.2,0"
+          style="visibility: hidden"
+        >
+          <div class="ms">
+            <span class="mono">Dinas Kehutanan, PDAM Tegal &amp; iCraft DS</span>
+            <p class="lede">
+              Architected SIGAP JABAR WebGIS for Dinas Kehutanan Jawa Barat,
+              engineered IoT smart water telemetry for PDAM Kota Tegal, shipped
+              automated QRIS &amp; WhatsApp tuition billing for RA Darul Fikri,
+              and built IC Game-Z AI platform at iCraft DS.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STOP 05: WHAT I DO (DARK + 3D STARFIELD) -->
+      <section
+        class="st svc-st"
+        id="services"
+        data-dark="1"
+        data-label="What I do"
+        data-gap="2.2"
+        data-hold="1.1"
+        data-a="0.46,-0.21"
+        data-ma="0.46,-0.25"
+      >
+        <div
+          class="el"
+          data-p="0,-0.38"
+          data-mp="0,-0.4"
+          data-z="-.1"
+          data-f="0,-.1"
+          style="visibility: hidden"
+        >
+          <span class="mono">Engineering capabilities</span>
+        </div>
+      </section>
+
+      <!-- STOP 06: SELECTED WORK -->
+      <section
+        class="st"
+        id="work"
+        data-label="Work"
+        data-gap="2.2"
+        data-hold=".55"
+        data-a="0.4,0.26"
+        data-ma="0.4,0.3"
+      >
+        <div
+          class="el far"
+          data-p="-0.12,-0.13"
+          data-mp="-0.05,-0.064"
+          data-z=".3"
+          data-f="-.15,0"
+          style="visibility: hidden"
+        >
+          <p class="d bb wk-h split" aria-label="Selected">Selected</p>
+        </div>
+        <div
+          class="el"
+          data-p="0.14,0.11"
+          data-mp="0.04,0.064"
+          data-z="0"
+          data-f=".15,0"
+          style="visibility: hidden"
+        >
+          <p class="d bb wk-h split" aria-label="Work">Work</p>
+        </div>
+        <div
+          class="el"
+          data-p="-0.3,0.4"
+          data-mp="0,0.3"
+          data-z="-.15"
+          data-f="0,0"
+          style="visibility: hidden"
+        >
+          <span class="mono">Six featured systems · click any card</span>
+        </div>
+      </section>
+
+      <div id="work-stops"></div>
+
+      <!-- STOP 07: FEATURED DEEP-DIVE TRIGGER -->
+      <section
+        class="st"
+        id="assist-ding-stop"
+        data-label="SIGAP JABAR"
+        data-gap="2.6"
+        data-hold="2.2"
+        data-ease="1"
+        data-a="0,0"
+        data-ma="0,0"
+        data-dk="1"
+      ></section>
+
+      <!-- STOP 08: CONTACT -->
+      <section
+        class="st"
+        id="contact"
+        data-label="Contact"
+        data-gap="3.4"
+        data-hold="1.2"
+        data-a="0.44,-0.07"
+        data-ma="0.47,-0.07"
+        data-end="1"
+      >
+        <div
+          class="el"
+          data-p="0,0.02"
+          data-mp="0,0.05"
+          data-z="0"
+          data-f="0,.1"
+          style="visibility: hidden"
+        >
+          <div class="ct-stack">
+            <div class="ct-wrap">
+              <h2
+                class="d bb ct-one split"
+                aria-label="Let's build something"
+              >
+                Let's build something
+              </h2>
+              <span class="para" aria-hidden="true"
+                ><svg viewBox="0 0 60 100">
+                  <g class="canopy">
+                    <path
+                      d="M2 22C2 6 15 0 30 0s28 6 28 22Q51 17 44 22 37 17 30 22 23 17 16 22 9 17 2 22Z"
+                      fill="var(--line)"
+                    ></path>
+                    <path
+                      d="M30 0Q20 9 16 22M30 0Q40 9 44 22"
+                      stroke="var(--bg)"
+                      stroke-width="1.2"
+                      fill="none"
+                      opacity=".5"
+                    ></path>
+                    <path
+                      d="M3 22 29 61M30 22 29.5 61M30 22 30.5 61M57 22 31 61"
+                      stroke="currentColor"
+                      stroke-width="1"
+                      fill="none"
+                    ></path>
+                  </g>
+                  <g transform="translate(12 44)">
+                    <circle cx="18" cy="9" r="4.6" fill="currentColor"></circle>
+                    <path
+                      d="M18 15 18 28M18 17 12 24 15 30M18 17 24 24 21 30M18 28 11 33 6 37M18 28 25 33 30 37"
+                      stroke="currentColor"
+                      stroke-width="4.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      fill="none"
+                    ></path>
+                  </g></svg
+              ></span>
+            </div>
+
+            <div class="ct-row">
+              <span class="ct-mail" id="mail">randizakariaputra22@gmail.com</span
+              ><button class="pill" id="copy">Copy email</button>
+            </div>
+
+            <form class="ct-form" id="contact-form">
+              <label class="ct-f"
+                ><span>Name</span
+                ><input
+                  type="text"
+                  name="name"
+                  required
+                  autocomplete="name"
+                  placeholder="Your name"
+              /></label>
+              <label class="ct-f"
+                ><span>Email</span
+                ><input
+                  type="email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  placeholder="you@example.com"
+              /></label>
+              <label class="ct-f"
+                ><span>Message</span
+                ><textarea
+                  name="message"
+                  rows="2"
+                  required
+                  placeholder="Tell me about your project or role"
+                ></textarea>
+              </label>
+              <div class="ct-f-row">
+                <button class="pill" type="submit">Send message</button>
+                <span
+                  class="ct-f-status mono"
+                  id="form-status"
+                  role="status"
+                  aria-live="polite"
+                ></span>
+              </div>
+            </form>
+
+            <div class="ct-foot mono">
+              <a
+                href="https://github.com/rzranz"
+                target="_blank"
+                rel="noopener"
+                >GitHub</a
+              >
+              <a
+                href="https://www.linkedin.com/in/randizakariaputra"
+                target="_blank"
+                rel="noopener"
+                >LinkedIn</a
+              >
+              <a href="/">&larr; Main Portfolio</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FEATURED FULLSCREEN ZOOM PANEL: SIGAP JABAR -->
+    <section
+      id="assist-ding"
+      aria-label="SIGAP JABAR Featured Project"
+      style="visibility: hidden; pointer-events: none"
+    >
+      <div class="panel">
+        <div class="dk-in">
+          <div class="dk-copy">
+            <h2 class="dk-h fly" style="--d: 0">SIGAP JABAR</h2>
+            <div class="dk-side">
+              <p class="fly" style="--d: 2">
+                WebGIS forest conservation &amp; spatial land monitoring
+                platform built for Dinas Kehutanan Jawa Barat with Go, Laravel,
+                PostgreSQL, and Docker — delivering sub-50ms spatial endpoints.
+              </p>
+              <div class="dk-acts fly" style="--d: 4">
+                <a
+                  class="dk-cta"
+                  href="https://dishut.public.unikom.my.id/"
+                  target="_blank"
+                  rel="noopener"
+                  >Visit live platform</a
+                >
+              </div>
+            </div>
+          </div>
+          <figure
+            class="dk-shot assist-diagram fly"
+            id="assist-diagram"
+            style="--d: 3"
+          >
+            <img
+              src="/projects/sigap-jabar.png"
+              alt="SIGAP JABAR WebGIS Forest Conservation Platform"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <div id="spacer" aria-hidden="true"></div>
+
+    <div id="proj" role="dialog" aria-modal="true" aria-label="Project"></div>
+    <button class="pv-x" id="pvx" aria-label="Close project">&#10005;</button>
+    <div id="wipe" aria-hidden="true">
+      <svg viewBox="0 0 1000 600" preserveAspectRatio="none">
+        <path
+          id="wpath"
+          d="M-20 470 C 220 470 260 140 500 160 S 780 520 1020 300"
+        ></path>
+      </svg>
+      <div class="w-in">
+        <span class="mono" id="wnum">Next project</span>
+        <p class="d" id="wtitle"></p>
+      </div>
+    </div>
+
+    <div id="hud" class="mono" aria-hidden="true" style="--p: 0">
+      <div class="trk"><i></i></div>
+      <div id="ticks"></div>
+      <i class="hd"></i>
+      <div class="lb"><span id="hudn">01</span><b id="hudl">Home</b></div>
+    </div>
+
+    <script src="js/garden/garden-standalone.js?v=1"></script>
+    <script src="js/curved-line-patch.js?v=1"></script>
+    <script src="js/contact-form.js?v=1" defer></script>
+    <script>
+      (function () {
+        "use strict";
+        document.body.style.overflowX = "visible";
+        var canvas = document.getElementById("garden-canvas");
+        var title = document.querySelector("#hero .h-name");
+        if (!canvas || !window.Garden) {
+          if (title) title.style.opacity = "1";
+          return;
+        }
+        var prefersReducedMotion =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (title) {
+          title.style.opacity = "0";
+          title.style.pointerEvents = "none";
+        }
+        if (!window.__garden) {
+          window.__garden = new Garden(canvas, {
+            text: "RANDI",
+            boil: true,
+            maxDpr: 2,
+            density: 1,
+            introRise: !prefersReducedMotion,
+          });
+        }
+        var obs = new MutationObserver(function () {
+          if (document.body.style.overflowX !== "visible") {
+            document.body.style.overflowX = "visible";
+          }
+        });
+        obs.observe(document.body, {
+          attributes: true,
+          attributeFilter: ["style"],
+        });
+      })();
+    </script>
+  </body>
+</html>
