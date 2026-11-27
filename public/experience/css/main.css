@@ -2091,16 +2091,21 @@ a {
 
 
 /* =========================================================================
-   DEEP SPACE COSMIC THEME OVERRIDES & IMPROVEMENTS (Points 1 - 10)
+   PURE BLACK SPACE THEME — GOOGLE PERFORMANCE STANDARDS (ZERO GPU KILLERS)
    ========================================================================= */
 :root {
-  --bg: #03050c;
-  --ink: #f1f5f9;
+  --bg: #000000;
+  --ink: #f8fafc;
   --muted: #94a3b8;
-  --hair: rgba(148, 197, 255, 0.2);
+  --hair: rgba(148, 197, 255, 0.22);
   --line: #38bdf8;
   --sky-accent: #818cf8;
-  --surface-space: rgba(11, 18, 36, 0.72);
+  --surface-space: #070b14;
+}
+
+html,
+body {
+  background: #000000 !important;
 }
 
 #space-canvas {
@@ -2120,11 +2125,9 @@ a {
   z-index: 5;
 }
 
-/* Fix Menu reversible animation — GSAP controls clip-path & visibility cleanly */
+/* Reversible Menu — Solid obsidian surface (zero backdrop-filter blur lag) */
 #menu {
-  background: rgba(5, 9, 22, 0.96);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: #05070e;
   color: var(--ink);
   transition: none !important;
   clip-path: circle(0% at calc(100% - 40px) 40px);
@@ -2157,7 +2160,7 @@ a {
   color: var(--line);
 }
 
-/* Hero Full Name + Orbital Tech Stack Logos behind text */
+/* Hero Full Name + GPU-only Floating Tech Stack Logos (zero filter: drop-shadow) */
 .hero-scene {
   width: min(94vw, 1260px);
   display: flex;
@@ -2168,7 +2171,7 @@ a {
 
 .hero-tech-bg {
   position: absolute;
-  inset: -120px -60px;
+  inset: -110px -50px;
   pointer-events: none;
   z-index: 0;
   overflow: visible;
@@ -2176,21 +2179,21 @@ a {
 
 .hero-tech-icon {
   position: absolute;
-  font-size: clamp(26px, 3.2vw, 48px);
+  font-size: clamp(26px, 3.2vw, 46px);
   color: rgba(147, 197, 253, 0.22);
-  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.2));
+  will-change: transform, opacity;
   animation: cosmicFloat var(--dur, 7s) ease-in-out infinite alternate;
   animation-delay: var(--del, 0s);
 }
 
 @keyframes cosmicFloat {
   0% {
-    transform: translate3d(0, 0, 0) rotate(-4deg) scale(0.96);
-    opacity: 0.2;
+    transform: translate3d(0, 0, 0);
+    opacity: 0.18;
   }
   100% {
-    transform: translate3d(0, -14px, 0) rotate(5deg) scale(1.06);
-    opacity: 0.42;
+    transform: translate3d(0, -12px, 0);
+    opacity: 0.38;
   }
 }
 
@@ -2206,7 +2209,6 @@ a {
   color: var(--ink);
   margin: 0;
   white-space: normal;
-  text-shadow: 0 8px 42px rgba(56, 189, 248, 0.22);
 }
 
 .hero-fullname .accent-dot {
@@ -2215,10 +2217,10 @@ a {
 
 @media (max-width: 767px) {
   .hero-tech-bg {
-    inset: -80px -16px;
+    inset: -72px -12px;
   }
   .hero-tech-icon {
-    font-size: 24px;
+    font-size: 22px;
   }
   .hero-fullname {
     font-size: clamp(42px, 13.5vw, 72px);
@@ -2226,14 +2228,13 @@ a {
   }
 }
 
-/* About Architectural Cosmic Card */
+/* About Architectural Card */
 .ab-monogram {
   width: clamp(250px, 27vw, 370px);
   aspect-ratio: auto;
-  border: 1px solid rgba(148, 197, 255, 0.25);
+  border: 1px solid rgba(148, 197, 255, 0.24);
   border-radius: 10px;
-  background: linear-gradient(155deg, rgba(14, 24, 50, 0.82), rgba(5, 9, 22, 0.92));
-  box-shadow: 0 0 32px rgba(56, 189, 248, 0.1);
+  background: #070b14;
   padding: 22px;
   gap: 14px;
 }
@@ -2265,52 +2266,31 @@ a {
   text-decoration: underline;
 }
 
-/* Space-themed Selected Work Cards */
+/* Space-themed Selected Work Cards — Crisp Lightweight Borders (zero mask-composite lag) */
 .card {
-  border: 1px solid rgba(148, 197, 255, 0.24) !important;
-  border-radius: 14px !important;
-  background: linear-gradient(160deg, rgba(12, 20, 42, 0.82), rgba(4, 7, 18, 0.92)) !important;
+  border: 1px solid rgba(148, 197, 255, 0.26) !important;
+  border-radius: 12px !important;
+  background: #070b14 !important;
   padding: 14px !important;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(148, 197, 255, 0.16) !important;
-  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.3s ease,
-              box-shadow 0.35s ease !important;
+  box-shadow: none !important;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.25s ease !important;
   text-align: left;
   position: relative;
   overflow: hidden;
 }
 
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.45), transparent 45%, rgba(129, 140, 248, 0.35));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: 0.45;
-  transition: opacity 0.3s ease;
-}
-
 .card:hover,
 .card:focus-visible {
-  transform: translateY(-6px) scale(1.02) !important;
-  border-color: rgba(56, 189, 248, 0.85) !important;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7), 0 0 32px rgba(56, 189, 248, 0.22) !important;
-}
-
-.card:hover::before {
-  opacity: 1;
+  transform: translate3d(0, -5px, 0) scale(1.015) !important;
+  border-color: var(--line) !important;
 }
 
 .card .work-cover {
-  border-radius: 9px;
+  border-radius: 8px;
   overflow: hidden;
   border: 1px solid rgba(148, 197, 255, 0.16);
-  background: #060b18;
+  background: #000000;
   aspect-ratio: 16 / 10;
   display: block;
 }
@@ -2320,11 +2300,11 @@ a {
   height: 100%;
   object-fit: cover;
   object-position: top;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card:hover .work-cover img {
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
 
 .card .open {
@@ -2343,15 +2323,13 @@ a {
 }
 
 #hud .tk:hover {
-  transform: scale(1.8);
+  transform: scale(1.7);
   background: var(--line);
 }
 
-/* Full-Page Cosmic Project Detail View (#proj) */
+/* Full-Page Project Detail View (#proj) — Pure Black Space */
 #proj {
-  background: radial-gradient(circle at 18% 15%, rgba(56, 189, 248, 0.08), transparent 45%),
-              radial-gradient(circle at 85% 80%, rgba(129, 140, 248, 0.08), transparent 45%),
-              #040712 !important;
+  background: #03050a !important;
   color: var(--ink);
 }
 
@@ -2397,7 +2375,7 @@ a {
   padding: 5px 10px;
   border-radius: 6px;
   border: 1px solid var(--hair);
-  background: rgba(15, 23, 42, 0.7);
+  background: #0a1020;
   color: var(--ink);
 }
 
@@ -2415,7 +2393,7 @@ a {
   padding: 12px 20px;
   border-radius: 8px;
   background: var(--line);
-  color: #03050c !important;
+  color: #000000 !important;
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 600;
@@ -2427,7 +2405,7 @@ a {
 
 .pv-btn-primary:hover {
   transform: translateY(-2px);
-  filter: brightness(1.1);
+  filter: brightness(1.08);
 }
 
 .pv-btn-secondary {
@@ -2437,7 +2415,7 @@ a {
   padding: 12px 18px;
   border-radius: 8px;
   border: 1px solid var(--hair);
-  background: rgba(15, 23, 42, 0.65);
+  background: #0a1020;
   color: var(--ink) !important;
   font-family: var(--mono);
   font-size: 12px;
@@ -2454,21 +2432,21 @@ a {
 
 .pv-r figure {
   border: 1px solid rgba(148, 197, 255, 0.2);
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
-  background: #070d1e;
+  background: #070b14;
 }
 
 .pv-r figure.is-mobile-shot {
   max-width: 340px;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 26px;
+  border-radius: 24px;
   border: 2px solid rgba(148, 197, 255, 0.3);
 }
 
 .pv-x {
-  background: rgba(10, 16, 34, 0.9) !important;
+  background: #070b14 !important;
   border: 1px solid rgba(148, 197, 255, 0.35) !important;
   color: var(--ink) !important;
 }
@@ -2478,18 +2456,16 @@ a {
   color: var(--line) !important;
 }
 
-/* Deep-dive featured panel cosmic theme */
+/* Deep-dive featured panel */
 #assist-ding .panel {
-  background: radial-gradient(circle at 25% 25%, rgba(56, 189, 248, 0.14), transparent 50%),
-              #050a18 !important;
+  background: #050811 !important;
   border: 1px solid rgba(148, 197, 255, 0.22);
 }
 
 #assist-ding .dk-shot {
-  border: 1px solid rgba(148, 197, 255, 0.26);
-  border-radius: 12px;
+  border: 1px solid rgba(148, 197, 255, 0.24);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.15);
 }
 
 @media (max-width: 767px) {
