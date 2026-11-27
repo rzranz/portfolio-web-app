@@ -13,15 +13,13 @@ interface HeroNavItem {
   labelKey: string
   fallbackLabel: string
   href: string
-  externalPage?: boolean
 }
 
 const HERO_NAV_ITEMS: HeroNavItem[] = [
-  { number: '00', labelKey: 'hero.experienceLab', fallbackLabel: 'Experience', href: '/experience/', externalPage: true },
   { number: '01', labelKey: 'menu.about', fallbackLabel: 'About', href: '#about' },
   { number: '02', labelKey: 'tech.nav', fallbackLabel: 'Stack', href: '#tech' },
   { number: '03', labelKey: 'menu.works', fallbackLabel: 'Works', href: '#works' },
-  { number: '04', labelKey: 'menu.experience', fallbackLabel: 'Journey', href: '#experience' },
+  { number: '04', labelKey: 'menu.experience', fallbackLabel: 'Experience', href: '#experience' },
   { number: '05', labelKey: 'menu.contact', fallbackLabel: 'Contact', href: '#contact' },
 ]
 
@@ -85,9 +83,6 @@ export default function HeroBook() {
   }, [])
 
   const getLabel = (item: HeroNavItem) => {
-    if (item.labelKey === 'hero.experienceLab') {
-      return 'Experience'
-    }
     if (item.labelKey === 'tech.nav') {
       return language === 'id' ? 'Teknologi' : 'Tech Stack'
     }
@@ -134,20 +129,25 @@ export default function HeroBook() {
               {t('hero.desc')}
             </p>
 
-            {/* Mobile-only Primary CTA Buttons (since 3D menu is replaced by draggable logo orb on mobile) */}
-            <div className="mt-7 flex md:hidden flex-wrap items-center gap-3">
-              <a
-                href="/experience/"
-                className="px-6 py-3 rounded-lg bg-[var(--color-primary)] text-white font-mono text-xs font-bold uppercase tracking-[0.18em] active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
-              >
-                <span>Experience</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
+            {/* Explore 3D Experience Link (under name, underlined Explore + arrow) */}
+            <a
+              href="/experience/"
+              className="group mt-5 inline-flex items-center gap-2 font-mono text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-text-main)] hover:text-[var(--color-primary)] active:scale-95 transition-all duration-200 w-fit select-none"
+            >
+              <span className="border-b border-[var(--color-text-main)] group-hover:border-[var(--color-primary)] pb-0.5 transition-colors">
+                Explore
+              </span>
+              <span className="text-base leading-none inline-block transition-transform duration-200 group-hover:translate-x-1.5">
+                →
+              </span>
+            </a>
 
+            {/* Mobile-only Primary CTA Buttons (since 3D menu is replaced by draggable logo orb on mobile) */}
+            <div className="mt-6 flex md:hidden flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={() => scrollToSection('#works', 0.9)}
-                className="px-5 py-3 rounded-lg bg-[var(--color-text-main)] text-[var(--color-canvas)] font-mono text-xs font-bold uppercase tracking-[0.18em] active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3 rounded-lg bg-[var(--color-text-main)] text-[var(--color-canvas)] font-mono text-xs font-bold uppercase tracking-[0.18em] active:scale-95 transition-transform inline-flex items-center gap-2 cursor-pointer"
               >
                 <span>{t('hero.recent')}</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -182,13 +182,7 @@ export default function HeroBook() {
                       onMouseLeave={() => setHoveredIndex(null)}
                       onFocus={() => setHoveredIndex(idx)}
                       onBlur={() => setHoveredIndex(null)}
-                      onClick={() => {
-                        if (item.externalPage) {
-                          window.location.href = item.href
-                        } else {
-                          scrollToSection(item.href, 1.1)
-                        }
-                      }}
+                      onClick={() => scrollToSection(item.href, 1.1)}
                       className={`book-menu-item group relative inline-flex items-baseline justify-end gap-2 sm:gap-3 md:gap-4 cursor-pointer py-0.5 sm:py-1 select-none bg-transparent border-0 outline-none text-right ${
                         isHovered
                           ? 'is-hovered opacity-100'
