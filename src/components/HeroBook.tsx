@@ -235,7 +235,7 @@ export default function HeroBook() {
                 Fullstack Software Engineer
               </span>
               <span className="text-[var(--color-text-muted)]">
-                Backend · Cloud · Interactive Web
+                Backend · QA
               </span>
             </div>
 

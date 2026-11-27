@@ -2579,3 +2579,167 @@ body {
     max-width: 280px !important;
   }
 }
+
+
+/* =========================================================================
+   MAIN PORTFOLIO FONT PARITY (Poppins + JetBrains Mono) +
+   BIG INTERACTIVE HERO TECH BOUQUET + 3D TECH STACK SHOWCASE
+   ========================================================================= */
+:root {
+  --display: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  --body: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+
+.d,
+.mark,
+.ab-monogram-name,
+.hero-fullname {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.d {
+  line-height: 0.94 !important;
+}
+
+/* Giant RANDI + Large Interactive Tech Stack Bouquet */
+.hero-scene {
+  width: min(92vw, 960px);
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-fullname {
+  position: relative;
+  z-index: 4;
+  font-size: clamp(64px, 14vw, 200px) !important;
+  line-height: 0.9 !important;
+  color: #f8fafc;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-bouquet {
+  position: absolute;
+  inset: -40px -20px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-logo {
+  position: absolute;
+  pointer-events: auto;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 0;
+  padding: 6px;
+  cursor: pointer;
+  color: rgba(147, 197, 253, 0.34);
+  transition: color 0.22s ease;
+  will-change: transform;
+}
+
+.hero-logo i {
+  font-size: clamp(44px, 6.4vw, 96px);
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.22s ease;
+}
+
+.hero-logo span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--line);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.hero-logo:hover,
+.hero-logo:focus-visible {
+  color: var(--line);
+  z-index: 6;
+}
+
+.hero-logo:hover i,
+.hero-logo:focus-visible i {
+  transform: scale(1.22);
+}
+
+.hero-logo:hover span,
+.hero-logo:focus-visible span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 3D Tech Stack Visual Showcase Stop (#tech-stack) */
+.tech-3d-wrap {
+  width: min(92vw, 920px);
+  text-align: center;
+}
+
+.tech-3d-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(14px, 2.2vw, 28px);
+  margin-top: 18px;
+}
+
+.tech-3d-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.tech-3d-item i {
+  font-size: clamp(32px, 3.8vw, 52px);
+  line-height: 1;
+}
+
+.tech-3d-item span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.tech-3d-item:hover,
+.tech-3d-item:focus-visible {
+  color: var(--line);
+  transform: translateY(-4px) scale(1.1);
+}
+
+@media (max-width: 767px) {
+  .hero-fullname {
+    font-size: clamp(56px, 19vw, 96px) !important;
+  }
+  .hero-bouquet {
+    inset: -32px -12px;
+  }
+  .hero-logo i {
+    font-size: clamp(34px, 10vw, 52px);
+  }
+  .tech-3d-grid {
+    gap: 12px 16px;
+  }
+  .tech-3d-item i {
+    font-size: 28px;
+  }
+}

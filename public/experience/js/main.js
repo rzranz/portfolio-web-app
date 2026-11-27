@@ -40,37 +40,66 @@
       'RESTful API',
       'Server Management',
     ],
+    techStack: [
+      { name: 'Laravel', icon: 'devicon-laravel-original' },
+      { name: 'Spring Boot', icon: 'devicon-spring-original' },
+      { name: 'Go', icon: 'devicon-go-original-wordmark' },
+      { name: 'Django', icon: 'devicon-django-plain' },
+      { name: 'Vue.js', icon: 'devicon-vuejs-plain' },
+      { name: 'React', icon: 'devicon-react-original' },
+      { name: 'Next.js', icon: 'devicon-nextjs-original-wordmark' },
+      { name: 'Tailwind', icon: 'devicon-tailwindcss-original' },
+      { name: 'MySQL', icon: 'devicon-mysql-original' },
+      { name: 'PostgreSQL', icon: 'devicon-postgresql-plain' },
+      { name: 'SQLite', icon: 'devicon-sqlite-plain' },
+      { name: 'Docker', icon: 'devicon-docker-plain' },
+      { name: 'Git', icon: 'devicon-git-plain' },
+      { name: 'IoT / Arduino', icon: 'devicon-arduino-plain' },
+      { name: 'Unity', icon: 'devicon-unity-plain' },
+      { name: 'Three.js', icon: 'devicon-threejs-original' },
+    ],
     projects: window.PROJECTS || [],
   };
 
   /* -------------------------------------------------------------------------
-     1. Populate Engineering Capabilities (5 exact pillars)
+     1. Populate Engineering Capabilities & Visual Tech Stack Stop
      ------------------------------------------------------------------------- */
   function populateCapabilities() {
     const svcStop = qs('.svc-st');
-    if (!svcStop) return;
+    if (svcStop) {
+      const coords = [
+        [-0.26, -0.18, 0.08, -0.12, -0.32],
+        [0.26, -0.12, 0.08, 0.12, -0.15],
+        [-0.22, 0.12, 0.08, 0.0, 0.02],
+        [0.24, 0.24, 0.08, -0.1, 0.19],
+        [0.0, 0.02, 0.08, 0.08, 0.35],
+      ];
 
-    const coords = [
-      [-0.26, -0.18, 0.08, -0.12, -0.32],
-      [0.26, -0.12, 0.08, 0.12, -0.15],
-      [-0.22, 0.12, 0.08, 0.0, 0.02],
-      [0.24, 0.24, 0.08, -0.1, 0.19],
-      [0.0, 0.02, 0.08, 0.08, 0.35],
-    ];
+      svcStop.insertAdjacentHTML(
+        'beforeend',
+        CONFIG.capabilities
+          .map((name, idx) => {
+            const c = coords[idx];
+            return (
+              `<div class="el" data-abs="1" data-p="${c[0]},${c[1]}" ` +
+              `data-mp="${c[3]},${c[4]}" data-z="${c[2]}" data-f="0,0">` +
+              `<p class="d svc-nm">${name}</p></div>`
+            );
+          })
+          .join(''),
+      );
+    }
 
-    svcStop.insertAdjacentHTML(
-      'beforeend',
-      CONFIG.capabilities
-        .map((name, idx) => {
-          const c = coords[idx];
-          return (
-            `<div class="el" data-abs="1" data-p="${c[0]},${c[1]}" ` +
-            `data-mp="${c[3]},${c[4]}" data-z="${c[2]}" data-f="0,0">` +
-            `<p class="d svc-nm">${name}</p></div>`
-          );
-        })
-        .join(''),
-    );
+    const techGrid = qs('#tech-3d-grid');
+    if (techGrid) {
+      techGrid.innerHTML = CONFIG.techStack
+        .map(
+          (item) =>
+            `<button type="button" class="tech-3d-item" title="${item.name}">` +
+            `<i class="${item.icon}"></i><span>${item.name}</span></button>`,
+        )
+        .join('');
+    }
   }
 
   /* -------------------------------------------------------------------------
@@ -948,6 +977,30 @@
     }
   });
 
+  const heroLogos = qsa('#hero-bouquet .hero-logo').map((el) => ({
+    el,
+    sx: parseNum(el.dataset.sx, 0),
+    sy: parseNum(el.dataset.sy, 0),
+    sr: parseNum(el.dataset.sr, 0),
+  }));
+
+  /* Scroll-synced Hero Bouquet: assembles tightly around RANDI at top, scatters outward on scroll, re-assembles when scrolling back up */
+  function renderHeroBouquet(scrollPx) {
+    if (!heroLogos.length) return;
+    const heroSpan = Math.max(1, viewH * 0.95);
+    const t = smoothstep(clamp(scrollPx / heroSpan, 0, 1));
+    const scaleFactor = isMobile ? 0.52 : 1;
+
+    for (let i = 0; i < heroLogos.length; i++) {
+      const logo = heroLogos[i];
+      const tx = logo.sx * scaleFactor * t;
+      const ty = logo.sy * scaleFactor * t;
+      const rot = logo.sr * t;
+      const sc = 1 + 0.18 * t;
+      logo.el.style.transform = `translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) rotate(${rot.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
+    }
+  }
+
   /* Zero-Idle-Burn GSAP Ticker Loop */
   function onTick(_time, deltaMs) {
     // Always read live window.scrollY on touch devices for immediate bi-directional scroll
@@ -977,6 +1030,7 @@
 
     const cameraZ = scrollToCameraZ(currentScrollK);
     renderCanvas(cameraZ, currentScrollK);
+    renderHeroBouquet(currentScrollK);
     renderElements(cameraZ);
     renderFeaturedPanel(currentScrollK);
     renderHud(currentScrollK);
