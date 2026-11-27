@@ -304,24 +304,33 @@
     activeCardTrigger = triggerBtn;
     renderProjectMarkup(idx);
 
-    const startInset = computeImageInset(triggerBtn);
     projDialog.classList.add('show');
     root.style.overflow = 'hidden';
 
     if (gsap) {
       gsap.killTweensOf(projDialog);
-      gsap.fromTo(
-        projDialog,
-        { clipPath: startInset, opacity: 0.9 },
-        {
-          clipPath: 'inset(0px 0px 0px 0px round 0px)',
-          opacity: 1,
-          duration: 0.58,
-          ease: 'power4.inOut',
-        },
-      );
+      if (isMobile) {
+        projDialog.style.clipPath = 'none';
+        gsap.fromTo(
+          projDialog,
+          { opacity: 0, y: 36 },
+          { opacity: 1, y: 0, duration: 0.34, ease: 'power3.out', clearProps: 'transform' },
+        );
+      } else {
+        const startInset = computeImageInset(triggerBtn);
+        gsap.fromTo(
+          projDialog,
+          { clipPath: startInset, opacity: 0.9 },
+          {
+            clipPath: 'inset(0px 0px 0px 0px round 0px)',
+            opacity: 1,
+            duration: 0.58,
+            ease: 'power4.inOut',
+          },
+        );
+      }
     } else {
-      projDialog.style.clipPath = 'inset(0)';
+      projDialog.style.clipPath = 'none';
     }
 
     if (projCloseBtn) projCloseBtn.focus({ preventScroll: true });
@@ -335,20 +344,32 @@
       projDialog.classList.remove('show');
       projDialog.innerHTML = '';
       projDialog.style.opacity = '';
+      projDialog.style.clipPath = '';
+      projDialog.style.transform = '';
       root.style.overflow = '';
       activeProjIndex = -1;
     };
 
     if (gsap) {
-      const endInset = computeImageInset(targetBtn);
       gsap.killTweensOf(projDialog);
-      gsap.to(projDialog, {
-        clipPath: endInset,
-        opacity: 0,
-        duration: 0.44,
-        ease: 'power3.inOut',
-        onComplete: finishClose,
-      });
+      if (isMobile) {
+        gsap.to(projDialog, {
+          opacity: 0,
+          y: 28,
+          duration: 0.24,
+          ease: 'power2.in',
+          onComplete: finishClose,
+        });
+      } else {
+        const endInset = computeImageInset(targetBtn);
+        gsap.to(projDialog, {
+          clipPath: endInset,
+          opacity: 0,
+          duration: 0.44,
+          ease: 'power3.inOut',
+          onComplete: finishClose,
+        });
+      }
     } else {
       finishClose();
     }
@@ -929,13 +950,18 @@
 
   /* Zero-Idle-Burn GSAP Ticker Loop */
   function onTick(_time, deltaMs) {
-    if (!gsap || !ScrollTrigger) {
-      targetScrollY = window.scrollY;
+    // Always read live window.scrollY on touch devices for immediate bi-directional scroll
+    if (isTouchDevice || !gsap || !ScrollTrigger) {
+      targetScrollY = window.scrollY || document.documentElement.scrollTop || 0;
     }
 
     const dt = Math.min(0.05, (deltaMs || 16) / 1000);
     const diff = targetScrollY - currentScrollK;
-    if (Math.abs(diff) > 0.25) {
+    if (isTouchDevice) {
+      // Snappier direct response on touch so upward/downward swipe feels native
+      currentScrollK += diff * Math.min(1, dt * 16);
+      if (Math.abs(diff) < 0.5) currentScrollK = targetScrollY;
+    } else if (Math.abs(diff) > 0.25) {
       currentScrollK += diff * (1 - Math.exp(-dt * 8.5));
     } else if (diff !== 0) {
       currentScrollK = targetScrollY;
@@ -969,15 +995,25 @@
   }
 
   let resizeTimer = null;
+  let lastLayoutWidth = window.innerWidth;
+  const isTouchDevice =
+    window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
   window.addEventListener(
     'resize',
     () => {
+      // CRITICAL MOBILE FIX: ignore vertical address-bar show/hide resize events
+      // so scrolling back up never snaps or rebuilds the scene!
+      if (isTouchDevice && window.innerWidth === lastLayoutWidth) {
+        return;
+      }
+      lastLayoutWidth = window.innerWidth;
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         buildSceneLayout();
         setupGsapScroll();
         dirty = true;
-      }, 150);
+      }, 180);
     },
     { passive: true },
   );
