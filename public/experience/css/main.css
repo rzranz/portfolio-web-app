@@ -2181,20 +2181,6 @@ body {
   position: absolute;
   font-size: clamp(26px, 3.2vw, 46px);
   color: rgba(147, 197, 253, 0.22);
-  will-change: transform, opacity;
-  animation: cosmicFloat var(--dur, 7s) ease-in-out infinite alternate;
-  animation-delay: var(--del, 0s);
-}
-
-@keyframes cosmicFloat {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.18;
-  }
-  100% {
-    transform: translate3d(0, -12px, 0);
-    opacity: 0.38;
-  }
 }
 
 .hero-fullname {

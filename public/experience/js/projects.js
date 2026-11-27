@@ -1,8 +1,8 @@
-/* Auto-synced factual project data from src/data/cv.json */
+/* Auto-synced factual project data with optimized WebP card thumbnails */
 window.PROJECTS = [
   {
     "slug": "golang",
-    "title": "SIGAP JABAR — WebGIS Forest Conservation Platform",
+    "title": "SIGAP JABAR \u2014 WebGIS Forest Conservation Platform",
     "shortTitle": "SIGAP JABAR",
     "category": "Backend & Cloud",
     "company": "Dinas Kehutanan Jawa Barat",
@@ -24,11 +24,11 @@ window.PROJECTS = [
       "REST API",
       "WebGIS"
     ],
-    "metrics": "<50ms Latency · WebGIS Integrated · Live Production",
+    "metrics": "<50ms Latency \u00b7 WebGIS Integrated \u00b7 Live Production",
     "images": [
       "/projects/sigap-jabar.png"
     ],
-    "cardImage": "/projects/sigap-jabar.png",
+    "cardImage": "/experience/thumbs/golang.webp",
     "liveUrl": "https://dishut.public.unikom.my.id/",
     "githubUrl": "https://github.com/rzranz",
     "url": "https://dishut.public.unikom.my.id/",
@@ -40,7 +40,7 @@ window.PROJECTS = [
   },
   {
     "slug": "ic-gamez",
-    "title": "IC Game-Z — Gamified Learning & AI Platform",
+    "title": "IC Game-Z \u2014 Gamified Learning & AI Platform",
     "shortTitle": "IC Game-Z",
     "category": "EdTech & AI",
     "company": "iCraft DS",
@@ -62,11 +62,11 @@ window.PROJECTS = [
       "AI Mentor Engine",
       "JetBrains Mono"
     ],
-    "metrics": "8+ Modules · AI Mentor · 100% Live",
+    "metrics": "8+ Modules \u00b7 AI Mentor \u00b7 100% Live",
     "images": [
       "/projects/ic-gamez.png"
     ],
-    "cardImage": "/projects/ic-gamez.png",
+    "cardImage": "/experience/thumbs/ic-gamez.webp",
     "liveUrl": "https://gamez.icraftds.id/",
     "githubUrl": "",
     "url": "https://gamez.icraftds.id/",
@@ -78,7 +78,7 @@ window.PROJECTS = [
   },
   {
     "slug": "spp",
-    "title": "SPP Darul Fikri — Payment Gateway & WhatsApp Automation",
+    "title": "SPP Darul Fikri \u2014 Payment Gateway & WhatsApp Automation",
     "shortTitle": "SPP Darul Fikri",
     "category": "Fullstack",
     "company": "RA Darul Fikri (Client Project & Thesis)",
@@ -99,11 +99,11 @@ window.PROJECTS = [
       "MySQL",
       "Tailwind CSS"
     ],
-    "metrics": "100% Automated · Live at ra.darulfikri.sch.id",
+    "metrics": "100% Automated \u00b7 Live at ra.darulfikri.sch.id",
     "images": [
       "/projects/darul-fikri.png"
     ],
-    "cardImage": "/projects/darul-fikri.png",
+    "cardImage": "/experience/thumbs/spp.webp",
     "liveUrl": "https://ra.darulfikri.sch.id/",
     "githubUrl": "https://github.com/rzranz",
     "url": "https://ra.darulfikri.sch.id/",
@@ -115,7 +115,7 @@ window.PROJECTS = [
   },
   {
     "slug": "finvault",
-    "title": "FinVault — Real-Time Cash & Investment Ledger",
+    "title": "FinVault \u2014 Real-Time Cash & Investment Ledger",
     "shortTitle": "FinVault",
     "category": "Fullstack",
     "company": "Personal Engineering Project",
@@ -138,13 +138,13 @@ window.PROJECTS = [
       "REST API",
       "Vercel"
     ],
-    "metrics": "Fullstack Nuxt · Zero-Bias Ledger · Live on Vercel",
+    "metrics": "Fullstack Nuxt \u00b7 Zero-Bias Ledger \u00b7 Live on Vercel",
     "images": [
       "/projects/finvault-web.jpg",
       "/projects/finvault-home-mobile.jpg",
       "/projects/finvault-wallets-mobile.jpg"
     ],
-    "cardImage": "/projects/finvault-web.jpg",
+    "cardImage": "/experience/thumbs/finvault.webp",
     "liveUrl": "https://financialtracker-orcin-six.vercel.app/login",
     "githubUrl": "https://github.com/rzranz",
     "url": "https://financialtracker-orcin-six.vercel.app/login",
@@ -156,7 +156,7 @@ window.PROJECTS = [
   },
   {
     "slug": "flowledger",
-    "title": "FlowLedger — Personal Financial Tracker",
+    "title": "FlowLedger \u2014 Personal Financial Tracker",
     "shortTitle": "FlowLedger",
     "category": "Fullstack",
     "company": "Personal Engineering Project",
@@ -181,13 +181,13 @@ window.PROJECTS = [
       "net/http",
       "Vite"
     ],
-    "metrics": "Deterministic Integer Math · <50ms Concurrency · Single Binary (embed.FS)",
+    "metrics": "Deterministic Integer Math \u00b7 <50ms Concurrency \u00b7 Single Binary (embed.FS)",
     "images": [
       "/projects/flowledger-web.png",
       "/projects/flowledger-home.png",
       "/projects/flowledger-transactions.png"
     ],
-    "cardImage": "/projects/flowledger-web.png",
+    "cardImage": "/experience/thumbs/flowledger.webp",
     "liveUrl": "",
     "githubUrl": "https://github.com/rzranz/flowledger",
     "url": "https://github.com/rzranz/flowledger",
@@ -199,10 +199,10 @@ window.PROJECTS = [
   },
   {
     "slug": "pdam-tegal",
-    "title": "PDAM Tegal — IoT Smart Water Monitoring & Pump Automation System",
+    "title": "PDAM Tegal \u2014 IoT Smart Water Monitoring & Pump Automation System",
     "shortTitle": "PDAM Tegal",
     "category": "Fullstack",
-    "company": "PDAM Tegal · Perumda Tirta Bahari",
+    "company": "PDAM Tegal \u00b7 Perumda Tirta Bahari",
     "period": "2025 - 2026",
     "year": "2025-2026",
     "device": "desktop",
@@ -222,13 +222,13 @@ window.PROJECTS = [
       "REST API",
       "MySQL"
     ],
-    "metrics": "Real-time Telemetry · Smart Pump Interlock · Multi-Bak IoT",
+    "metrics": "Real-time Telemetry \u00b7 Smart Pump Interlock \u00b7 Multi-Bak IoT",
     "images": [
       "/projects/pdam-dashboard.png",
       "/projects/pdam-landing.png",
       "/projects/pdam-analytics.png"
     ],
-    "cardImage": "/projects/pdam-dashboard.png",
+    "cardImage": "/experience/thumbs/pdam-tegal.webp",
     "liveUrl": "",
     "githubUrl": "https://github.com/rzranz",
     "url": "https://github.com/rzranz",
@@ -240,7 +240,7 @@ window.PROJECTS = [
   },
   {
     "slug": "cinemax",
-    "title": "CineMax TIX — Enterprise Cinema Ticketing & Concession Platform",
+    "title": "CineMax TIX \u2014 Enterprise Cinema Ticketing & Concession Platform",
     "shortTitle": "CineMax TIX",
     "category": "Fullstack",
     "company": "Academic Project & Architectural Re-engineering",
@@ -267,7 +267,7 @@ window.PROJECTS = [
       "JUnit 5",
       "REST API"
     ],
-    "metrics": "Pessimistic Locking · 300s TTL Hold · Strategy Pattern · 100% JUnit Pass",
+    "metrics": "Pessimistic Locking \u00b7 300s TTL Hold \u00b7 Strategy Pattern \u00b7 100% JUnit Pass",
     "images": [
       "/projects/cinemax-home.jpg",
       "/projects/cinemax-showtimes.jpg",
@@ -275,7 +275,7 @@ window.PROJECTS = [
       "/projects/cinemax-checkout.jpg",
       "/projects/cinemax-ticket.png"
     ],
-    "cardImage": "/projects/cinemax-home.jpg",
+    "cardImage": "/experience/thumbs/cinemax.webp",
     "liveUrl": "",
     "githubUrl": "https://github.com/rzranz/TiketBioskop",
     "url": "https://github.com/rzranz/TiketBioskop",
@@ -287,7 +287,7 @@ window.PROJECTS = [
   },
   {
     "slug": "hrms",
-    "title": "TalentHub & HRMS — PT. YukMari Project Indonesia",
+    "title": "TalentHub & HRMS \u2014 PT. YukMari Project Indonesia",
     "shortTitle": "TalentHub & HRMS",
     "category": "Fullstack",
     "company": "PT. YukMari Project Indonesia",
@@ -311,14 +311,14 @@ window.PROJECTS = [
       "REST API",
       "Blade"
     ],
-    "metrics": "Full Recruitment Lifecycle · RBAC · 4 Integrated Portals",
+    "metrics": "Full Recruitment Lifecycle \u00b7 RBAC \u00b7 4 Integrated Portals",
     "images": [
       "/projects/hrms-talenthub.png",
       "/projects/hrms-dashboard.png",
       "/projects/hrms-talent-profile.png",
       "/projects/hrms-hire-requests.png"
     ],
-    "cardImage": "/projects/hrms-talenthub.png",
+    "cardImage": "/experience/thumbs/hrms.webp",
     "liveUrl": "",
     "githubUrl": "https://github.com/rzranz",
     "url": "https://github.com/rzranz",

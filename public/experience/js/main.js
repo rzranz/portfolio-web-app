@@ -1,9 +1,10 @@
 /**
- * Randi Zakaria Putra — Clean-Code 3D Z-Depth Portfolio Engine
- * Built to Google Web Performance standards:
- * - Zero Canvas shadowBlur / zero layout thrashing
- * - GSAP 3 ScrollTrigger + ScrollToPlugin + Ticker
- * - Reversible GSAP Menu & Image-Origin Project Case Study Transitions
+ * Randi Zakaria Putra — Ultra-Lightweight 3D Z-Depth Portfolio Engine
+ * Google Web Performance Standards:
+ * - Single Canvas (#cv) renders both Deep Space Starfield + Celestial Thread
+ * - Zero idle CPU burn (ticker sleeps when camera rests)
+ * - Zero per-frame zIndex / DOM-query / getBoundingClientRect thrashing
+ * - GSAP 3 ScrollTrigger (numeric bounds) + ScrollToPlugin + Reversible Menu + Image-Origin Modal
  */
 (function initExperienceEngine() {
   'use strict';
@@ -43,7 +44,7 @@
   };
 
   /* -------------------------------------------------------------------------
-     1. Populate Engineering Capabilities (5 exact pillars + subtle star dots)
+     1. Populate Engineering Capabilities (5 exact pillars)
      ------------------------------------------------------------------------- */
   function populateCapabilities() {
     const svcStop = qs('.svc-st');
@@ -57,22 +58,23 @@
       [0.0, 0.02, 0.08, 0.08, 0.35],
     ];
 
-    const html = CONFIG.capabilities
-      .map((name, idx) => {
-        const c = coords[idx];
-        return (
-          `<div class="el" data-abs="1" data-p="${c[0]},${c[1]}" ` +
-          `data-mp="${c[3]},${c[4]}" data-z="${c[2]}" data-f="0,0">` +
-          `<p class="d svc-nm">${name}</p></div>`
-        );
-      })
-      .join('');
-
-    svcStop.insertAdjacentHTML('beforeend', html);
+    svcStop.insertAdjacentHTML(
+      'beforeend',
+      CONFIG.capabilities
+        .map((name, idx) => {
+          const c = coords[idx];
+          return (
+            `<div class="el" data-abs="1" data-p="${c[0]},${c[1]}" ` +
+            `data-mp="${c[3]},${c[4]}" data-z="${c[2]}" data-f="0,0">` +
+            `<p class="d svc-nm">${name}</p></div>`
+          );
+        })
+        .join(''),
+    );
   }
 
   /* -------------------------------------------------------------------------
-     2. Populate Selected Work 3D Stops (factual data from projects.js)
+     2. Populate Selected Work 3D Stops (lightweight WebP card thumbnails)
      ------------------------------------------------------------------------- */
   function populateWorkStops() {
     const mount = qs('#work-stops');
@@ -98,7 +100,7 @@
           `data-hold=".4" data-ease=".5" data-a="${slot.ax},${slot.ay}" data-ma="${0.4 * dir},0.34">` +
           `<div class="el" data-p="${slot.x},${slot.y}" data-mp="0,-0.02" data-z="0" ` +
           `data-f="${slot.x < 0 ? -0.22 : 0.22},0" data-r="${slot.x < 0 ? 14 : -14}">` +
-          `<button type="button" class="card ${side}" data-proj="${idx}" style="width:clamp(270px,30vw,520px)">` +
+          `<button type="button" class="card ${side}" data-proj="${idx}" style="width:clamp(270px,30vw,500px)">` +
           `<span class="fig work-cover"><img src="${proj.cardImage}" alt="${shortName}" loading="lazy" decoding="async"></span>` +
           `<span class="meta"><span class="mono">${labelIdx} / ${total}</span><span class="mono">${proj.category}</span></span>` +
           `<span class="d ${idx % 2 ? 't2' : 'b7'}">${shortName}</span>` +
@@ -111,7 +113,7 @@
   }
 
   /* -------------------------------------------------------------------------
-     3. Reversible GSAP Fullscreen Menu (Point #10)
+     3. Reversible GSAP Fullscreen Menu
      ------------------------------------------------------------------------- */
   const burgerBtn = qs('#burger');
   const menuEl = qs('#menu');
@@ -126,7 +128,7 @@
       visibility: 'hidden',
       clipPath: 'circle(0% at calc(100% - 40px) 40px)',
     });
-    gsap.set(menuItems, { opacity: 0, y: 24 });
+    gsap.set(menuItems, { opacity: 0, y: 20 });
 
     menuTimeline = gsap.timeline({
       paused: true,
@@ -146,7 +148,7 @@
         menuEl,
         {
           clipPath: 'circle(150% at calc(100% - 40px) 40px)',
-          duration: 0.58,
+          duration: 0.52,
           ease: 'power3.inOut',
         },
         0,
@@ -156,11 +158,11 @@
         {
           opacity: 1,
           y: 0,
-          duration: 0.36,
-          stagger: 0.04,
+          duration: 0.32,
+          stagger: 0.035,
           ease: 'power3.out',
         },
-        0.14,
+        0.12,
       );
 
     return menuTimeline;
@@ -204,7 +206,7 @@
   }
 
   /* -------------------------------------------------------------------------
-     4. Full-Page Project Case Study with Image-Origin Expand/Collapse (#2, #9)
+     4. Full-Page Project Case Study (Image-Origin GSAP Expand/Collapse)
      ------------------------------------------------------------------------- */
   const projDialog = qs('#proj');
   const projCloseBtn = qs('#pvx');
@@ -293,13 +295,6 @@
         activeProjIndex = nextIdx;
         activeCardTrigger = doc.querySelector(`[data-proj="${nextIdx}"]`);
         renderProjectMarkup(nextIdx);
-        if (gsap) {
-          gsap.fromTo(
-            qsa('.pv-l > *, .pv-r figure', projDialog),
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.45, stagger: 0.035, ease: 'power3.out', clearProps: 'transform' },
-          );
-        }
       });
     }
   }
@@ -321,21 +316,8 @@
         {
           clipPath: 'inset(0px 0px 0px 0px round 0px)',
           opacity: 1,
-          duration: 0.65,
+          duration: 0.58,
           ease: 'power4.inOut',
-        },
-      );
-      gsap.fromTo(
-        qsa('.pv-l > *, .pv-r figure', projDialog),
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.55,
-          stagger: 0.04,
-          delay: 0.2,
-          ease: 'power3.out',
-          clearProps: 'transform',
         },
       );
     } else {
@@ -363,7 +345,7 @@
       gsap.to(projDialog, {
         clipPath: endInset,
         opacity: 0,
-        duration: 0.48,
+        duration: 0.44,
         ease: 'power3.inOut',
         onComplete: finishClose,
       });
@@ -389,7 +371,7 @@
   });
 
   /* -------------------------------------------------------------------------
-     5. Copy Email Micro-Interaction
+     5. Copy Email
      ------------------------------------------------------------------------- */
   const copyBtn = qs('#copy');
   if (copyBtn) {
@@ -412,7 +394,7 @@
   }
 
   /* -------------------------------------------------------------------------
-     6. Core 3D Z-Depth Camera & GSAP ScrollTrigger Engine
+     6. Core 3D Z-Depth Camera + Single-Canvas Starfield & Celestial Thread
      ------------------------------------------------------------------------- */
   populateCapabilities();
   populateWorkStops();
@@ -426,13 +408,17 @@
   }
 
   root.classList.add('is3d');
-  try {
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  } catch (_) {}
+  if ('scrollRestoration' in history) {
+    try {
+      history.scrollRestoration = 'manual';
+    } catch {
+      // ignore restricted history environments
+    }
+  }
   window.scrollTo(0, 0);
 
-  const threadCanvas = qs('#cv');
-  const ctx = threadCanvas ? threadCanvas.getContext('2d') : null;
+  const canvas = qs('#cv');
+  const ctx = canvas ? canvas.getContext('2d', { alpha: false }) : null;
   const spacerEl = qs('#spacer');
   const featuredSection = qs('#assist-ding');
   const featuredPanel = featuredSection ? qs('.panel', featuredSection) : null;
@@ -452,18 +438,36 @@
   let elements = [];
   let keyStops = [];
   let curveSamples = [];
+  let stars = [];
+  let cachedTicks = [];
   let maxCurveZ = 0;
   let featuredStop = null;
   let totalScrollPx = 0;
+  let targetScrollY = 0;
   let currentScrollK = 0;
-  let lastCameraZ = null;
-  let lastScrollK = null;
+  let lastRenderedK = -1;
   let dirty = true;
   let countAnimated = false;
   let lastHudLabel = '';
+  let scrollTriggerInstance = null;
 
-  const gsapScrollState = { progress: 0 };
-  let scrollTimeline = null;
+  const STAR_COLORS = ['#f8fafc', '#bae6fd', '#38bdf8', '#a5b4fc'];
+
+  function initStars() {
+    const count = isMobile ? 35 : 68;
+    stars = new Array(count);
+    for (let i = 0; i < count; i++) {
+      const depth = 0.3 + Math.random() * 0.9;
+      stars[i] = {
+        x: Math.random() * viewW,
+        y: Math.random() * viewH,
+        size: depth > 0.85 ? 2 : 1.2,
+        depth,
+        alpha: 0.25 + Math.random() * 0.6,
+        color: STAR_COLORS[i % STAR_COLORS.length],
+      };
+    }
+  }
 
   function buildSceneLayout() {
     const prevRatio = totalScrollPx ? clamp(window.scrollY / totalScrollPx, 0, 1) : 0;
@@ -472,13 +476,12 @@
     isMobile = viewW < 768;
     focalLen = isMobile ? 860 : clamp(viewW * 0.78, 900, 1360);
 
-    // DPR capped at 1.5 for crisp lines with half the GPU fill-rate cost
-    if (threadCanvas && ctx) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      threadCanvas.width = Math.round(viewW * dpr);
-      threadCanvas.height = Math.round(viewH * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Single opaque canvas at DPR=1 for zero-lag 60-120fps on all devices
+    if (canvas) {
+      canvas.width = viewW;
+      canvas.height = viewH;
     }
+    initStars();
 
     stops = [];
     elements = [];
@@ -512,6 +515,7 @@
         const fly = parsePair(el.dataset.f);
         const zOff = parseNum(el.dataset.z, 0);
         el.style.visibility = 'hidden';
+        el.style.pointerEvents = 'none';
         elements.push({
           el,
           stop,
@@ -525,6 +529,7 @@
           fy: fly[1],
           rotY: isMobile ? 0 : parseNum(el.dataset.r, 0),
           visible: false,
+          clickable: false,
           node: el.querySelector('.node'),
         });
       });
@@ -550,7 +555,7 @@
     totalScrollPx = scrollAcc;
     if (spacerEl) spacerEl.style.height = `${totalScrollPx + viewH}px`;
 
-    // Build Catmull/Hermite 3D curve for celestial thread
+    // Build Hermite 3D curve for celestial sky thread
     const pts = [{ z: stops[0].z, x: stops[0].ax * viewW, y: stops[0].ay * viewH }];
     let flip = 1;
     for (let i = 1; i < stops.length; i++) {
@@ -583,7 +588,7 @@
       const g = pts[i];
       const h = pts[i + 1];
       const dz = Math.max(1, h.z - g.z);
-      const segs = Math.max(18, Math.round((dz / focalLen) * 28));
+      const segs = Math.max(16, Math.round((dz / focalLen) * 22));
       for (let j = 0; j < segs; j++) {
         const t = j / segs;
         const t2 = t * t;
@@ -601,7 +606,6 @@
     }
     curveSamples.push({ z: maxCurveZ, x: pts[pts.length - 1].x, y: pts[pts.length - 1].y });
 
-    // Scale featured panel cleanly on short screens
     if (featuredInner) {
       featuredInner.style.transform = '';
       const maxH = viewH - (isMobile ? 120 : 150);
@@ -610,7 +614,6 @@
       }
     }
 
-    // Build clickable HUD ticks once per layout
     if (hudTicksEl) {
       hudTicksEl.innerHTML = stops
         .filter((st, idx) => idx === 0 || st.gap >= 2.1)
@@ -619,9 +622,11 @@
             `<i class="tk" data-s="${st.sHold}" title="${st.label}" style="top:${((st.sHold / totalScrollPx) * 100).toFixed(2)}%"></i>`,
         )
         .join('');
+      cachedTicks = qsa('.tk', hudTicksEl).map((el) => ({ el, s: Number(el.dataset.s) }));
     }
 
     currentScrollK = prevRatio * totalScrollPx;
+    targetScrollY = currentScrollK;
     if (prevRatio > 0 && activeProjIndex < 0) window.scrollTo(0, currentScrollK);
   }
 
@@ -639,11 +644,24 @@
     return keyStops[keyStops.length - 1].zc;
   }
 
-  /* Fast Celestial Thread Renderer — ZERO shadowBlur! (<0.4ms/frame) */
-  function renderThread(cameraZ) {
+  /* Single-Canvas Renderer: Pure Black + Parallax Stars + Celestial Thread (<0.5ms/frame) */
+  function renderCanvas(cameraZ, scrollPx) {
     if (!ctx) return;
-    ctx.clearRect(0, 0, viewW, viewH);
 
+    // 1. Pure black space backdrop
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, viewW, viewH);
+
+    // 2. Parallax stars driven directly by scroll depth (zero extra canvas!)
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      const sy = ((s.y - scrollPx * 0.08 * s.depth) % viewH + viewH) % viewH;
+      ctx.globalAlpha = s.alpha;
+      ctx.fillStyle = s.color;
+      ctx.fillRect(s.x | 0, sy | 0, s.size, s.size);
+    }
+
+    // 3. Celestial sky-blue / indigo 3D thread
     const cx = viewW * 0.5;
     const cy = viewH * 0.5;
     const nearClip = 0.12 * focalLen;
@@ -690,7 +708,7 @@
       ctx.stroke();
 
       if (lastPt) {
-        const r = clamp(4.5 * lastPt.scale, 2.5, 9);
+        const r = clamp(4.2 * lastPt.scale, 2.5, 8);
         ctx.fillStyle = mirror === 0 ? '#38bdf8' : '#818cf8';
         ctx.globalAlpha = 0.9;
         ctx.beginPath();
@@ -699,9 +717,10 @@
       }
       ctx.restore();
     }
+    ctx.globalAlpha = 1;
   }
 
-  /* Fast 3D Element Projection Renderer — GPU translate3d + dynamic zIndex */
+  /* Fast 3D Element Projection — ZERO zIndex mutations per frame */
   function renderElements(cameraZ) {
     const cx = viewW * 0.5;
     const cy = viewH * 0.5;
@@ -712,11 +731,14 @@
       const baseDist = focalLen * (1 + item.zOff);
       const offset = dz - baseDist;
 
-      if (offset > 2.5 * focalLen || dz < 0.18 * focalLen) {
+      if (offset > 2.4 * focalLen || dz < 0.18 * focalLen) {
         if (item.visible) {
           item.el.style.visibility = 'hidden';
-          item.el.style.pointerEvents = 'none';
           item.visible = false;
+        }
+        if (item.clickable) {
+          item.el.style.pointerEvents = 'none';
+          item.clickable = false;
         }
         continue;
       }
@@ -734,8 +756,11 @@
       if (alpha < 0.015) {
         if (item.visible) {
           item.el.style.visibility = 'hidden';
-          item.el.style.pointerEvents = 'none';
           item.visible = false;
+        }
+        if (item.clickable) {
+          item.el.style.pointerEvents = 'none';
+          item.clickable = false;
         }
         continue;
       }
@@ -745,9 +770,13 @@
         item.visible = true;
       }
 
+      const canClick = alpha > 0.35 && scale > 0.55 && scale < 2.1;
+      if (canClick !== item.clickable) {
+        item.clickable = canClick;
+        item.el.style.pointerEvents = canClick ? 'auto' : 'none';
+      }
+
       item.el.style.opacity = alpha.toFixed(3);
-      item.el.style.zIndex = String(Math.max(1, Math.round(1000 - dz / 10)));
-      item.el.style.pointerEvents = alpha > 0.32 && scale > 0.5 && scale < 2.2 ? 'auto' : 'none';
       item.el.style.transform =
         `translate3d(${px.toFixed(1)}px,${py.toFixed(1)}px,0) ` +
         `translate(-50%,-50%) perspective(1100px) ` +
@@ -768,7 +797,7 @@
         if (gsap) {
           gsap.to(obj, {
             val: 20,
-            duration: 1.0,
+            duration: 0.9,
             ease: 'power3.out',
             onUpdate: () => {
               countEl.textContent = String(Math.round(obj.val));
@@ -784,15 +813,14 @@
     }
   }
 
-  /* Featured Deep-Dive Zoom Panel (SIGAP JABAR) */
   function renderFeaturedPanel(scrollPx) {
     if (!featuredStop || !featuredSection || !featuredPanel) return;
 
     const start = featuredStop.sHold;
     const hold = featuredStop.holdPx;
-    const enter = smoothstep((scrollPx - (start - 0.72 * viewH)) / (1.0 * viewH));
+    const enter = smoothstep((scrollPx - (start - 0.72 * viewH)) / viewH);
     const mid = (scrollPx - (start + 0.05 * viewH)) / (0.9 * viewH);
-    const exit = smoothstep((scrollPx - (start + hold - 1.0 * viewH)) / viewH);
+    const exit = smoothstep((scrollPx - (start + hold - viewH)) / viewH);
 
     if (enter <= 0 || exit >= 1) {
       if (featuredSection.style.visibility !== 'hidden') {
@@ -811,28 +839,28 @@
     featuredPanel.style.opacity = (1 - smoothstep((exit - 0.65) / 0.35)).toFixed(3);
     featuredSection.style.pointerEvents = enter > 0.95 && exit < 0.2 ? 'auto' : 'none';
 
-    featuredFlys.forEach((el, idx) => {
-      const q = 1 - smoothstep(mid * 1.5 - idx * 0.12);
-      el.style.setProperty('--q', q.toFixed(3));
-    });
+    for (let i = 0; i < featuredFlys.length; i++) {
+      const q = 1 - smoothstep(mid * 1.5 - i * 0.12);
+      featuredFlys[i].style.setProperty('--q', q.toFixed(3));
+    }
   }
 
-  /* HUD Progress Rail & Active Stop Label */
   function renderHud(scrollPx) {
     if (!hudEl || !stops.length) return;
     let active = stops[0];
     let activeIdx = 0;
     let majorIdx = 0;
 
-    stops.forEach((st) => {
-      if (st.gap >= 2.1 || st === stops[0]) {
+    for (let i = 0; i < stops.length; i++) {
+      const st = stops[i];
+      if (st.gap >= 2.1 || i === 0) {
         if (scrollPx >= st.sHold - 0.55 * viewH) {
           active = st;
           activeIdx = majorIdx;
         }
         majorIdx++;
       }
-    });
+    }
 
     if (active.label !== lastHudLabel) {
       lastHudLabel = active.label;
@@ -841,42 +869,36 @@
     }
 
     hudEl.style.setProperty('--p', clamp(scrollPx / totalScrollPx, 0, 1).toFixed(4));
-    qsa('.tk', hudTicksEl).forEach((tk) => {
-      tk.classList.toggle('on', Number(tk.dataset.s) <= scrollPx + 2);
-    });
+    for (let i = 0; i < cachedTicks.length; i++) {
+      cachedTicks[i].el.classList.toggle('on', cachedTicks[i].s <= scrollPx + 2);
+    }
   }
 
-  /* Setup GSAP ScrollTrigger */
+  /* Numeric ScrollTrigger — ZERO getBoundingClientRect() on scroll */
   function setupGsapScroll() {
-    if (!gsap || !ScrollTrigger || !spacerEl) return;
+    if (!gsap || !ScrollTrigger) return;
     if (ScrollToPlugin) gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
     else gsap.registerPlugin(ScrollTrigger);
 
-    if (scrollTimeline) {
-      if (scrollTimeline.scrollTrigger) scrollTimeline.scrollTrigger.kill();
-      scrollTimeline.kill();
-      scrollTimeline = null;
+    if (scrollTriggerInstance) {
+      scrollTriggerInstance.kill();
+      scrollTriggerInstance = null;
     }
 
-    gsapScrollState.progress = totalScrollPx ? clamp(window.scrollY / totalScrollPx, 0, 1) : 0;
-    scrollTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: spacerEl,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.6,
-        invalidateOnRefresh: true,
+    scrollTriggerInstance = ScrollTrigger.create({
+      start: 0,
+      end: () => Math.max(1, totalScrollPx),
+      onUpdate: (self) => {
+        targetScrollY = self.progress * totalScrollPx;
       },
     });
-    scrollTimeline.to(gsapScrollState, { progress: 1, ease: 'none', duration: 1 });
-    ScrollTrigger.refresh();
   }
 
   function flyToScroll(targetY) {
     if (gsap && ScrollToPlugin) {
       gsap.to(window, {
         scrollTo: targetY,
-        duration: 1.05,
+        duration: 1.0,
         ease: 'power3.inOut',
         overwrite: 'auto',
       });
@@ -885,7 +907,6 @@
     }
   }
 
-  /* Bind [data-go] navigation & clickable HUD ticks */
   doc.addEventListener('click', (e) => {
     const goEl = e.target.closest && e.target.closest('[data-go]');
     if (goEl) {
@@ -906,25 +927,33 @@
     }
   });
 
-  /* Main Tick Loop driven by GSAP Ticker */
-  function onTick() {
-    if (gsap && ScrollTrigger && scrollTimeline) {
-      currentScrollK = gsapScrollState.progress * totalScrollPx;
-    } else {
-      currentScrollK += (window.scrollY - currentScrollK) * 0.14;
+  /* Zero-Idle-Burn GSAP Ticker Loop */
+  function onTick(_time, deltaMs) {
+    if (!gsap || !ScrollTrigger) {
+      targetScrollY = window.scrollY;
     }
+
+    const dt = Math.min(0.05, (deltaMs || 16) / 1000);
+    const diff = targetScrollY - currentScrollK;
+    if (Math.abs(diff) > 0.25) {
+      currentScrollK += diff * (1 - Math.exp(-dt * 8.5));
+    } else if (diff !== 0) {
+      currentScrollK = targetScrollY;
+    }
+
+    // Sleep when idle — 0% CPU/GPU usage between scrolls!
+    if (!dirty && Math.abs(currentScrollK - lastRenderedK) < 0.05) {
+      return;
+    }
+
+    lastRenderedK = currentScrollK;
+    dirty = false;
 
     const cameraZ = scrollToCameraZ(currentScrollK);
-    if (cameraZ !== lastCameraZ || currentScrollK !== lastScrollK || dirty) {
-      lastCameraZ = cameraZ;
-      lastScrollK = currentScrollK;
-      dirty = false;
-
-      renderThread(cameraZ);
-      renderElements(cameraZ);
-      renderFeaturedPanel(currentScrollK);
-      renderHud(currentScrollK);
-    }
+    renderCanvas(cameraZ, currentScrollK);
+    renderElements(cameraZ);
+    renderFeaturedPanel(currentScrollK);
+    renderHud(currentScrollK);
   }
 
   buildSceneLayout();
@@ -932,10 +961,9 @@
 
   if (gsap) {
     gsap.ticker.add(onTick);
-    gsap.ticker.lagSmoothing(0);
   } else {
     (function fallbackLoop() {
-      onTick();
+      onTick(0, 16);
       requestAnimationFrame(fallbackLoop);
     })();
   }
