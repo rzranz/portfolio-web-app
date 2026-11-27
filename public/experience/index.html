@@ -3,11 +3,11 @@
   lang="en"
   class="is3d"
   style="
-    --bg: rgb(15, 55, 43);
-    --ink: rgb(239, 231, 218);
-    --muted: rgb(204, 197, 183);
-    --hair: rgb(79, 105, 94);
-    --line: rgb(198, 47, 40);
+    --bg: rgb(3, 5, 12);
+    --ink: rgb(241, 245, 249);
+    --muted: rgb(148, 163, 184);
+    --hair: rgba(148, 197, 255, 0.2);
+    --line: rgb(56, 189, 248);
   "
 >
   <head>
@@ -16,12 +16,12 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>Randi Zakaria Putra · 3D Portfolio Experience</title>
+    <title>Randi Zakaria Putra · 3D Cosmic Portfolio Experience</title>
     <meta
       name="description"
-      content="Randi Zakaria Putra — Fullstack Software Engineer. Interactive 3D web experience showcasing Laravel, Go, Spring Boot, Vue, Nuxt, WebGIS, and IoT systems."
+      content="Randi Zakaria Putra — Fullstack Software Engineer. Interactive 3D cosmic web experience showcasing Fullstack, Backend, QA, RESTful API, and Server Management systems."
     />
-    <meta name="theme-color" content="#0F372B" />
+    <meta name="theme-color" content="#03050C" />
     <link rel="icon" type="image/svg+xml" href="/RLogo.svg" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,21 +30,25 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Anton:wght@400;700&family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+    />
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
-    <script src="js/projects.js?v=1"></script>
-    <script type="module" crossorigin="" src="js/main.js?v=2"></script>
-    <link rel="stylesheet" crossorigin="" href="css/main.css?v=1" />
+    <script src="js/projects.js?v=2"></script>
+    <script type="module" crossorigin="" src="js/main.js?v=3"></script>
+    <link rel="stylesheet" crossorigin="" href="css/main.css?v=2" />
   </head>
   <body>
     <noscript>
       <div class="seo-text">
         <h2>About Randi Zakaria Putra</h2>
         <p>
-          Fullstack Software Engineer focused on Laravel, Go, Spring Boot, Vue,
-          Nuxt, WebGIS, IoT telemetry, and scalable REST APIs.
+          Fullstack Software Engineer focused on Fullstack, Backend, QA,
+          RESTful API, and Server Management.
         </p>
         <p><a href="/">Back to main portfolio</a></p>
       </div>
@@ -84,12 +88,12 @@
         </li>
         <li>
           <a href="#services" data-go="services"
-            ><span class="mono">03</span><span class="d">What I do</span></a
+            ><span class="mono">03</span><span class="d">Capabilities</span></a
           >
         </li>
         <li>
           <a href="#work" data-go="work"
-            ><span class="mono">04</span><span class="d">Work</span></a
+            ><span class="mono">04</span><span class="d">Selected Work</span></a
           >
         </li>
         <li>
@@ -110,12 +114,15 @@
       </ol>
     </nav>
 
+    <!-- Deep Space Starfield Canvas -->
+    <canvas id="space-canvas" aria-hidden="true"></canvas>
+    <!-- 3D Celestial Thread Canvas -->
     <canvas id="cv" aria-hidden="true" width="150" height="1057"></canvas>
 
     <main id="world">
       <h1 class="sr-only">Randi Zakaria Putra — Fullstack Software Engineer</h1>
 
-      <!-- STOP 01: HERO -->
+      <!-- STOP 01: HERO (Full Name + Floating Tech Stack Logos Constellation) -->
       <section
         class="st"
         id="hero"
@@ -127,35 +134,30 @@
       >
         <div
           class="el hero-scene"
-          data-p="0.02,-0.02"
-          data-mp="0,-0.06"
+          data-p="0,-0.04"
+          data-mp="0,-0.08"
           data-z="0"
           data-f="0,0.05"
         >
-          <p class="d bb h-name intro split" aria-hidden="true">
-            <span class="w"
-              ><span class="c" style="--i: 0">R</span
-              ><span class="c" style="--i: 1">A</span
-              ><span class="c" style="--i: 2">N</span
-              ><span class="c" style="--i: 3">D</span
-              ><span class="c" style="--i: 4">I</span></span
-            >
-          </p>
-          <div
-            class="garden-canvas-wrapper"
-            style="position: absolute; inset: 0; pointer-events: none"
-          >
-            <canvas
-              id="garden-canvas"
-              aria-hidden="true"
-              style="
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                display: block;
-              "
-            ></canvas>
+          <!-- Tech Stack Logos Constellation behind Name (from Technologies I work with) -->
+          <div class="hero-tech-bg" aria-hidden="true">
+            <i class="devicon-laravel-original hero-tech-icon" style="top: 4%; left: 10%; --dur: 6.5s; --del: -1s"></i>
+            <i class="devicon-spring-original hero-tech-icon" style="top: 12%; right: 14%; --dur: 7.5s; --del: -2.2s"></i>
+            <i class="devicon-go-original-wordmark hero-tech-icon" style="top: 48%; left: 3%; --dur: 8s; --del: -0.5s"></i>
+            <i class="devicon-vuejs-plain hero-tech-icon" style="bottom: 10%; left: 16%; --dur: 6.8s; --del: -3s"></i>
+            <i class="devicon-react-original hero-tech-icon" style="top: 6%; left: 46%; --dur: 9s; --del: -1.5s"></i>
+            <i class="devicon-nextjs-original-wordmark hero-tech-icon" style="bottom: 6%; left: 48%; --dur: 7.2s; --del: -2.8s"></i>
+            <i class="devicon-tailwindcss-original hero-tech-icon" style="top: 52%; right: 4%; --dur: 6.4s; --del: -1.8s"></i>
+            <i class="devicon-mysql-original hero-tech-icon" style="bottom: 12%; right: 16%; --dur: 7.8s; --del: -0.9s"></i>
+            <i class="devicon-postgresql-plain hero-tech-icon" style="top: 22%; left: 26%; --dur: 8.5s; --del: -3.5s"></i>
+            <i class="devicon-docker-plain hero-tech-icon" style="top: 24%; right: 26%; --dur: 7.1s; --del: -2.1s"></i>
+            <i class="devicon-git-plain hero-tech-icon" style="bottom: 24%; left: 31%; --dur: 6.9s; --del: -1.2s"></i>
+            <i class="devicon-arduino-plain hero-tech-icon" style="bottom: 24%; right: 30%; --dur: 8.2s; --del: -2.6s"></i>
           </div>
+
+          <p class="hero-fullname intro" aria-label="Randi Zakaria Putra">
+            RANDI ZAKARIA<br />PUTRA<span class="accent-dot">.</span>
+          </p>
         </div>
         <div
           class="el hero-caption-scene"
@@ -165,10 +167,9 @@
           data-f="-.1,.1"
         >
           <div class="h-cap">
-            <span class="mono">Fullstack Engineer · Laravel, Go &amp; Vue</span>
+            <span class="mono">Fullstack Software Engineer · Bandung, ID</span>
             <p class="lede">
               Driven by logic, adaptability, and the pursuit of clean code.
-              Bandung, Indonesia.
             </p>
           </div>
         </div>
@@ -183,7 +184,7 @@
         </div>
       </section>
 
-      <!-- STOP 02: ABOUT -->
+      <!-- STOP 02: ABOUT (100% Accurate Profile & Credentials from cv.json) -->
       <section
         class="st"
         id="about"
@@ -195,36 +196,54 @@
       >
         <div
           class="el far"
-          data-p="-0.18,0.075"
-          data-mp="0,-0.22"
-          data-z=".35"
+          data-p="-0.2,0.06"
+          data-mp="0,-0.24"
+          data-z=".32"
           data-f="-.35,.05"
-          data-r="28"
+          data-r="22"
           style="visibility: hidden"
         >
           <div class="ab-monogram">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
               <img src="/RLogo.svg" alt="Randi Logo" class="ab-monogram-logo" />
-              <span class="mono">UNIKOM · 3.43</span>
+              <span class="mono">GPA 3.43 · 2022–2026</span>
             </div>
             <div class="ab-monogram-meta">
-              <span class="mono">Bandung, ID (UTC+7)</span>
+              <span class="mono">Bandung, Jawa Barat (UTC+7)</span>
               <p class="ab-monogram-name">RANDI ZAKARIA PUTRA</p>
-              <div class="ab-badges">
-                <span>BNSP Web Dev</span>
-                <span>CCNA</span>
-                <span>TOEFL 457</span>
+            </div>
+            <div class="ab-cred-list">
+              <div class="ab-cred-item">
+                <span class="mono" style="font-size: 9px;">Education</span>
+                <strong>Universitas Komputer Indonesia (UNIKOM)</strong>
+                <span>Bachelor of Informatics Engineering (S1)</span>
               </div>
+              <div class="ab-cred-item">
+                <span class="mono" style="font-size: 9px;">Leadership</span>
+                <strong>Head of Communication &amp; Information Division</strong>
+                <a href="https://hmif.unikom.my.id/" target="_blank" rel="noopener">HMIF UNIKOM &nearr;</a> (Jan 2025 – Dec 2025)
+              </div>
+              <div class="ab-cred-item">
+                <span class="mono" style="font-size: 9px;">Software House</span>
+                <strong>Software Engineer</strong>
+                <a href="https://www.icraftds.id/" target="_blank" rel="noopener">iCraft DS &nearr;</a> (Digital Studio &amp; Development)
+              </div>
+            </div>
+            <div class="ab-badges">
+              <span>BNSP Web Dev</span>
+              <span>LSP Informatika</span>
+              <span>CCNA</span>
+              <span>TOEFL 457</span>
             </div>
           </div>
         </div>
         <div
           class="el"
-          data-p="0.18,0.12"
-          data-mp="0,0.26"
+          data-p="0.2,0.1"
+          data-mp="0,0.28"
           data-z="-.08"
           data-f=".3,0"
-          data-r="-22"
+          data-r="-18"
           style="visibility: hidden"
         >
           <div class="ab-txt">
@@ -236,17 +255,18 @@
               Fullstack Software Engineer
             </p>
             <p class="lede">
-              Informatics Engineering graduate from UNIKOM (GPA 3.43) focused on
-              Fullstack and Backend Web Development. Experienced in designing
-              database architectures, high-throughput REST APIs (Laravel, Go,
-              Spring Boot, Nuxt), WebGIS platforms, IoT telemetry, and secure
-              payment gateways with real-time WhatsApp automation.
+              Informatics Engineering graduate from UNIKOM with a proven track
+              record of designing database architectures, building scalable REST
+              APIs (Laravel, Go, Spring Boot), and integrating secure payment
+              gateways (Pakasir) &amp; real-time notification systems (Fonnte
+              WhatsApp API). Experienced in managing technical projects
+              end-to-end and leading organizational divisions.
             </p>
           </div>
         </div>
       </section>
 
-      <!-- STOP 03: BY THE NUMBERS (DARK TRANSITION) -->
+      <!-- STOP 03: BY THE NUMBERS -->
       <section
         class="st"
         id="numbers"
@@ -266,8 +286,8 @@
           style="visibility: hidden"
         >
           <div class="num">
-            <span class="mono">Building since</span>
-            <p class="d t1">2022</p>
+            <span class="mono">Years Active</span>
+            <p class="d t1">4+</p>
           </div>
         </div>
         <div
@@ -279,8 +299,8 @@
           style="visibility: hidden"
         >
           <div class="num">
-            <span class="mono">Projects shipped</span>
-            <p class="d b7" aria-label="14+ projects">
+            <span class="mono">Production Apps</span>
+            <p class="d b7" aria-label="20+ production apps">
               <span id="count">0</span>+
             </p>
           </div>
@@ -295,7 +315,7 @@
         >
           <div class="num num-worked">
             <span class="mono num-worked-label"
-              ><span>GPA</span><span class="num-with">at</span></span
+              ><span>GPA</span><span class="num-with">/</span></span
             >
             <p class="d t1">3.43</p>
             <span class="mono num-company">UNIKOM</span>
@@ -451,9 +471,9 @@
           <div class="ms">
             <span class="mono">HMIF UNIKOM &amp; PT YukMari Project</span>
             <p class="lede">
-              Led the Communication &amp; Information Division at HMIF UNIKOM
-              (hmif.unikom.my.id) while interning as Project Manager &amp;
-              Fullstack Developer at PT YukMari Project, shipping their
+              Head of Communication &amp; Information Division at HMIF UNIKOM
+              (hmif.unikom.my.id) and Fullstack Developer &amp; Project Manager
+              Intern at PT. YukMari Project Indonesia, shipping their integrated
               TalentHub &amp; HRMS recruitment platform.
             </p>
           </div>
@@ -501,21 +521,21 @@
           <div class="ms">
             <span class="mono">Dinas Kehutanan, PDAM Tegal &amp; iCraft DS</span>
             <p class="lede">
-              Architected SIGAP JABAR WebGIS for Dinas Kehutanan Jawa Barat,
-              engineered IoT smart water telemetry for PDAM Kota Tegal, shipped
-              automated QRIS &amp; WhatsApp tuition billing for RA Darul Fikri,
-              and built IC Game-Z AI platform at iCraft DS.
+              Engineered SIGAP JABAR WebGIS for Dinas Kehutanan Jawa Barat,
+              IoT smart water telemetry for PDAM Kota Tegal, automated Pakasir
+              QRIS &amp; Fonnte WhatsApp SPP billing for RA Darul Fikri, and
+              IC Game-Z AI learning platform at iCraft DS.
             </p>
           </div>
         </div>
       </section>
 
-      <!-- STOP 05: WHAT I DO (DARK + 3D STARFIELD) -->
+      <!-- STOP 05: ENGINEERING CAPABILITIES (Fullstack, Backend, QA, RESTful API, Server Management) -->
       <section
         class="st svc-st"
         id="services"
         data-dark="1"
-        data-label="What I do"
+        data-label="Capabilities"
         data-gap="2.2"
         data-hold="1.1"
         data-a="0.46,-0.21"
@@ -571,7 +591,7 @@
           data-f="0,0"
           style="visibility: hidden"
         >
-          <span class="mono">Six featured systems · click any card</span>
+          <span class="mono">Eight featured systems · click any card</span>
         </div>
       </section>
 
@@ -611,10 +631,7 @@
         >
           <div class="ct-stack">
             <div class="ct-wrap">
-              <h2
-                class="d bb ct-one split"
-                aria-label="Let's build something"
-              >
+              <h2 class="d bb ct-one split" aria-label="Let's build something">
                 Let's build something
               </h2>
               <span class="para" aria-hidden="true"
@@ -783,45 +800,8 @@
       <div class="lb"><span id="hudn">01</span><b id="hudl">Home</b></div>
     </div>
 
-    <script src="js/garden/garden-standalone.js?v=1"></script>
+    <script src="js/space-bg.js?v=1"></script>
     <script src="js/curved-line-patch.js?v=1"></script>
     <script src="js/contact-form.js?v=1" defer></script>
-    <script>
-      (function () {
-        "use strict";
-        document.body.style.overflowX = "visible";
-        var canvas = document.getElementById("garden-canvas");
-        var title = document.querySelector("#hero .h-name");
-        if (!canvas || !window.Garden) {
-          if (title) title.style.opacity = "1";
-          return;
-        }
-        var prefersReducedMotion =
-          window.matchMedia &&
-          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (title) {
-          title.style.opacity = "0";
-          title.style.pointerEvents = "none";
-        }
-        if (!window.__garden) {
-          window.__garden = new Garden(canvas, {
-            text: "RANDI",
-            boil: true,
-            maxDpr: 2,
-            density: 1,
-            introRise: !prefersReducedMotion,
-          });
-        }
-        var obs = new MutationObserver(function () {
-          if (document.body.style.overflowX !== "visible") {
-            document.body.style.overflowX = "visible";
-          }
-        });
-        obs.observe(document.body, {
-          attributes: true,
-          attributeFilter: ["style"],
-        });
-      })();
-    </script>
   </body>
 </html>

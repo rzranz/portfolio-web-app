@@ -1,49 +1,49 @@
 const sa = {
   email: "randizakariaputra22@gmail.com",
   stats: [
-    ["Active since", "2022"],
-    ["Projects", "14+"],
-    ["Partners & clients", "6+"],
+    ["Years Active", "4+"],
+    ["Production Apps", "20+"],
+    ["GPA / UNIKOM", "3.43"],
   ],
   services: [
     [
-      "Backend & APIs",
+      "Fullstack",
       [
-        "Laravel, Go & Spring Boot",
-        "High-concurrency REST APIs",
+        "Laravel, Vue 3, Nuxt, React & Next.js",
+        "End-to-end architecture & UI",
+        "Production web & mobile systems",
+      ],
+    ],
+    [
+      "Backend",
+      [
+        "Go, Laravel & Spring Boot",
+        "Database design & concurrency",
         "Payment & WhatsApp automation",
       ],
     ],
     [
-      "Fullstack Web",
+      "QA",
       [
-        "Vue 3, Nuxt, React & Next.js",
-        "Responsive Tailwind UI",
-        "Clean architecture & state",
+        "Automated unit & integration tests",
+        "JUnit 5 & end-to-end validation",
+        "Cross-device responsive verification",
       ],
     ],
     [
-      "Database & Cloud",
+      "RESTful API",
       [
-        "PostgreSQL, MySQL & SQLite WAL",
-        "Docker & CI/CD pipelines",
-        "Query & latency tuning",
+        "Clean OpenAPI & JSON contracts",
+        "Idempotency & auth middleware",
+        "Sub-50ms spatial & ledger queries",
       ],
     ],
     [
-      "IoT & WebGIS",
+      "Server Management",
       [
-        "PostGIS & OpenLayers mapping",
-        "Real-time sensor telemetry",
-        "Automated pump interlocks",
-      ],
-    ],
-    [
-      "AI, AR & 3D",
-      [
-        "Unity 3D & MediaPipe AI",
-        "Contextual AI Mentor engines",
-        "Interactive Three.js scenes",
+        "Docker containerization & CI/CD",
+        "Linux deployment & reverse proxy",
+        "Database tuning & monitoring",
       ],
     ],
   ],
@@ -233,7 +233,7 @@ window.JB = sa;
       '</span></span><span class="d ' +
       (n % 2 ? "t2" : "b7") +
       '">' +
-      e.title +
+      (e.shortTitle || e.title) +
       '</span><span class="small work-copy">' +
       e.lines
         .map(function (i) {
@@ -315,12 +315,87 @@ window.JB = sa;
         (r.removeAllRanges(), r.addRange(t));
       }
     }));
-  var nt = l("#burger");
-  function Re(e) {
-    (C.classList.toggle("menu-open", e), nt.setAttribute("aria-expanded", e));
+  var nt = l("#burger"),
+    menuEl = l("#menu"),
+    menuLinks = m("#menu ol li"),
+    menuOpenState = !1,
+    menuPendingCb = null,
+    menuTl = null;
+
+  function ensureMenuTl() {
+    if (menuTl || !window.gsap || !menuEl) return menuTl;
+    window.gsap.set(menuEl, {
+      visibility: "hidden",
+      clipPath: "circle(0% at calc(100% - 40px) 40px)",
+    });
+    window.gsap.set(menuLinks, { opacity: 0, y: 26 });
+    menuTl = window.gsap.timeline({
+      paused: !0,
+      onReverseComplete: function () {
+        menuEl.style.visibility = "hidden";
+        C.classList.remove("menu-open");
+        if (menuPendingCb) {
+          var cb = menuPendingCb;
+          menuPendingCb = null;
+          cb();
+        }
+      },
+    });
+    menuTl
+      .to(
+        menuEl,
+        {
+          clipPath: "circle(150% at calc(100% - 40px) 40px)",
+          duration: 0.68,
+          ease: "power3.inOut",
+        },
+        0,
+      )
+      .to(
+        menuLinks,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.42,
+          stagger: 0.045,
+          ease: "power3.out",
+        },
+        0.18,
+      );
+    return menuTl;
+  }
+
+  function Re(e, onClosed) {
+    var tl = ensureMenuTl();
+    menuOpenState = !!e;
+    nt.setAttribute("aria-expanded", menuOpenState);
+    if (!tl) {
+      C.classList.toggle("menu-open", menuOpenState);
+      if (!menuOpenState && onClosed) onClosed();
+      return;
+    }
+    if (menuOpenState) {
+      menuPendingCb = null;
+      menuEl.style.visibility = "visible";
+      C.classList.add("menu-open");
+      tl.timeScale(1).play();
+    } else {
+      menuPendingCb = onClosed || null;
+      if (tl.progress() > 0) {
+        tl.timeScale(1.25).reverse();
+      } else {
+        menuEl.style.visibility = "hidden";
+        C.classList.remove("menu-open");
+        if (menuPendingCb) {
+          var cb = menuPendingCb;
+          menuPendingCb = null;
+          cb();
+        }
+      }
+    }
   }
   nt.addEventListener("click", function () {
-    Re(!C.classList.contains("menu-open"));
+    Re(!menuOpenState);
   });
   var V = l("#proj"),
     it = l("#pvx"),
@@ -383,144 +458,165 @@ window.JB = sa;
   function Pe(e, n) {
     var a = U[e],
       i = U[(e + 1) % U.length],
-      t = a.description
-        .split(
-          `
-`,
-        )
+      t = (a.description || "")
+        .split(/\n+/)
         .filter(Boolean)
         .map(function (s) {
           return "<p>" + s + "</p>";
         })
         .join(""),
-      r = a.images.map(function (s, f) {
-        var srcset =
-          s.indexOf("/upload/") >= 0
-            ? ' srcset="' + G(s) + '" sizes="' + ot + '"'
-            : "";
+      hlHtml = (a.highlights && a.highlights.length)
+        ? '<div><span class="mono">Key Engineering Highlights</span><ul class="pv-highlights">' +
+          a.highlights
+            .map(function (h) {
+              return "<li>" + h + "</li>";
+            })
+            .join("") +
+          "</ul></div>"
+        : "",
+      stackHtml = (a.services && a.services.length)
+        ? '<div><span class="mono">Tech Stack</span><div class="pv-stack">' +
+          a.services
+            .map(function (s) {
+              return "<span>" + s + "</span>";
+            })
+            .join("") +
+          "</div></div>"
+        : "",
+      metricsHtml = a.metrics
+        ? '<div class="pv-metrics">' + a.metrics + "</div>"
+        : "",
+      actionsHtml =
+        '<div class="pv-actions">' +
+        (a.liveUrl
+          ? '<a class="pv-btn-primary" href="' +
+            a.liveUrl +
+            '" target="_blank" rel="noopener noreferrer">Visit Live Site &#8599;</a>'
+          : "") +
+        (a.githubUrl
+          ? '<a class="pv-btn-secondary" href="' +
+            a.githubUrl +
+            '" target="_blank" rel="noopener noreferrer">GitHub Repository &#8599;</a>'
+          : "") +
+        "</div>",
+      r = (a.images || []).map(function (s, f) {
+        var isMob =
+          a.device === "mobile" ||
+          s.indexOf("-mobile") >= 0 ||
+          s.indexOf("cinemax") >= 0 ||
+          s.indexOf("flowledger-home") >= 0 ||
+          s.indexOf("flowledger-transactions") >= 0;
         return (
-          '<figure><img src="' +
-          L(s, 1600) +
-          '"' +
-          srcset +
-          ' alt="' +
-          (a.imageAlts && a.imageAlts[f]
-            ? a.imageAlts[f]
-            : a.title + " image " + (f + 1)) +
+          '<figure class="' +
+          (isMob ? "is-mobile-shot" : "") +
+          '"><img src="' +
+          s +
+          '" alt="' +
+          a.title +
+          " preview " +
+          (f + 1) +
           '"' +
           (f > 1 ? ' loading="lazy" decoding="async"' : "") +
           "></figure>"
         );
       });
-    function d(s, f) {
-      var j = s.src || s,
-        c = j.replace("/upload/", "/upload/f_auto:video,q_auto,w_900/"),
-        w = j
-          .replace("/upload/", "/upload/so_1,f_jpg,q_auto,w_900/")
-          .replace(/\.mp4$/, ".jpg");
-      return (
-        '<figure class="pv-vid ' +
-        f +
-        '"><video src="' +
-        c +
-        '" poster="' +
-        w +
-        '" muted loop playsinline autoplay preload="metadata"></video></figure>'
+
+    V.innerHTML =
+      '<div class="pv"><div class="pv-l"><span class="mono">' +
+      String(e + 1).padStart(2, "0") +
+      " / " +
+      String(U.length).padStart(2, "0") +
+      " · " +
+      a.category +
+      " · " +
+      (a.period || a.year) +
+      '</span><h2 class="d b9">' +
+      a.title +
+      "</h2>" +
+      metricsHtml +
+      '<div><span class="mono">Overview</span><div style="margin-top:10px">' +
+      t +
+      "</div></div>" +
+      hlHtml +
+      '<dl class="pv-dl"><dt>Organization / Role</dt><dd>' +
+      (a.company || "Personal Project") +
+      "</dd></dl>" +
+      stackHtml +
+      actionsHtml +
+      '<button class="pv-next" id="pvn"><span class="mono">Next project</span><span class="d t1">' +
+      (i.shortTitle || i.title) +
+      '</span></button></div><div class="pv-r">' +
+      r.join("") +
+      "</div></div>";
+
+    V.scrollTop = 0;
+    l("#pvn").addEventListener("click", function () {
+      dt((e + 1) % U.length);
+    });
+    setTimeout(function () {
+      st((e + 1) % U.length);
+    }, 900);
+
+    if (window.gsap && !n && !De) {
+      window.gsap.fromTo(
+        m(".pv-l > *, .pv-r figure", V),
+        { opacity: 0, y: 28 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.62,
+          stagger: 0.045,
+          delay: 0.22,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
       );
     }
-    var o = [];
-    (a.videos || [])
-      .slice()
-      .reverse()
-      .forEach(function (s) {
-        s.after != null ? r.splice(s.after, 0, d(s, "mid")) : o.unshift(s);
-      });
-    var u = r.join("");
-    u ||
-      (u =
-        '<figure class="work-detail-diagram">' +
-        renderWorkDiagram(a) +
-        '<figcaption class="mono">Project flow</figcaption></figure>');
-    (o.length &&
-      (u +=
-        '<div class="pv-vids">' +
-        o
-          .map(function (s) {
-            return d(s, "");
-          })
-          .join("") +
-        "</div>"),
-      (V.innerHTML =
-        '<div class="pv"><div class="pv-l"><span class="mono">' +
-        String(e + 1).padStart(2, "0") +
-        " / " +
-        String(U.length).padStart(2, "0") +
-        '</span><h2 class="d b9">' +
-        a.title +
-        '</h2><div><span class="mono">Overview</span><div style="margin-top:12px">' +
-        t +
-        '</div></div><dl class="pv-dl"><dt>Project type</dt><dd>' +
-        a.projectType +
-        "</dd><dt>Services</dt><dd>" +
-        a.services.join(", ") +
-        '</dd></dl><a class="pv-link mono" href="' +
-        a.url +
-        '" target="_blank" rel="noopener noreferrer">' +
-        a.cta +
-        '</a><button class="pv-next" id="pvn"><span class="mono">Next project</span><span class="d t1">' +
-        i.title +
-        '</span></button></div><div class="pv-r">' +
-        u +
-        "</div></div>"),
-      (V.scrollTop = 0),
-      l("#pvn").addEventListener("click", function () {
-        dt((e + 1) % U.length);
-      }),
-      setTimeout(function () {
-        st((e + 1) % U.length);
-      }, 1200),
-      V.animate &&
-        !n &&
-        m(".pv-r figure, .pv-l > *", V).forEach(function (s, f) {
-          s.animate(
-            [
-              { opacity: 0, transform: "translateY(40px)" },
-              { opacity: 1, transform: "none" },
-            ],
-            {
-              duration: 900,
-              delay: 120 + f * 60,
-              easing: "cubic-bezier(.2,.8,.2,1)",
-              fill: "backwards",
-            },
-          );
-        }));
   }
-  function Ne(e, n, a) {
-    (a || je(e, !0), (X = e), (Fe = n), Pe(e));
-    var i = n.getBoundingClientRect(),
+
+  function getCardImgInset(btn) {
+    var img = btn ? btn.querySelector(".work-cover img") || btn : null;
+    if (!img) return "inset(10% 10% 10% 10% round 14px)";
+    var i = img.getBoundingClientRect(),
       t = innerWidth,
-      r = innerHeight,
-      d =
-        "inset(" +
-        Math.max(0, i.top) +
-        "px " +
-        Math.max(0, t - i.right) +
-        "px " +
-        Math.max(0, r - i.bottom) +
-        "px " +
-        Math.max(0, i.left) +
-        "px)";
-    (V.classList.add("show"),
-      (C.style.overflow = "hidden"),
-      V.animate && !De
-        ? V.animate([{ clipPath: d }, { clipPath: "inset(0px 0px 0px 0px)" }], {
-            duration: 900,
-            easing: "cubic-bezier(.7,0,.2,1)",
-            fill: "forwards",
-          })
-        : (V.style.clipPath = "inset(0)"),
-      it.focus({ preventScroll: !0 }));
+      r = innerHeight;
+    return (
+      "inset(" +
+      Math.max(0, i.top).toFixed(1) +
+      "px " +
+      Math.max(0, t - i.right).toFixed(1) +
+      "px " +
+      Math.max(0, r - i.bottom).toFixed(1) +
+      "px " +
+      Math.max(0, i.left).toFixed(1) +
+      "px round 12px)"
+    );
+  }
+
+  function Ne(e, n, a) {
+    a || je(e, !0);
+    X = e;
+    Fe = n;
+    Pe(e);
+    var d = getCardImgInset(n);
+    V.classList.add("show");
+    C.style.overflow = "hidden";
+    if (window.gsap && !De) {
+      window.gsap.killTweensOf(V);
+      window.gsap.fromTo(
+        V,
+        { clipPath: d, opacity: 0.85 },
+        {
+          clipPath: "inset(0px 0px 0px 0px round 0px)",
+          opacity: 1,
+          duration: 0.72,
+          ease: "power4.inOut",
+        },
+      );
+    } else {
+      V.style.clipPath = "inset(0)";
+    }
+    it.focus({ preventScroll: !0 });
   }
   var ne = l("#wipe"),
     me = l("#wpath"),
@@ -651,19 +747,19 @@ window.JB = sa;
           (X = -1),
           Fe && e === !0 && Fe.focus({ preventScroll: !0 }));
       };
-      if (V.animate && !De) {
-        var d = V.animate(
-          [
-            { clipPath: "inset(0px 0px 0px 0px)" },
-            { clipPath: "inset(50% 50% 50% 50%)" },
-          ],
-          {
-            duration: 700,
-            easing: "cubic-bezier(.7,0,.2,1)",
-            fill: "forwards",
+      if (window.gsap && !De) {
+        var backInset = Fe ? getCardImgInset(Fe) : "inset(45% 45% 45% 45% round 16px)";
+        window.gsap.killTweensOf(V);
+        window.gsap.to(V, {
+          clipPath: backInset,
+          opacity: 0,
+          duration: 0.56,
+          ease: "power3.inOut",
+          onComplete: function () {
+            V.style.opacity = "";
+            r();
           },
-        );
-        d.onfinish = r;
+        });
       } else r();
     }
   }
@@ -697,28 +793,35 @@ window.JB = sa;
     (v.addEventListener("click", function (e) {
       var n = e.target.closest && e.target.closest("[data-go]");
       if (n) {
-        (e.preventDefault(), Re(!1));
+        e.preventDefault();
         var a = n.dataset.go;
-        if (!Oe) {
-          var i = l("#" + (a === "assist-ding" ? "assist-ding" : a));
-          i && i.scrollIntoView({ behavior: "smooth" });
-          return;
-        }
-        var t = W.filter(function (r) {
-          return r.id === a || (a === "assist-ding" && r.dk);
-        })[0];
-        if (t) {
-          var targetY = t.sHold + (t.dk ? t.holdPx * 0.45 : 2);
-          if (window.gsap && window.ScrollToPlugin) {
-            window.gsap.to(window, {
-              scrollTo: targetY,
-              duration: 1.15,
-              ease: "power3.inOut",
-              overwrite: "auto",
-            });
-          } else {
-            scrollTo(0, targetY);
+        var flyToTarget = function () {
+          if (!Oe) {
+            var i = l("#" + (a === "assist-ding" ? "assist-ding" : a));
+            i && i.scrollIntoView({ behavior: "smooth" });
+            return;
           }
+          var t = W.filter(function (r) {
+            return r.id === a || (a === "assist-ding" && r.dk);
+          })[0];
+          if (t) {
+            var targetY = t.sHold + (t.dk ? t.holdPx * 0.45 : 2);
+            if (window.gsap && window.ScrollToPlugin) {
+              window.gsap.to(window, {
+                scrollTo: targetY,
+                duration: 1.1,
+                ease: "power3.inOut",
+                overwrite: "auto",
+              });
+            } else {
+              scrollTo(0, targetY);
+            }
+          }
+        };
+        if (menuOpenState) {
+          Re(!1, flyToTarget);
+        } else {
+          flyToTarget();
         }
       }
     }),
@@ -950,8 +1053,8 @@ window.JB = sa;
       ")"
     );
   }
-  var ct = [198, 47, 40],
-    ut = [198, 47, 40];
+  var ct = [56, 189, 248],
+    ut = [129, 140, 248];
   function It(e) {
     k.clearRect(0, 0, q, x);
     var n = q / 2,
@@ -969,7 +1072,7 @@ window.JB = sa;
       ((k.lineCap = "butt"),
         (k.lineJoin = "round"),
         (k.miterLimit = 1),
-        (k.strokeStyle = Je(ct, ut, ce)));
+        (k.strokeStyle = Je(ct, ut, ce)), (k.shadowColor = "rgba(56,189,248,0.45)"), (k.shadowBlur = 10));
       for (var o = null, u = 0; u < ge.length; u++) {
         var s = ge[u];
         if (s.z < e + i) {
@@ -1183,7 +1286,7 @@ window.JB = sa;
               1,
             ),
           ),
-        (t.el.style.pointerEvents = _ > 0.6 && u < 1.6 ? "auto" : "none"),
+        (t.el.style.zIndex = String(Math.max(1, Math.round(1000 - r / 10)))), (t.el.style.pointerEvents = elementOpacity > 0.35 && u > 0.55 && u < 2.2 ? "auto" : "none"),
         t.node && t.node.classList.toggle("on", o < 0.05 * p));
     }
   }
@@ -1235,24 +1338,24 @@ window.JB = sa;
   qe && (qe.textContent = "0");
   var Ve = {
     bg: [
-      [15, 55, 43],
-      [10, 10, 10],
+      [3, 5, 12],
+      [7, 11, 26],
     ],
     ink: [
-      [239, 231, 218],
-      [239, 231, 218],
+      [241, 245, 249],
+      [248, 250, 252],
     ],
     muted: [
-      [204, 197, 183],
-      [154, 160, 156],
+      [148, 163, 184],
+      [148, 163, 184],
     ],
     hair: [
-      [79, 105, 94],
-      [44, 47, 45],
+      [46, 68, 104],
+      [56, 86, 132],
     ],
     line: [
-      [198, 47, 40],
-      [198, 47, 40],
+      [56, 189, 248],
+      [129, 140, 248],
     ],
   };
   function Gt(e) {
@@ -1286,7 +1389,7 @@ window.JB = sa;
           if (d === Ue) {
             var s = M((u - r) / 1100, 0, 1),
               f = 1 - Math.pow(1 - s, 3);
-            ((qe.textContent = Math.round(14 * f)),
+            ((qe.textContent = Math.round(20 * f)),
               s < 1 && requestAnimationFrame(o));
           }
         })(r);
@@ -1535,6 +1638,16 @@ window.JB = sa;
         d.classList.toggle("on", +d.dataset.s <= e + 2);
       }));
   }
+  mt.addEventListener("click", function (e) {
+    var tk = e.target.closest && e.target.closest(".tk");
+    if (!tk) return;
+    var targetY = +tk.dataset.s + 2;
+    if (window.gsap && window.ScrollToPlugin) {
+      window.gsap.to(window, { scrollTo: targetY, duration: 1.0, ease: "power3.inOut", overwrite: "auto" });
+    } else {
+      scrollTo(0, targetY);
+    }
+  });
   var yt = null,
     bt = null,
     xt = -1,
@@ -1562,7 +1675,7 @@ window.JB = sa;
         trigger: Bt,
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.85,
+        scrub: 0.65,
         invalidateOnRefresh: true,
       },
     });
