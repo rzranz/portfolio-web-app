@@ -105,6 +105,12 @@
       "category": "EdTech & AI",
       "featured": true,
       "image": "/projects/ic-gamez.png",
+      "gallery": [
+        "/projects/ic-gamez.png",
+        "/projects/ic-gamez-hero.jpg",
+        "/projects/ic-gamez-practice.jpg",
+        "/projects/ic-gamez-cheatsheet.jpg"
+      ],
       "live_url": "https://gamez.icraftds.id/",
       "github_url": "",
       "description": "Gamified skill validation & interactive learning web application equipped with AI Mentor guidance, structured coding tracks, automated code validation, and a global leaderboard.",

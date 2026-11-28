@@ -64,7 +64,10 @@ window.PROJECTS = [
     ],
     "metrics": "8+ Modules \u00b7 AI Mentor \u00b7 100% Live",
     "images": [
-      "/projects/ic-gamez.png"
+      "/projects/ic-gamez.png",
+      "/projects/ic-gamez-hero.jpg",
+      "/projects/ic-gamez-practice.jpg",
+      "/projects/ic-gamez-cheatsheet.jpg"
     ],
     "cardImage": "/experience/thumbs/ic-gamez.webp",
     "liveUrl": "https://gamez.icraftds.id/",
