@@ -39,10 +39,18 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
     <script src="js/projects.js?v=4"></script>
-    <script type="module" crossorigin="" src="js/main.js?v=6"></script>
-    <link rel="stylesheet" crossorigin="" href="css/main.css?v=5" />
+    <script type="module" crossorigin="" src="js/main.js?v=7"></script>
+    <link rel="stylesheet" crossorigin="" href="css/main.css?v=6" />
   </head>
   <body>
+    <!-- Apple-Style Multilingual Greeting Preloader & Exit Transition Curtain -->
+    <div id="apple-loader" class="apple-loader" role="status" aria-live="polite" aria-label="Loading 3D Experience">
+      <div class="apple-loader-inner">
+        <span id="apple-greeting" class="apple-greeting">Hello</span>
+        <span id="apple-sub" class="apple-sub mono">Randi · 3D Experience</span>
+      </div>
+    </div>
+
     <noscript>
       <div class="seo-text">
         <h2>About Randi Zakaria Putra</h2>
@@ -480,6 +488,18 @@
                 ></span>
               </div>
             </form>
+
+            <div class="ct-docs" aria-label="Download CV and Portfolio">
+              <a href="/CV/CV%20-%20Randi%20Zakaria%20Putra.pdf" download="CV-Randi-Zakaria-Putra-EN.pdf" class="ct-doc-pill">
+                CV (EN) &darr;
+              </a>
+              <a href="/CV/CV%20-%20Randi%20Zakaria%20Putra.pdf" download="CV-Randi-Zakaria-Putra-ID.pdf" class="ct-doc-pill">
+                CV (ID) &darr;
+              </a>
+              <a href="/CV/PORTOFOLIO_RANDI%20ZAKARIA%20PUTRA.pdf" download="Portfolio-Randi-Zakaria-Putra.pdf" class="ct-doc-pill ct-doc-accent">
+                Portfolio PDF &darr;
+              </a>
+            </div>
 
             <div class="ct-foot mono">
               <a

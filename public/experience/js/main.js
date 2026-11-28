@@ -15,6 +15,171 @@
   const ScrollTrigger = window.ScrollTrigger;
   const ScrollToPlugin = window.ScrollToPlugin;
 
+  /* -------------------------------------------------------------------------
+     0. Apple-Style Multilingual Greeting Preloader + Seamless Exit to Main
+     ------------------------------------------------------------------------- */
+  const TRANSITION_KEY = 'rz_nav_transition';
+  const loaderEl = doc.getElementById('apple-loader');
+  const greetingEl = doc.getElementById('apple-greeting');
+  const loaderSubEl = doc.getElementById('apple-sub');
+  const GREETINGS = ['Hello', 'Halo', 'Ciao', 'Bonjour', 'こんにちは', 'Hola', '안녕하세요'];
+
+  function runApplePreloader() {
+    if (!loaderEl || !greetingEl) return;
+
+    try {
+      window.sessionStorage.removeItem(TRANSITION_KEY);
+    } catch {
+      // ignore storage restrictions
+    }
+
+    const reduced =
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduced || !gsap) {
+      loaderEl.classList.add('is-done');
+      return;
+    }
+
+    let finished = false;
+    const tl = gsap.timeline();
+
+    const revealExperience = () => {
+      if (finished) return;
+      finished = true;
+      tl.kill();
+
+      const heroTitle = doc.querySelector('.hero-fullname');
+      const heroLogosNode = doc.querySelectorAll('#hero-bouquet .hero-logo');
+      const outTl = gsap.timeline({
+        onComplete: () => {
+          loaderEl.classList.add('is-done');
+          if (heroTitle) gsap.set(heroTitle, { clearProps: 'transform,opacity' });
+        },
+      });
+
+      outTl
+        .to(greetingEl, { opacity: 0, y: -18, duration: 0.26, ease: 'power2.in' })
+        .to(loaderSubEl, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '<')
+        .to(
+          loaderEl,
+          {
+            clipPath: 'inset(0% 0% 100% 0%)',
+            duration: 0.72,
+            ease: 'power4.inOut',
+          },
+          '-=0.06',
+        );
+
+      if (heroTitle) {
+        outTl.fromTo(
+          heroTitle,
+          { opacity: 0, scale: 0.92, y: 24 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+          '-=0.52',
+        );
+      }
+
+      if (heroLogosNode.length) {
+        outTl.fromTo(
+          heroLogosNode,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.55, stagger: 0.04, ease: 'power2.out', clearProps: 'opacity' },
+          '-=0.5',
+        );
+      }
+    };
+
+    // Allow instant skip on click/tap
+    loaderEl.addEventListener('click', revealExperience, { once: true });
+
+    gsap.set(greetingEl, { opacity: 0, y: 12 });
+    gsap.fromTo(
+      loaderSubEl,
+      { opacity: 0, y: 6 },
+      { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' },
+    );
+
+    GREETINGS.forEach((word, idx) => {
+      const isFirst = idx === 0;
+      const isLast = idx === GREETINGS.length - 1;
+      const holdDur = isFirst ? 0.24 : isLast ? 0.22 : 0.12;
+
+      tl.call(() => {
+        greetingEl.textContent = word;
+      })
+        .fromTo(
+          greetingEl,
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: isFirst ? 0.3 : 0.16, ease: 'power2.out' },
+        )
+        .to(greetingEl, {
+          opacity: isLast ? 1 : 0,
+          y: isLast ? 0 : -10,
+          duration: isLast ? 0.01 : 0.13,
+          delay: holdDur,
+          ease: 'power2.in',
+        });
+    });
+
+    tl.call(revealExperience);
+  }
+
+  function transitionBackToMain(href) {
+    try {
+      window.sessionStorage.setItem(TRANSITION_KEY, 'to-main');
+    } catch {
+      // ignore storage restrictions
+    }
+
+    if (!loaderEl || !greetingEl || !gsap) {
+      window.location.href = href;
+      return;
+    }
+
+    loaderEl.classList.remove('is-done');
+    greetingEl.textContent = 'RANN.';
+    if (loaderSubEl) loaderSubEl.textContent = 'Returning to Main Portfolio';
+
+    gsap.set(loaderEl, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 1 });
+    gsap.set([greetingEl, loaderSubEl], { opacity: 0, y: 14 });
+
+    const exitTl = gsap.timeline({
+      onComplete: () => {
+        window.location.href = href;
+      },
+    });
+
+    exitTl
+      .to(loaderEl, {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        duration: 0.56,
+        ease: 'power4.inOut',
+      })
+      .to(
+        [greetingEl, loaderSubEl],
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.28,
+          stagger: 0.05,
+          ease: 'power2.out',
+        },
+        '-=0.22',
+      );
+  }
+
+  doc.addEventListener('click', (e) => {
+    const backLink = e.target.closest && e.target.closest('a[href="/"]');
+    if (backLink && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+      e.preventDefault();
+      transitionBackToMain('/');
+    }
+  });
+
+  runApplePreloader();
+
   const qs = (sel, parent) => (parent || doc).querySelector(sel);
   const qsa = (sel, parent) => Array.from((parent || doc).querySelectorAll(sel));
   const clamp = (val, min, max) => (val < min ? min : val > max ? max : val);

@@ -3064,3 +3064,95 @@ body {
     max-width: 280px !important;
   }
 }
+
+/* =========================================================================
+   APPLE-STYLE MULTILINGUAL PRELOADER & EXIT TRANSITION CURTAIN
+   ========================================================================= */
+.apple-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000000;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: inset(0% 0% 0% 0%);
+  user-select: none;
+  cursor: pointer;
+}
+
+.apple-loader.is-done {
+  display: none;
+  pointer-events: none;
+}
+
+.apple-loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.apple-greeting {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(44px, 8.5vw, 96px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  color: #f8fafc;
+  will-change: transform, opacity;
+}
+
+.apple-sub {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+/* CV & Portfolio PDF Download Strip inside Contact */
+.ct-docs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ct-doc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: #0b1120;
+  color: #e2e8f0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.ct-doc-pill:hover,
+.ct-doc-pill:focus-visible {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+.ct-doc-pill.ct-doc-accent {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.1);
+  color: #bae6fd;
+}
+
+.ct-doc-pill.ct-doc-accent:hover,
+.ct-doc-pill.ct-doc-accent:focus-visible {
+  background: #38bdf8;
+  color: #020617;
+}

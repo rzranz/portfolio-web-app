@@ -17,6 +17,7 @@ import Footer from './components/Footer'
 import CustomCursor from './components/CustomCursor'
 import StaggeredMenu from './components/StaggeredMenu'
 import MobileAssistiveNav from './components/MobileAssistiveNav'
+import PageTransitionOverlay from './components/PageTransitionOverlay'
 import { useLanguage } from './lib/i18n'
 import { scrollToSection } from './lib/scroll'
 
@@ -29,6 +30,7 @@ const ENABLE_SIDEBAR_MENU = false
 function App() {
   const { language, toggleLanguage, t } = useLanguage()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [exitingToExperience, setExitingToExperience] = useState(false)
   const [originY, setOriginY] = useState(0)
   const [isScrolled, setIsScrolled] = useState(false)
   const [viewportMode, setViewportMode] = useState<'mobile' | 'tablet' | 'desktop'>(() => {
@@ -134,6 +136,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-[var(--color-canvas)] overflow-x-clip selection:bg-[var(--color-primary)] selection:text-white">
+      <PageTransitionOverlay exitingToExperience={exitingToExperience} />
       <CustomCursor />
 
       {/* Background Layer with Ambient Glow revealed when canvas pulls back in 3D */}
@@ -257,7 +260,11 @@ function App() {
 
         <main className="relative z-10">
           {/* 00: Hero (3D Book Perspective Hero active; original Hero preserved behind toggle) */}
-          {USE_BOOK_HERO ? <HeroBook /> : <Hero />}
+          {USE_BOOK_HERO ? (
+            <HeroBook onExploreExperience={() => setExitingToExperience(true)} />
+          ) : (
+            <Hero />
+          )}
           
           {/* 01: About (sticky top-0 z-20) */}
           <About />

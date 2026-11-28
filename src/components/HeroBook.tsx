@@ -5,8 +5,13 @@ import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '../lib/i18n'
 import { scrollToSection } from '../lib/scroll'
 import { Particles } from './ui/particles'
+import DownloadMenu from './DownloadMenu'
 
 gsap.registerPlugin(ScrollTrigger)
+
+interface HeroBookProps {
+  onExploreExperience?: () => void
+}
 
 interface HeroNavItem {
   number: string
@@ -26,10 +31,9 @@ const HERO_NAV_ITEMS: HeroNavItem[] = [
 const SOCIAL_LINKS = [
   { number: '01', label: 'github', href: 'https://github.com/rzranz' },
   { number: '02', label: 'linkedin', href: 'https://www.linkedin.com/in/randizakariaputra' },
-  { number: '03', label: 'cv (ats)', href: 'mailto:randizakariaputra22@gmail.com?subject=Request%20CV%20ATS%20-%20Randi%20Zakaria%20Putra' },
 ]
 
-export default function HeroBook() {
+export default function HeroBook({ onExploreExperience }: HeroBookProps) {
   const { t, language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -132,6 +136,12 @@ export default function HeroBook() {
             {/* Explore 3D Experience Link (under name, underlined Explore + arrow) */}
             <a
               href="/experience/"
+              onClick={(e) => {
+                if (onExploreExperience) {
+                  e.preventDefault()
+                  onExploreExperience()
+                }
+              }}
               className="group mt-5 inline-flex items-center gap-2 font-mono text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-text-main)] hover:text-[var(--color-primary)] active:scale-95 transition-all duration-200 w-fit select-none"
             >
               <span className="border-b border-[var(--color-text-main)] group-hover:border-[var(--color-primary)] pb-0.5 transition-colors">
@@ -267,6 +277,7 @@ export default function HeroBook() {
                 <ArrowUpRight className="w-3 h-3 opacity-60 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             ))}
+            <DownloadMenu variant="hero" align="right" openDirection="up" />
           </div>
         </div>
       </div>
