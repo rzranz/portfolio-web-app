@@ -136,7 +136,10 @@ function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-[var(--color-canvas)] overflow-x-clip selection:bg-[var(--color-primary)] selection:text-white">
-      <PageTransitionOverlay exitingToExperience={exitingToExperience} />
+      <PageTransitionOverlay
+        exitingToExperience={exitingToExperience}
+        onResetExit={() => setExitingToExperience(false)}
+      />
       <CustomCursor />
 
       {/* Background Layer with Ambient Glow revealed when canvas pulls back in 3D */}

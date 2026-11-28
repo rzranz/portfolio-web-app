@@ -174,7 +174,7 @@
     const backLink = e.target.closest && e.target.closest('a[href="/"]');
     if (backLink && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
       e.preventDefault();
-      transitionBackToMain('/');
+      transitionBackToMain('/?from=experience');
     }
   });
 

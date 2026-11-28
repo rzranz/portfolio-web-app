@@ -13,6 +13,13 @@
           document.documentElement.classList.add('dark');
           localStorage.setItem('theme', 'dark');
         }
+        if (
+          sessionStorage.getItem('rz_nav_transition') === 'to-main' ||
+          window.location.search.indexOf('from=experience') !== -1 ||
+          (document.referrer && document.referrer.indexOf('/experience') !== -1)
+        ) {
+          document.documentElement.style.backgroundColor = '#000000';
+        }
       } catch (e) {
         document.documentElement.classList.add('dark');
       }
