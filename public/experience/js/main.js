@@ -139,11 +139,15 @@
     }
 
     loaderEl.classList.remove('is-done');
-    greetingEl.textContent = 'RANN.';
-    if (loaderSubEl) loaderSubEl.textContent = 'Returning to Main Portfolio';
+    greetingEl.innerHTML =
+      '<span style="display:inline-flex;align-items:center;gap:14px;">' +
+      '<img src="/RLogo.svg" alt="Randi Logo" style="width:40px;height:40px;border-radius:8px;display:block;" />' +
+      '<span style="font-weight:900;letter-spacing:-0.04em;">RANN<span style="color:#38bdf8;">.</span></span>' +
+      '</span>';
+    if (loaderSubEl) loaderSubEl.style.display = 'none';
 
     gsap.set(loaderEl, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 1 });
-    gsap.set([greetingEl, loaderSubEl], { opacity: 0, y: 14 });
+    gsap.set(greetingEl, { opacity: 0, y: 12 });
 
     const exitTl = gsap.timeline({
       onComplete: () => {
@@ -154,19 +158,18 @@
     exitTl
       .to(loaderEl, {
         clipPath: 'inset(0% 0% 0% 0%)',
-        duration: 0.56,
+        duration: 0.48,
         ease: 'power4.inOut',
       })
       .to(
-        [greetingEl, loaderSubEl],
+        greetingEl,
         {
           opacity: 1,
           y: 0,
-          duration: 0.28,
-          stagger: 0.05,
+          duration: 0.24,
           ease: 'power2.out',
         },
-        '-=0.22',
+        '-=0.18',
       );
   }
 

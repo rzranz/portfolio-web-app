@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, Download, FileText } from 'lucide-react'
 
-export const DOWNLOAD_DOCUMENTS = [
+const DOWNLOAD_DOCUMENTS = [
   {
     id: 'cv-en',
     label: 'CV — English',
@@ -64,7 +64,7 @@ export default function DownloadMenu({
 
   const alignClass =
     align === 'right'
-      ? 'right-0'
+      ? 'left-0 sm:left-auto sm:right-0'
       : 'left-0'
 
   return (
