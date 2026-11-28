@@ -1,11 +1,11 @@
 /**
- * RandiLoader — Single Reusable Page Transition & Loading Engine
+ * RandiLoader — Single Unified Reusable Page Transition & Loading Engine
  * Shared identically between Main Portfolio (/) and 3D Experience (/experience/).
  *
- * Public API:
- *   window.RandiLoader.enter('greetings' | 'brand', { onDone })
- *   window.RandiLoader.autoEnter('greetings' | 'brand', { always: boolean })
- *   window.RandiLoader.navigateTo(url, nextMode)
+ * Both modes share the EXACT same layout, timing, progress bar (0% -> 100%),
+ * and upward curtain lift:
+ *   - 'greetings' (Main -> 3D Experience): Apple-style multilingual greetings + 0-100% bar
+ *   - 'brand'     (3D Experience -> Main): Logo + RANN. + 0-100% bar
  */
 (function initRandiLoader() {
   'use strict';
@@ -46,7 +46,7 @@
         user-select: none;
         clip-path: inset(0% 0% 0% 0%);
         opacity: 1;
-        transition: clip-path 0.72s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.35s ease;
+        transition: clip-path 0.72s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.32s ease;
         font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
       }
       #${ROOT_ID}.rz-hidden {
@@ -65,7 +65,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 18px;
         padding: 0 24px;
         text-align: center;
         transition: opacity 0.26s ease, transform 0.26s ease;
@@ -73,6 +73,12 @@
       #${ROOT_ID} .rz-inner.rz-fade-out {
         opacity: 0;
         transform: translateY(-14px);
+      }
+      #${ROOT_ID} .rz-stage {
+        min-height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       #${ROOT_ID} .rz-brand {
         display: inline-flex;
@@ -86,7 +92,7 @@
         display: block;
       }
       #${ROOT_ID} .rz-brand-name {
-        font-size: 30px;
+        font-size: 32px;
         font-weight: 900;
         letter-spacing: -0.04em;
         line-height: 1;
@@ -95,8 +101,15 @@
       #${ROOT_ID} .rz-brand-name span {
         color: #38bdf8;
       }
+      #${ROOT_ID} .rz-greeting {
+        font-size: clamp(38px, 7.5vw, 72px);
+        font-weight: 600;
+        letter-spacing: -0.035em;
+        line-height: 1.08;
+        color: #f8fafc;
+      }
       #${ROOT_ID} .rz-track {
-        width: 192px;
+        width: 200px;
         height: 2px;
         background: #1e293b;
         border-radius: 999px;
@@ -114,20 +127,6 @@
         font-size: 12px;
         letter-spacing: 0.22em;
         color: #94a3b8;
-      }
-      #${ROOT_ID} .rz-greeting {
-        font-size: clamp(44px, 8.5vw, 96px);
-        font-weight: 600;
-        letter-spacing: -0.035em;
-        line-height: 1.08;
-        color: #f8fafc;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.18s ease, transform 0.18s ease;
-      }
-      #${ROOT_ID} .rz-greeting.rz-show {
-        opacity: 1;
-        transform: translateY(0);
       }
     `;
     (document.head || document.documentElement).appendChild(style);
@@ -162,13 +161,18 @@
     );
   }
 
-  function runBrandLoader(el, onDone) {
+  /* Single unified 0% -> 100% loader used identically by both 'greetings' and 'brand' */
+  function runUnifiedLoader(el, isGreetings, onDone) {
+    const headerHtml = isGreetings
+      ? '<span class="rz-greeting">Hello</span>'
+      : '<div class="rz-brand">' +
+        '<img src="/RLogo.svg" alt="Randi Logo" />' +
+        '<span class="rz-brand-name">RANN<span>.</span></span>' +
+        '</div>';
+
     el.innerHTML =
       '<div class="rz-inner">' +
-      '<div class="rz-brand">' +
-      '<img src="/RLogo.svg" alt="Randi Logo" />' +
-      '<span class="rz-brand-name">RANN<span>.</span></span>' +
-      '</div>' +
+      '<div class="rz-stage">' + headerHtml + '</div>' +
       '<div class="rz-track"><div class="rz-bar"></div></div>' +
       '<span class="rz-pct">0%</span>' +
       '</div>';
@@ -176,77 +180,38 @@
     const inner = el.querySelector('.rz-inner');
     const bar = el.querySelector('.rz-bar');
     const pct = el.querySelector('.rz-pct');
-    const duration = 850;
+    const greetingEl = isGreetings ? el.querySelector('.rz-greeting') : null;
+
+    // Identical smooth 0-100% duration for both directions
+    const duration = isGreetings ? 1350 : 1050;
     const start = performance.now();
+    let lastGreetingIdx = 0;
 
     function step(now) {
       const raw = Math.min(1, (now - start) / duration);
-      // Ease in-out cubic
+      // Smooth cubic ease-in-out for consistent visual cadence
       const eased = raw < 0.5 ? 4 * raw * raw * raw : 1 - Math.pow(-2 * raw + 2, 3) / 2;
+
       if (bar) bar.style.transform = `scaleX(${eased.toFixed(4)})`;
       if (pct) pct.textContent = `${Math.round(eased * 100)}%`;
+
+      if (greetingEl) {
+        const idx = Math.min(GREETINGS.length - 1, Math.floor(raw * GREETINGS.length));
+        if (idx !== lastGreetingIdx) {
+          lastGreetingIdx = idx;
+          greetingEl.textContent = GREETINGS[idx];
+        }
+      }
 
       if (raw < 1) {
         activeRaf = requestAnimationFrame(step);
       } else {
         activeRaf = 0;
-        activeTimers.push(setTimeout(() => finishLift(el, inner, onDone), 100));
+        activeTimers.push(setTimeout(() => finishLift(el, inner, onDone), 120));
       }
     }
 
     activeRaf = requestAnimationFrame(step);
-  }
-
-  function runGreetingsLoader(el, onDone) {
-    el.innerHTML =
-      '<div class="rz-inner" style="cursor:pointer;">' +
-      '<span class="rz-greeting">Hello</span>' +
-      '</div>';
-
-    const inner = el.querySelector('.rz-inner');
-    const wordEl = el.querySelector('.rz-greeting');
-    let finished = false;
-
-    const complete = () => {
-      if (finished) return;
-      finished = true;
-      clearTimers();
-      finishLift(el, inner, onDone);
-    };
-
-    el.addEventListener('click', complete, { once: true });
-
-    let idx = 0;
-    function showNext() {
-      if (finished) return;
-      if (idx >= GREETINGS.length) {
-        complete();
-        return;
-      }
-      const isFirst = idx === 0;
-      const isLast = idx === GREETINGS.length - 1;
-      wordEl.textContent = GREETINGS[idx];
-      wordEl.classList.remove('rz-show');
-
-      // Force frame so transition triggers cleanly
-      activeRaf = requestAnimationFrame(() => {
-        wordEl.classList.add('rz-show');
-        const hold = isFirst ? 340 : isLast ? 300 : 190;
-        activeTimers.push(
-          setTimeout(() => {
-            if (isLast) {
-              complete();
-            } else {
-              wordEl.classList.remove('rz-show');
-              idx += 1;
-              activeTimers.push(setTimeout(showNext, 130));
-            }
-          }, hold),
-        );
-      });
-    }
-
-    showNext();
   }
 
   function enter(mode, options) {
@@ -272,11 +237,7 @@
       }
     }
 
-    if (mode === 'greetings') {
-      runGreetingsLoader(el, opts.onDone);
-    } else {
-      runBrandLoader(el, opts.onDone);
-    }
+    runUnifiedLoader(el, mode === 'greetings', opts.onDone);
   }
 
   function shouldAutoEnter(defaultMode, always) {
@@ -325,25 +286,18 @@
     }
 
     const el = getOrCreateOverlay();
-    el.innerHTML =
-      '<div class="rz-inner">' +
-      '<div class="rz-brand">' +
-      '<img src="/RLogo.svg" alt="Randi Logo" />' +
-      '<span class="rz-brand-name">RANN<span>.</span></span>' +
-      '</div>' +
-      '</div>';
-
+    el.innerHTML = '';
     el.classList.remove('rz-hidden', 'rz-lift');
     el.classList.add('rz-from-bottom');
 
-    // Slide obsidian curtain cleanly up from bottom, then navigate
+    // Clean obsidian curtain slides up smoothly, then destination plays the unified 0-100% loader
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         el.classList.remove('rz-from-bottom');
         activeTimers.push(
           setTimeout(() => {
             window.location.href = url;
-          }, 520),
+          }, 420),
         );
       });
     });
