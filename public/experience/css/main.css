@@ -2604,10 +2604,11 @@ body {
   line-height: 0.94 !important;
 }
 
-/* Giant RANDI + Large Interactive Tech Stack Bouquet */
+/* Giant RANDI + Large Interactive Tech Stack Bouquet (All 8 Logos Visible & Responsive) */
 .hero-scene {
-  width: min(92vw, 960px);
-  min-height: 220px;
+  width: min(92vw, 860px) !important;
+  height: clamp(290px, 46vh, 420px) !important;
+  min-height: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2617,16 +2618,17 @@ body {
 .hero-fullname {
   position: relative;
   z-index: 4;
-  font-size: clamp(64px, 14vw, 200px) !important;
+  font-size: clamp(64px, 13.5vw, 196px) !important;
   line-height: 0.9 !important;
   color: #f8fafc;
   pointer-events: none;
   user-select: none;
+  text-shadow: 0 8px 36px rgba(0, 0, 0, 0.85);
 }
 
 .hero-bouquet {
   position: absolute;
-  inset: -40px -20px;
+  inset: 0;
   z-index: 2;
   pointer-events: none;
 }
@@ -2642,13 +2644,23 @@ body {
   border: 0;
   padding: 6px;
   cursor: pointer;
-  color: rgba(147, 197, 253, 0.34);
+  color: rgba(186, 230, 253, 0.56);
   transition: color 0.22s ease;
   will-change: transform;
 }
 
+/* 8 logos arranged cleanly around RANDI — all 100% inside viewport */
+.hero-logo.hl-1 { top: 2%; left: 10%; }
+.hero-logo.hl-2 { top: -4%; left: 45%; }
+.hero-logo.hl-3 { top: 4%; right: 10%; }
+.hero-logo.hl-4 { top: 40%; left: 0%; }
+.hero-logo.hl-5 { top: 38%; right: 0%; }
+.hero-logo.hl-6 { bottom: 2%; left: 14%; }
+.hero-logo.hl-7 { bottom: -4%; left: 46%; }
+.hero-logo.hl-8 { bottom: 4%; right: 13%; }
+
 .hero-logo i {
-  font-size: clamp(44px, 6.4vw, 96px);
+  font-size: clamp(46px, 6.2vw, 88px);
   line-height: 1;
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.22s ease;
 }
@@ -2658,7 +2670,7 @@ body {
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--line);
+  color: #38bdf8;
   opacity: 0;
   transform: translateY(4px);
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -2667,7 +2679,7 @@ body {
 
 .hero-logo:hover,
 .hero-logo:focus-visible {
-  color: var(--line);
+  color: #38bdf8;
   z-index: 6;
 }
 
@@ -2680,6 +2692,196 @@ body {
 .hero-logo:focus-visible span {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* =========================================================================
+   WCAG AAA HIGH-CONTRAST PROJECT DETAIL MODAL (#proj) — ZERO CLIPPING
+   ========================================================================= */
+#proj {
+  --bg: #05070d;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --hair: rgba(148, 163, 184, 0.22);
+  --line: #38bdf8;
+  background: #05070d !important;
+  color: #f8fafc !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pv {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(32px, 4vw, 64px);
+  padding: 92px clamp(24px, 4.5vw, 64px) 72px !important;
+  box-sizing: border-box;
+}
+
+.pv-l {
+  position: sticky;
+  top: 84px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: calc(100vh - 112px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  padding-bottom: 24px;
+  min-width: 0;
+}
+
+.pv-l .mono {
+  color: #94a3b8 !important;
+  white-space: normal;
+  line-height: 1.5;
+}
+
+.pv-l h2.d {
+  font-size: clamp(26px, 2.8vw, 42px) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.025em !important;
+  color: #f8fafc !important;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-break: normal;
+  margin: 0;
+}
+
+.pv-metrics {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.55;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #bae6fd !important;
+  padding: 10px 14px;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.1);
+  white-space: normal;
+}
+
+.pv-l p {
+  margin: 0;
+  max-width: 100%;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #cbd5e1 !important;
+}
+
+.pv-highlights {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pv-highlights li {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #cbd5e1 !important;
+  padding-left: 14px;
+  border-left: 2px solid #38bdf8;
+  overflow-wrap: break-word;
+}
+
+.pv-dl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #0b1120;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.pv-dl dt {
+  color: #94a3b8 !important;
+  font-size: 10px;
+}
+
+.pv-dl dd {
+  color: #f8fafc !important;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.pv-stack span {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: #0f172a;
+  color: #e2e8f0 !important;
+}
+
+.pv-btn-primary {
+  background: #38bdf8;
+  color: #020617 !important;
+}
+
+.pv-btn-secondary {
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  background: #0f172a;
+  color: #f8fafc !important;
+}
+
+.pv-next {
+  border-top: 1px solid rgba(148, 163, 184, 0.22);
+  padding-top: 18px;
+  margin-top: 4px;
+}
+
+.pv-next .d {
+  font-size: clamp(20px, 2vw, 30px) !important;
+  line-height: 1.15 !important;
+  white-space: normal !important;
+  color: #f8fafc !important;
+  transition: color 0.2s ease;
+}
+
+.pv-next:hover .d {
+  color: #38bdf8 !important;
+}
+
+.pv-r {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.pv-r figure {
+  margin: 0;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0b1120;
+}
+
+.pv-r img {
+  width: 100%;
+  height: auto;
+  transform: none !important;
+  display: block;
+}
+
+.pv-x {
+  background: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.42) !important;
+  color: #f8fafc !important;
+}
+
+.pv-x:hover {
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
 }
 
 /* 3D Tech Stack Visual Showcase Stop (#tech-stack) */
@@ -2702,7 +2904,7 @@ body {
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
-  color: var(--muted);
+  color: #cbd5e1;
   cursor: pointer;
   transition: transform 0.2s ease, color 0.2s ease;
 }
@@ -2717,29 +2919,148 @@ body {
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  opacity: 0.8;
+  color: #94a3b8;
 }
 
 .tech-3d-item:hover,
 .tech-3d-item:focus-visible {
-  color: var(--line);
+  color: #38bdf8;
   transform: translateY(-4px) scale(1.1);
 }
 
+.tech-3d-item:hover span,
+.tech-3d-item:focus-visible span {
+  color: #f8fafc;
+}
+
+/* =========================================================================
+   COMPREHENSIVE TABLET & MOBILE RESPONSIVENESS
+   ========================================================================= */
+@media (max-width: 900px) {
+  .pv {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+    padding: calc(env(safe-area-inset-top, 0px) + 74px) 20px 56px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+
+  .pv-l {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .pv-l h2.d {
+    font-size: clamp(24px, 6.8vw, 34px) !important;
+  }
+
+  .pv-r {
+    width: 100% !important;
+    margin: 0 !important;
+    gap: 16px !important;
+  }
+}
+
 @media (max-width: 767px) {
+  .bar-left {
+    gap: 10px;
+  }
+
+  .back-pill {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  #menu .d {
+    font-size: clamp(30px, 9.2vw, 52px) !important;
+    white-space: normal !important;
+    line-height: 1.05 !important;
+  }
+
+  .hero-scene {
+    width: 94vw !important;
+    height: clamp(240px, 42vh, 330px) !important;
+  }
+
   .hero-fullname {
-    font-size: clamp(56px, 19vw, 96px) !important;
+    font-size: clamp(54px, 18vw, 88px) !important;
   }
-  .hero-bouquet {
-    inset: -32px -12px;
+
+  .hero-logo {
+    padding: 4px;
   }
+
   .hero-logo i {
-    font-size: clamp(34px, 10vw, 52px);
+    font-size: clamp(30px, 8.8vw, 46px);
   }
+
+  .hero-logo.hl-1 { top: 2%; left: 6%; }
+  .hero-logo.hl-2 { top: -2%; left: 43%; }
+  .hero-logo.hl-3 { top: 2%; right: 6%; }
+  .hero-logo.hl-4 { top: 41%; left: 0%; }
+  .hero-logo.hl-5 { top: 41%; right: 0%; }
+  .hero-logo.hl-6 { bottom: 2%; left: 8%; }
+  .hero-logo.hl-7 { bottom: -2%; left: 43%; }
+  .hero-logo.hl-8 { bottom: 2%; right: 8%; }
+
+  .num .d {
+    font-size: clamp(58px, 16vw, 96px) !important;
+  }
+
+  .wk-h {
+    font-size: clamp(52px, 15vw, 92px) !important;
+  }
+
+  .tech-3d-wrap {
+    width: 92vw;
+  }
+
   .tech-3d-grid {
-    gap: 12px 16px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px 6px;
+    margin-top: 14px;
   }
+
+  .tech-3d-item {
+    padding: 4px 2px;
+    gap: 5px;
+  }
+
   .tech-3d-item i {
-    font-size: 28px;
+    font-size: 26px;
+  }
+
+  .tech-3d-item span {
+    font-size: 8.5px;
+    letter-spacing: 0.04em;
+  }
+
+  .ct-stack {
+    width: 92vw;
+    gap: 14px;
+  }
+
+  .ct-form {
+    width: 100%;
+    max-width: 90vw;
+  }
+
+  .pv-actions {
+    flex-direction: column;
+  }
+
+  .pv-btn-primary,
+  .pv-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pv-r figure.is-mobile-shot {
+    max-width: 280px !important;
   }
 }
