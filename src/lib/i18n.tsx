@@ -117,8 +117,8 @@ export const translations: Translations = {
 
   'exp.cat.darulfikri': { en: 'Educational Client', id: 'Klien Pendidikan' },
   'exp.desc.darulfikri': { 
-    en: 'Integrated automated Pakasir payment gateway for student tuition (SPP) and real-time WhatsApp parent notification bots for RA Darul Fikri.', 
-    id: 'Mengintegrasikan gateway pembayaran Pakasir otomatis untuk SPP dan bot notifikasi WhatsApp real-time kepada wali murid RA Darul Fikri.' 
+    en: 'Integrated automated payment gateway for student tuition (SPP) and real-time WhatsApp parent notification bots for RA Darul Fikri.', 
+    id: 'Mengintegrasikan payment gateway otomatis untuk SPP dan bot notifikasi WhatsApp real-time kepada wali murid RA Darul Fikri.' 
   },
 
   'exp.cat.sh': { en: 'Software House (Active)', id: 'Software House (Aktif)' },

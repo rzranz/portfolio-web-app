@@ -8,7 +8,7 @@
     "email": "randizakariaputra22@gmail.com",
     "github": "https://github.com/rzranz",
     "linkedin": "https://www.linkedin.com/in/randizakariaputra",
-    "summary": "Recent Informatics Engineering graduate from UNIKOM with a strong focus on Full Stack and Backend Web Development. Proven track record in designing database architectures, building scalable REST APIs (Laravel, Go, Spring Boot), and integrating secure payment gateways (Pakasir) & real-time notification systems (Fonnte WhatsApp API). Experienced in managing technical projects end-to-end and leading organizational divisions.",
+    "summary": "Recent Informatics Engineering graduate from UNIKOM with a strong focus on Full Stack and Backend Web Development. Proven track record in designing database architectures, building scalable REST APIs (Laravel, Go, Spring Boot), and integrating secure payment gateways & real-time WhatsApp notification systems. Experienced in managing technical projects end-to-end and leading organizational divisions.",
     "education": {
       "institution": "Universitas Komputer Indonesia (UNIKOM)",
       "degree": "Bachelor of Informatics Engineering (Sarjana Teknik Informatika)",
@@ -135,13 +135,13 @@
       "image": "/projects/darul-fikri.png",
       "live_url": "https://ra.darulfikri.sch.id/",
       "github_url": "https://github.com/rzranz",
-      "description": "Engineered an automated school fee (SPP) payment application using Laravel and Vue.js to digitize administrative workflows, replacing manual school records. Integrated Pakasir payment gateway for secure, trackable transactions, and Fonnte WhatsApp API to deliver real-time payment notifications to parents.",
-      "stack": ["Laravel", "Vue.js", "Pakasir Payment Gateway", "Fonnte WhatsApp API", "MySQL", "Tailwind CSS"],
+      "description": "Engineered an automated school fee (SPP) payment application using Laravel and Vue.js to digitize administrative workflows, replacing manual school records. Integrated a payment gateway for secure, trackable transactions, and WhatsApp API to deliver real-time payment notifications to parents.",
+      "stack": ["Laravel", "Vue.js", "Payment Gateway", "WhatsApp API", "MySQL", "Tailwind CSS"],
       "tags": ["Client Project", "Thesis (Tugas Akhir)", "Fintech", "Live Production"],
       "highlights": [
         "Built complete end-to-end digital tuition billing system, replacing manual pen-and-paper tracking",
-        "Integrated Pakasir payment gateway for secure, centralized, and traceable financial transactions",
-        "Embedded Fonnte WhatsApp API for instant real-time receipts and billing reminders to parents"
+        "Integrated payment gateway for secure, centralized, and traceable financial transactions",
+        "Embedded WhatsApp API for instant real-time receipts and billing reminders to parents"
       ],
       "metrics": "100% Automated · Live at ra.darulfikri.sch.id"
     },

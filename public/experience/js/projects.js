@@ -88,17 +88,17 @@ window.PROJECTS = [
     "period": "Jan 2026 - Aug 2026",
     "year": "2026",
     "device": "desktop",
-    "description": "Engineered an automated school fee (SPP) payment application using Laravel and Vue.js to digitize administrative workflows, replacing manual school records. Integrated Pakasir payment gateway for secure, trackable transactions, and Fonnte WhatsApp API to deliver real-time payment notifications to parents.",
+    "description": "Engineered an automated school fee (SPP) payment application using Laravel and Vue.js to digitize administrative workflows, replacing manual school records. Integrated a payment gateway for secure, trackable transactions, and WhatsApp API to deliver real-time payment notifications to parents.",
     "highlights": [
       "Built complete end-to-end digital tuition billing system, replacing manual pen-and-paper tracking",
-      "Integrated Pakasir payment gateway for secure, centralized, and traceable financial transactions",
-      "Embedded Fonnte WhatsApp API for instant real-time receipts and billing reminders to parents"
+      "Integrated payment gateway for secure, centralized, and traceable financial transactions",
+      "Embedded WhatsApp API for instant real-time receipts and billing reminders to parents"
     ],
     "services": [
       "Laravel",
       "Vue.js",
-      "Pakasir Payment Gateway",
-      "Fonnte WhatsApp API",
+      "Payment Gateway",
+      "WhatsApp API",
       "MySQL",
       "Tailwind CSS"
     ],
@@ -113,7 +113,7 @@ window.PROJECTS = [
     "cta": "Visit Live Platform",
     "lines": [
       "Built complete end-to-end digital tuition billing system, replacing manual pen-and-paper tracking",
-      "Integrated Pakasir payment gateway for secure, centralized, and traceable financial transactions"
+      "Integrated payment gateway for secure, centralized, and traceable financial transactions"
     ]
   },
   {

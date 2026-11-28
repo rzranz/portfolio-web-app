@@ -62,7 +62,7 @@ const MILESTONES: MilestoneItem[] = [
     role: 'Fullstack & Integration Engineer',
     period: 'Tuition & Notification Gateway · 2025',
     descKey: 'exp.desc.darulfikri',
-    tag: 'Pakasir Payment & WhatsApp Automation'
+    tag: 'Payment Gateway & WhatsApp Automation'
   },
   {
     index: '06',
