@@ -9,8 +9,8 @@ import DownloadMenu from './DownloadMenu'
 
 gsap.registerPlugin(ScrollTrigger)
 
-interface HeroBookProps {
-  onExploreExperience?: () => void
+interface RandiLoaderApi {
+  navigateTo: (url: string, nextMode?: 'greetings' | 'brand') => void
 }
 
 interface HeroNavItem {
@@ -33,7 +33,7 @@ const SOCIAL_LINKS = [
   { number: '02', label: 'linkedin', href: 'https://www.linkedin.com/in/randizakariaputra' },
 ]
 
-export default function HeroBook({ onExploreExperience }: HeroBookProps) {
+export default function HeroBook() {
   const { t, language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -137,9 +137,10 @@ export default function HeroBook({ onExploreExperience }: HeroBookProps) {
             <a
               href="/experience/"
               onClick={(e) => {
-                if (onExploreExperience) {
+                const loader = (window as unknown as { RandiLoader?: RandiLoaderApi }).RandiLoader
+                if (loader) {
                   e.preventDefault()
-                  onExploreExperience()
+                  loader.navigateTo('/experience/', 'greetings')
                 }
               }}
               className="group mt-5 inline-flex items-center gap-2 font-mono text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-text-main)] hover:text-[var(--color-primary)] active:scale-95 transition-all duration-200 w-fit select-none"

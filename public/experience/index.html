@@ -39,17 +39,16 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
     <script src="js/projects.js?v=5"></script>
-    <script type="module" crossorigin="" src="js/main.js?v=9"></script>
+    <script type="module" crossorigin="" src="js/main.js?v=10"></script>
     <link rel="stylesheet" crossorigin="" href="css/main.css?v=6" />
   </head>
   <body>
-    <!-- Apple-Style Multilingual Greeting Preloader & Exit Transition Curtain -->
-    <div id="apple-loader" class="apple-loader" role="status" aria-live="polite" aria-label="Loading 3D Experience">
-      <div class="apple-loader-inner">
-        <span id="apple-greeting" class="apple-greeting">Hello</span>
-        <span id="apple-sub" class="apple-sub mono">Randi · 3D Experience</span>
-      </div>
-    </div>
+    <script src="/shared-loader.js?v=1"></script>
+    <script>
+      if (window.RandiLoader) {
+        window.RandiLoader.autoEnter('greetings', { always: true });
+      }
+    </script>
 
     <noscript>
       <div class="seo-text">
