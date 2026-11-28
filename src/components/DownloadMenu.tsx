@@ -6,8 +6,8 @@ export const DOWNLOAD_DOCUMENTS = [
     id: 'cv-en',
     label: 'CV — English',
     meta: 'PDF · ATS Friendly',
-    href: '/CV/CV%20-%20Randi%20Zakaria%20Putra.pdf',
-    filename: 'CV-Randi-Zakaria-Putra-EN.pdf',
+    href: '/CV/CV%20Universal%20(English)%20-%20Randi%20Zakaria%20Putra.pdf',
+    filename: 'CV-English-Randi-Zakaria-Putra.pdf',
   },
   {
     id: 'cv-id',
